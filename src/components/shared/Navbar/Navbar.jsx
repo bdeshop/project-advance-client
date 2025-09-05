@@ -17,18 +17,22 @@ import {
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
 
   return (
     <nav className="w-full bg-[#047857] text-white">
       {/* Top Section */}
       <div className="flex justify-between items-center px-4 md:px-8 py-2 lg:py-4">
         {/* Left Logo */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           {!isLoggedIn && (
             <h1 className="text-2xl font-bold text-yellow-400">
             baji365
           </h1>
           )}
+          {isLoggedIn && (<h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
+            baji365
+          </h1>)}
           <div className="hidden lg:flex">
             <input
               type="text"
@@ -39,7 +43,7 @@ const Navbar = () => {
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center space-x-2">
+        <div className={`flex items-center ${isLoggedIn ? 'space-x-[1px] md:space-x-4' : 'space-x-4'}`}>
           {!isLoggedIn ? (
             // যখন লগইন হয়নি তখন লগইন ইনপুট আর বাটন দেখাবে
             <div className="flex items-center space-x-2">
@@ -68,7 +72,7 @@ const Navbar = () => {
                 Login
               </button>
               <button className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white">
-                Sign up
+                Signup
               </button>
             </div>
           ) : (
@@ -90,16 +94,65 @@ const Navbar = () => {
               </div>
 
               {/* My Account Section */}
-              <div className="hidden lg:flex items-center bg-green-800 text-yellow-400 border border-white rounded px-3 py-1 ">
-                <FaUser className="mr-2" />
-                <select className="bg-green-800 text-yellow-400 outline-none">
-                  <option>My Account</option>
-                  <option>Profile</option>
-                  <option>Logout</option>
-                </select>
+               {/* My Account Dropdown */}
+              <div className="relative">
+                <button
+                  onClick={() => setAccountOpen(!accountOpen)}
+                  className="hidden md:flex items-center bg-green-800 text-yellow-400 border border-white rounded px-3 py-1"
+                >
+                  <FaUser className="mr-2" />
+                  <span>My Account</span>
+                </button>
+
+                {accountOpen && (
+                  <div className="absolute right-0 mt-1 w-48 bg-white text-black rounded-md shadow-lg overflow-hidden z-50">
+                    <div className="px-4 py-2 border-b font-semibold text-green-800">
+                      akash31 <span className="text-xs text-gray-500">GMT+5:30</span>
+                    </div>
+                    <ul className="text-sm">
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        My Profile
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Balance Overview
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Account Statement
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        My Bets
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Bets History
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Profit & Loss
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Results
+                      </li>
+                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                        Activity Log
+                      </li>
+                    </ul>
+                    <div className="border-t">
+                      <button
+                        onClick={() => {
+                          setIsLoggedIn(false);
+                          setAccountOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
+                      >
+                        LOGOUT
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
+
+
 
           {/* Mobile Menu Icon */}
           <div
