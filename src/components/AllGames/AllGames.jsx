@@ -4,62 +4,62 @@ const games = [
   {
     id: 1,
     name: "Play8",
-    image: "https://i.ibb.co/3zDqkfk/play8.jpg",
+    image: "https://i.ibb.co.com/mCn80gTq/ETFr-DKk6w-G7j-Ib-QAw-Fe4nm8-Pvo6-BUWRPugch-ZYvu.webp",
   },
   {
     id: 2,
     name: "FastSpin",
-    image: "https://i.ibb.co/DY7gB1L/fastspin.jpg",
+    image: "https://i.ibb.co.com/JjH8GXPK/maxresdefault.jpg",
   },
   {
     id: 3,
     name: "ILoveU",
-    image: "https://i.ibb.co/kJ8mN3Y/iloveu.jpg",
+    image: "https://i.ibb.co.com/NnKxWCZC/apps-6458-14353780560698029-ebd0d5e5-940e-4b86-a563-4518bd770f6e.jpg",
   },
   {
     id: 4,
     name: "AE Sexy",
-    image: "https://i.ibb.co/NpB8yYB/aesexy.jpg",
+    image: "https://i.ibb.co.com/VYDtybRb/betgames-wheelpr.jpg",
   },
   {
     id: 5,
     name: "Casino",
-    image: "https://i.ibb.co/LrRHmhM/livecasino.jpg",
+    image: "https://i.ibb.co.com/1G3KbhCt/5120.jpg",
   },
   {
     id: 6,
     name: "Ezugi",
-    image: "https://i.ibb.co/YZt99Yh/ezugi.jpg",
+    image: "https://i.ibb.co.com/S4mHh38t/header-ace-playing-cards.webp",
   },
   {
     id: 7,
     name: "Evolution",
-    image: "https://i.ibb.co/Y2hVtkn/evolution.jpg",
+    image: "https://i.ibb.co.com/tTN4Myzr/2018-september-first-person-gaming-roulette-7-0.jpg",
   },
   {
     id: 8,
     name: "Pragmatic",
-    image: "https://i.ibb.co/jJcK9dY/pragmatic.jpg",
+    image: "https://i.ibb.co.com/zTsvs4Vj/pngtree-strategies-and-elements-in-poker-gambling-bluffs-betting-chips-luck-and-tactical-gameplay-ph.webp",
   },
   {
     id: 9,
     name: "Spade",
-    image: "https://i.ibb.co/vXLJwSB/spade.jpg",
+    image: "https://i.ibb.co.com/DDymCtcv/images.jpg",
   },
   {
     id: 10,
     name: "Cricket",
-    image: "https://i.ibb.co/vXLJwSB/spade.jpg",
+    image: "https://i.ibb.co.com/5bJV0Ff/Light-Wonder-Games-Blog.png",
   },
   {
     id: 11,
     name: "Soccer",
-    image: "https://i.ibb.co/vXLJwSB/spade.jpg",
+    image: "https://i.ibb.co.com/4RmKfsgb/istockphoto-1627628253-612x612.jpg",
   },
   {
     id: 12,
     name: "Tennis",
-    image: "https://i.ibb.co/vXLJwSB/spade.jpg",
+    image: "https://i.ibb.co.com/4nzgm6RV/shutterstock-2488096013.webp",
   },
 ];
 

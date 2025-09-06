@@ -4,32 +4,32 @@ const games = [
   {
     id: 1,
     name: "Poker",
-    image: "https://i.ibb.co/3zDqkfk/play8.jpg",
+    image: "https://i.ibb.co.com/XxyR3xHM/Royal-Flush-poker-card-game-gambling.webp",
   },
   {
     id: 2,
     name: "Fast Spin",
-    image: "https://i.ibb.co/DY7gB1L/fastspin.jpg",
+    image: "https://i.ibb.co.com/W9xXB7J/hq720.jpg",
   },
   {
     id: 3,
     name: "Roulette",
-    image: "https://i.ibb.co/LrRHmhM/livecasino.jpg",
+    image: "https://i.ibb.co.com/XrCsHg5D/ceb2b9555219d76671d0cbe14ce2152df16df0677dd1d4d86772654e649f87b2.jpg",
   },
   {
     id: 4,
     name: "Blackjack",
-    image: "https://i.ibb.co/YZt99Yh/ezugi.jpg",
+    image: "https://i.ibb.co.com/VpzcWWmB/blackjack-logo-with-green-ribbon-and-on-a-green-background-isolated-card-game-casino-game-free-vecto.jpg",
   },
   {
     id: 5,
     name: "Baccarat",
-    image: "https://i.ibb.co/Y2hVtkn/evolution.jpg",
+    image: "https://i.ibb.co.com/nqWmSQdJ/Baccarat-Rules-1200x675-1.jpg",
   },
   {
     id: 6,
     name: "Slot Machine",
-    image: "https://i.ibb.co/jJcK9dY/pragmatic.jpg",
+    image: "https://i.ibb.co.com/tpNVnLRd/what-is-a-slot-machine.webp",
   },
 ];
 

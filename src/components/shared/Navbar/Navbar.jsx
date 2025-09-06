@@ -166,8 +166,9 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Menu (Desktop) */}
-      <div className="hidden lg:flex bg-yellow-400 text-black px-4 md:px-8 py-2 space-x-6 font-medium">
-        <NavLink to="/" className={({ isActive }) =>
+      <div className="hidden lg:flex bg-yellow-400 text-black ">
+        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
+          <NavLink to="/" className={({ isActive }) =>
           `${
             isActive ? "font-extrabold underline" : ""
           }`
@@ -189,11 +190,17 @@ const Navbar = () => {
         <a href="#" className="bg-red-600 text-white px-2 rounded-md">
           Casino
         </a>
+        </div>
+        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
+          <a href="">Time Zone</a>
+          <a href="">On Click Bet</a>
+          <a href="">setting</a>
+        </div>
       </div>
 
       {/* Mobile Sidebar Menu */}
       <div
-        className={`fixed top-0 left-0 w-3/4 h-full bg-black/50 z-40 transform ${
+        className={`fixed top-0 left-0 w-3/4 h-full bg-black/50 z-40 transform pb-20 ${
           open ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:hidden`}
       >

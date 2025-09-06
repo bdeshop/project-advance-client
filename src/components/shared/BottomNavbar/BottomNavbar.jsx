@@ -3,7 +3,7 @@ import { Home, Trophy, Play, Layers, User } from "lucide-react";
 
 const BottomNavbar = () => {
   return (
-    <div className="md:hidden fixed bottom-0 left-0 w-full bg-slate-800 text-white flex justify-around items-center py-2 shadow-lg z-50">
+    <div className="lg:hidden fixed bottom-0 left-0 w-full bg-slate-800 text-white flex justify-around items-center py-2 shadow-lg z-50">
       {/* Home */}
       <NavLink
         to="/"
@@ -32,7 +32,7 @@ const BottomNavbar = () => {
 
       {/* In-Play */}
       <NavLink
-        to="/paly-in"
+        to="/play-in"
         className={({ isActive }) =>
           `flex flex-col items-center transition-all duration-300 ${
             isActive ? "text-yellow-400 scale-110" : "text-white"
