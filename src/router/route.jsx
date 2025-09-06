@@ -6,6 +6,8 @@ import Account from "../pages/Account/Account";
 import Sports from "../pages/Sports/Sports";
 import PlayIn from "../pages/PlayIn/PlayIn";
 import Multi from "../pages/Multi/Multi";
+import Wallet from "../pages/Profile/ProfilePages/Wallet/Wallet";
+import MyProfile from "../pages/Profile/ProfilePages/MyProfile/MyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +21,15 @@ export const router = createBrowserRouter([
       {
         path: "profile",
         Component: Profile,
+        children: [
+          {
+            index: true,
+            Component:MyProfile,
+          },{
+            path:"wallet",
+            Component:Wallet,
+          }
+        ]
       },
       {
         path: "account",

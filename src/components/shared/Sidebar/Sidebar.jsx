@@ -1,0 +1,136 @@
+import React, { useState } from "react";
+import {
+  FaWallet,
+  FaHistory,
+  FaSyncAlt,
+  FaUserShield,
+  FaFileAlt,
+  FaUser,
+  FaKey,
+  FaEnvelope,
+  FaUsers,
+  FaYoutube,
+  FaTelegramPlane,
+  FaMoneyBillWave,
+  FaBars,
+  FaTimes,
+} from "react-icons/fa";
+import { Link } from "react-router";
+
+const Sidebar = () => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen((prev) => !prev);
+  };
+
+  return (
+    <>
+      {/* Mobile Menu Icon */}
+      <div className="md:hidden p-4 bg-black/50 z-40 transform text-white flex justify-between items-center">
+        <h1 className="text-lg font-bold">My Profile</h1>
+        <button onClick={toggleSidebar} className="text-xl">
+          {isOpen ? <FaTimes /> : <FaBars />}
+        </button>
+      </div>
+
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 left-0 z-50 h-full w-64 bg-black/50 z-40 transform text-white transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 ease-in-out md:relative md:translate-x-0 md:block`}
+      >
+        <div className="p-4 flex flex-col justify-between h-full">
+          {/* Profile Section */}
+          <div>
+            <div className="flex flex-col items-center text-center">
+              <div className="w-16 h-16 bg-gray-700 rounded-full mb-2"></div>
+              <h2 className="text-lg font-semibold">akash31</h2>
+              <p className="text-yellow-400 text-sm">৳ 0.00</p>
+
+              <div className="flex items-center justify-between w-full mt-3 text-xs text-gray-400">
+                <span>Silver</span>
+                <div className="flex-grow mx-2 bg-gray-600 h-2 rounded">
+                  <div className="w-1/6 bg-yellow-400 h-full rounded"></div>
+                </div>
+                <span>Elite</span>
+              </div>
+
+              <div className="mt-4 w-full flex flex-col gap-2">
+                <button className="bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 py-2 px-4 rounded">
+                  <FaMoneyBillWave />
+                  Deposit
+                </button>
+                <button className="bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 py-2 px-4 rounded">
+                  <FaMoneyBillWave />
+                  Withdrawal
+                </button>
+              </div>
+            </div>
+
+            {/* Funds */}
+            <div className="mt-6">
+              <h3 className="text-sm font-bold text-gray-400 mb-2">Funds</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaHistory /> Betting Records
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaWallet /> <Link to="wallet">My Wallet</Link>
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaSyncAlt /> Turnover
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaUserShield /> VIP
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaFileAlt /> Transaction Records
+                </li>
+              </ul>
+            </div>
+
+            {/* Profile */}
+            <div className="mt-6">
+              <h3 className="text-sm font-bold text-gray-400 mb-2">Profile</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaUser /> Personal Info
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaKey /> Reset Password
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaEnvelope /> Inbox
+                </li>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                  <FaUsers /> Referral Program
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Social */}
+          <div className="mt-6 flex gap-3 justify-between">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm">
+              <FaYoutube /> Youtube
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm">
+              <FaTelegramPlane /> Telegram
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Overlay for mobile (optional) */}
+      {isOpen && (
+        <div
+          onClick={toggleSidebar}
+          className="fixed inset-0 bg-black/50 z-40 transform bg-opacity-40 z-40 md:hidden"
+        ></div>
+      )}
+    </>
+  );
+};
+
+export default Sidebar;

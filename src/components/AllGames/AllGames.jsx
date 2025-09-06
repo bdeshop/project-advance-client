@@ -78,7 +78,7 @@ const AllGames = () => {
             <img
               src={game.image}
               alt={game.name}
-              className="w-full h-48 md:h-56 lg:h-60 object-cover group-hover:scale-105 transition-transform duration-300"
+              className="w-full h-28 md:h-56 lg:h-60 object-cover group-hover:scale-105 transition-transform duration-300"
             />
 
             {/* Overlay */}

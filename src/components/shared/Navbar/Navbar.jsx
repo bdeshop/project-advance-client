@@ -14,6 +14,7 @@ import {
   FaSignInAlt,
 } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
+import { MdArrowDropDown } from "react-icons/md";
 import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
@@ -109,18 +110,18 @@ const Navbar = () => {
                   className="hidden md:flex items-center bg-green-800 text-yellow-400 border border-white rounded px-3 py-1"
                 >
                   <FaUser className="mr-2" />
-                  <span>My Account</span>
+                  <span className="flex items-center gap-[2px]">My Account <MdArrowDropDown /></span>
                 </button>
 
                 {accountOpen && (
                   <div className="absolute right-0 mt-1 w-48 bg-white text-black rounded-md shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-2 border-b font-semibold text-green-800">
-                      akash31{" "}
+                     raihan-7{" "}
                       <span className="text-xs text-gray-500">GMT+5:30</span>
                     </div>
                     <ul className="text-sm">
                       <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        My Profile
+                        <Link to="/profile">My Profile</Link>
                       </li>
                       <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                         Balance Overview
