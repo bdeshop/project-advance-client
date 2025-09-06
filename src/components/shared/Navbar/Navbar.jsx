@@ -13,6 +13,7 @@ import {
   FaHome,
   FaSignInAlt,
 } from "react-icons/fa";
+import { IoSettings } from "react-icons/io5";
 import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
@@ -28,12 +29,14 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           {!isLoggedIn && (
             <Link to="/" className="text-2xl font-bold text-yellow-400">
-            baji365
-          </Link>
+              baji365
+            </Link>
           )}
-          {isLoggedIn && (<h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
-            baji365
-          </h1>)}
+          {isLoggedIn && (
+            <h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
+              baji365
+            </h1>
+          )}
           <div className="hidden lg:flex">
             <input
               type="text"
@@ -44,7 +47,11 @@ const Navbar = () => {
         </div>
 
         {/* Right Section */}
-        <div className={`flex items-center ${isLoggedIn ? 'space-x-[1px] md:space-x-4' : 'space-x-4'}`}>
+        <div
+          className={`flex items-center ${
+            isLoggedIn ? "space-x-[1px] md:space-x-4" : "space-x-4"
+          }`}
+        >
           {!isLoggedIn ? (
             // যখন লগইন হয়নি তখন লগইন ইনপুট আর বাটন দেখাবে
             <div className="flex items-center space-x-2">
@@ -95,7 +102,7 @@ const Navbar = () => {
               </div>
 
               {/* My Account Section */}
-               {/* My Account Dropdown */}
+              {/* My Account Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setAccountOpen(!accountOpen)}
@@ -108,7 +115,8 @@ const Navbar = () => {
                 {accountOpen && (
                   <div className="absolute right-0 mt-1 w-48 bg-white text-black rounded-md shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-2 border-b font-semibold text-green-800">
-                      akash31 <span className="text-xs text-gray-500">GMT+5:30</span>
+                      akash31{" "}
+                      <span className="text-xs text-gray-500">GMT+5:30</span>
                     </div>
                     <ul className="text-sm">
                       <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
@@ -153,8 +161,6 @@ const Navbar = () => {
             </div>
           )}
 
-
-
           {/* Mobile Menu Icon */}
           <div
             className="lg:hidden cursor-pointer"
@@ -168,33 +174,46 @@ const Navbar = () => {
       {/* Bottom Menu (Desktop) */}
       <div className="hidden lg:flex bg-yellow-400 text-black ">
         <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
-          <NavLink to="/" className={({ isActive }) =>
-          `${
-            isActive ? "font-extrabold underline" : ""
-          }`
-        }>Home</NavLink>
-        <NavLink to="/play-in" className={({ isActive }) =>
-          `${
-            isActive ? "font-extrabold underline" : ""
-          }`
-        }>Play-In</NavLink>
-        <NavLink to="/multi" className={({ isActive }) =>
-          `${
-            isActive ? "font-extrabold underline" : ""
-          }`
-        }>Multi</NavLink>
-        <a href="#">Cricket</a>
-        <a href="#">Soccer</a>
-        <a href="#">Tennis</a>
-        <a href="#">Result</a>
-        <a href="#" className="bg-red-600 text-white px-2 rounded-md">
-          Casino
-        </a>
+          <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `${isActive ? "font-extrabold underline" : ""}`
+            }
+          >
+            Home
+          </NavLink>
+          <NavLink
+            to="/play-in"
+            className={({ isActive }) =>
+              `${isActive ? "font-extrabold underline" : ""}`
+            }
+          >
+            Play-In
+          </NavLink>
+          <NavLink
+            to="/multi"
+            className={({ isActive }) =>
+              `${isActive ? "font-extrabold underline" : ""}`
+            }
+          >
+            Multi
+          </NavLink>
+          <a href="#">Cricket</a>
+          <a href="#">Soccer</a>
+          <a href="#">Tennis</a>
+          <a href="#">Result</a>
+          <a href="#" className="bg-red-600 text-white px-2 rounded-md">
+            Casino
+          </a>
         </div>
         <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
           <a href="">Time Zone</a>
-          <a href="">On Click Bet</a>
-          <a href="">setting</a>
+          <a href="" className="bg-black text-white px-4">
+            On Click Bet
+          </a>
+          <a href="" className="flex items-center">
+            <IoSettings size={16} /> <span className="ml-1">Settings</span>
+          </a>
         </div>
       </div>
 
@@ -216,7 +235,10 @@ const Navbar = () => {
                 >
                   Log in
                 </button>
-                <button onClick={() => setIsLoggedIn(true)} className="bg-yellow-400 text-black px-3 py-1 rounded">
+                <button
+                  onClick={() => setIsLoggedIn(true)}
+                  className="bg-yellow-400 text-black px-3 py-1 rounded"
+                >
                   Sign up
                 </button>
               </div>
