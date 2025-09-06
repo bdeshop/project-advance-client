@@ -13,6 +13,7 @@ import {
   FaHome,
   FaSignInAlt,
 } from "react-icons/fa";
+import { Link, NavLink } from "react-router";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -26,9 +27,9 @@ const Navbar = () => {
         {/* Left Logo */}
         <div className="flex items-center space-x-3">
           {!isLoggedIn && (
-            <h1 className="text-2xl font-bold text-yellow-400">
+            <Link to="/" className="text-2xl font-bold text-yellow-400">
             baji365
-          </h1>
+          </Link>
           )}
           {isLoggedIn && (<h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
             baji365
@@ -166,9 +167,21 @@ const Navbar = () => {
 
       {/* Bottom Menu (Desktop) */}
       <div className="hidden lg:flex bg-yellow-400 text-black px-4 md:px-8 py-2 space-x-6 font-medium">
-        <a href="#">Home</a>
-        <a href="#">In-Play</a>
-        <a href="#">Multi Market</a>
+        <NavLink to="/" className={({ isActive }) =>
+          `${
+            isActive ? "font-extrabold underline" : ""
+          }`
+        }>Home</NavLink>
+        <NavLink to="/play-in" className={({ isActive }) =>
+          `${
+            isActive ? "font-extrabold underline" : ""
+          }`
+        }>Play-In</NavLink>
+        <NavLink to="/multi" className={({ isActive }) =>
+          `${
+            isActive ? "font-extrabold underline" : ""
+          }`
+        }>Multi</NavLink>
         <a href="#">Cricket</a>
         <a href="#">Soccer</a>
         <a href="#">Tennis</a>
