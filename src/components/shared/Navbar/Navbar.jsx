@@ -12,6 +12,8 @@ import {
   FaInstagram,
   FaHome,
   FaSignInAlt,
+  FaEyeSlash,
+  FaEye,
 } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { MdArrowDropDown } from "react-icons/md";
@@ -21,6 +23,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <nav className="w-full bg-[#047857] text-white">
@@ -63,25 +66,43 @@ const Navbar = () => {
                   placeholder="4-15 char, allow number"
                   className="px-2 py-1 text-black rounded-md text-sm bg-white"
                 />
-                <input
-                  type="password"
-                  placeholder="8-20 char"
-                  className="px-2 py-1 text-black rounded-md text-sm bg-white"
-                />
-                <input
-                  type="text"
-                  placeholder="Validation Code"
-                  className="px-2 py-1 text-black rounded-md text-sm w-24 bg-white"
-                />
+                <div className="relative w-full">
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="8-20 char"
+                    className="w-full px-2 py-1 text-black rounded-md text-sm bg-white pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+                  >
+                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                  </button>
+                </div>
+                <div className="relative w-full">
+                  <input
+                    type="text"
+                    placeholder="Validation Code"
+                    className="w-full px-2 py-1 text-black rounded-md text-sm bg-white pr-12"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-black font-bold">
+                    9558
+                  </span>
+                </div>
               </div>
               <button
-                className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white"
+                className="hidden lg:flex bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white"
                 onClick={() => setIsLoggedIn(true)}
               >
                 Login
               </button>
+              <button className="lg:hidden bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white">
+                <Link to="login">Login</Link>
+              </button>
+
               <button className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white">
-                Signup
+                <Link to="signup">Signup</Link>
               </button>
             </div>
           ) : (
@@ -110,13 +131,15 @@ const Navbar = () => {
                   className="hidden md:flex items-center bg-green-800 text-yellow-400 border border-white rounded px-3 py-1"
                 >
                   <FaUser className="mr-2" />
-                  <span className="flex items-center gap-[2px]">My Account <MdArrowDropDown /></span>
+                  <span className="flex items-center gap-[2px]">
+                    My Account <MdArrowDropDown />
+                  </span>
                 </button>
 
                 {accountOpen && (
                   <div className="absolute right-0 mt-1 w-48 bg-white text-black rounded-md shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-2 border-b font-semibold text-green-800">
-                     raihan-7{" "}
+                      raihan-7{" "}
                       <span className="text-xs text-gray-500">GMT+5:30</span>
                     </div>
                     <ul className="text-sm">
@@ -230,17 +253,11 @@ const Navbar = () => {
             <p className="font-medium">Hi, welcome.</p>
             {!isLoggedIn ? (
               <div className="flex space-x-2 mt-2">
-                <button
-                  className="bg-yellow-400 text-black px-3 py-1 rounded"
-                  onClick={() => setIsLoggedIn(true)}
-                >
-                  Log in
+                <button className="bg-yellow-400 text-black px-3 py-1 rounded">
+                  <Link to="login">Login</Link>
                 </button>
-                <button
-                  onClick={() => setIsLoggedIn(true)}
-                  className="bg-yellow-400 text-black px-3 py-1 rounded"
-                >
-                  Sign up
+                <button className="bg-yellow-400 text-black px-3 py-1 rounded">
+                  <Link to="signup">Sign Up</Link>
                 </button>
               </div>
             ) : (
@@ -293,7 +310,7 @@ const Navbar = () => {
             {!isLoggedIn ? (
               <div className="flex-1 bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex items-center justify-center space-x-2 p-2 rounded">
                 <FaSignInAlt />
-                <span onClick={() => setIsLoggedIn(true)}>Log in</span>
+                <Link to="login">Login</Link>
               </div>
             ) : (
               <div className="flex-1 bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex items-center justify-center space-x-2 p-2 rounded">

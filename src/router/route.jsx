@@ -8,6 +8,8 @@ import PlayIn from "../pages/PlayIn/PlayIn";
 import Multi from "../pages/Multi/Multi";
 import Wallet from "../pages/Profile/ProfilePages/Wallet/Wallet";
 import MyProfile from "../pages/Profile/ProfilePages/MyProfile/MyProfile";
+import SignUp from "../pages/SignUp/SignUp";
+import Login from "../pages/Login/Login";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +49,13 @@ export const router = createBrowserRouter([
         path: "multi",
         Component: Multi,
       },
+      {
+        path:"signup",
+        Component:SignUp,
+      },{
+        path:"login",
+        Component:Login,
+      }
     ],
   },
 ]);
