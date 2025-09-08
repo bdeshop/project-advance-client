@@ -5,7 +5,7 @@ import AllGames2 from '../../components/AllGames2/AllGames2';
 
 const Home = () => {
     return (
-        <div>
+        <div className='mt-14 lg:mt-28'>
            <HeroSection></HeroSection>
            <AllGames2></AllGames2>
            <AllGames></AllGames>

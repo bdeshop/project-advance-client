@@ -1,5 +1,6 @@
 import { NavLink } from "react-router";
 import { Home, Trophy, Play, Layers, User } from "lucide-react";
+import { SiNintendogamecube } from "react-icons/si";
 
 const BottomNavbar = () => {
   return (
@@ -15,6 +16,18 @@ const BottomNavbar = () => {
       >
         <Home size={22} />
         <span className="text-xs">Home</span>
+      </NavLink>
+      {/* My-Bets */}
+      <NavLink
+        to="/my-bets"
+        className={({ isActive }) =>
+          `flex flex-col items-center transition-all duration-300 ${
+            isActive ? "text-yellow-400 scale-110" : "text-white"
+          }`
+        }
+      >
+        <SiNintendogamecube size={22}/>
+        <span className="text-xs">My-Bets</span>
       </NavLink>
 
       {/* Sports */}
@@ -42,6 +55,7 @@ const BottomNavbar = () => {
         <Play size={22} />
         <span className="text-xs">In-Play</span>
       </NavLink>
+      
 
       {/* Multi Market */}
       <NavLink

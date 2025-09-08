@@ -2,7 +2,7 @@ import React from 'react';
 
 const Multi = () => {
     return (
-        <div>
+        <div className='mt-14 lg:mt-28'>
             Multi Page
         </div>
     );

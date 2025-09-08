@@ -7,8 +7,8 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="lg:hidden flex items-center justify-center bg-gray-200">
-      <div className="w-full bg-green-700 rounded-md overflow-hidden shadow-lg">
+    <div className="lg:hidden flex items-center justify-center bg-gray-200 mt-12">
+      <div className="w-full bg-green-700 overflow-hidden shadow-lg">
         {/* Top Banner */}
         <div className="relative">
           <img

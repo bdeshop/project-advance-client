@@ -10,6 +10,7 @@ import Wallet from "../pages/Profile/ProfilePages/Wallet/Wallet";
 import MyProfile from "../pages/Profile/ProfilePages/MyProfile/MyProfile";
 import SignUp from "../pages/SignUp/SignUp";
 import Login from "../pages/Login/Login";
+import MyBets from "../pages/MyBets/MyBets";
 
 export const router = createBrowserRouter([
   {
@@ -26,12 +27,13 @@ export const router = createBrowserRouter([
         children: [
           {
             index: true,
-            Component:MyProfile,
-          },{
-            path:"wallet",
-            Component:Wallet,
-          }
-        ]
+            Component: MyProfile,
+          },
+          {
+            path: "wallet",
+            Component: Wallet,
+          },
+        ],
       },
       {
         path: "account",
@@ -50,12 +52,17 @@ export const router = createBrowserRouter([
         Component: Multi,
       },
       {
-        path:"signup",
-        Component:SignUp,
-      },{
-        path:"login",
-        Component:Login,
-      }
+        path: "signup",
+        Component: SignUp,
+      },
+      {
+        path: "login",
+        Component: Login,
+      },
+      {
+        path: "my-bets",
+        Component: MyBets,
+      },
     ],
   },
 ]);

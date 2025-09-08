@@ -5,8 +5,11 @@ import MobileProfile from "./MobileProfile";
 const MyProfile = () => {
   return (
     <>
-        {/* Mobile View */}
+    {/* Mobile View */}
     <MobileProfile />
+        
+        <div className="mt-14">
+          
       {/* Desktop View */}
       <div className="w-full min-h-screen bg-gray-600 text-gray-200 p-4 md:p-8 hidden md:block">
         {/* Top Verification Notice */}
@@ -79,8 +82,8 @@ const MyProfile = () => {
         </div>
 
         {/* Promotions Section */}
-        <div className="mb-6 bg-gray-800">
-          <h2 className="border border-amber-400 text-amber-300 inline-block px-3 py-1 rounded-md text-sm font-bold mb-3">
+        <div className="mb-6 bg-gray-800 p-6 rounded-xl">
+          <h2 className="border border-amber-400 text-amber-300 inline-block px-3 py-1  text-sm font-bold mb-3">
             New Promotions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -140,6 +143,8 @@ const MyProfile = () => {
           </div>
         </div>
       </div>
+        </div>
+    
     </>
   );
 };

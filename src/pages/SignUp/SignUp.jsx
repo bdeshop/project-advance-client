@@ -6,7 +6,7 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-400">
+    <div className="flex items-center justify-center min-h-screen bg-gray-400 lg:mt-26">
       <div className="w-full max-w-7xl bg-gray-400 border-2 border-blue-500 rounded-md p-6 md:flex">
         {/* Left Side - Form */}
         <div className="w-full md:w-1/2 bg-gray-400 p-6">

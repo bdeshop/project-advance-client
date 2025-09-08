@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Account = () => {
+const MyBets = () => {
     return (
         <div className='mt-14 lg:mt-28'>
-            Account Page
+            My Bets
         </div>
     );
 };
 
-export default Account;
+export default MyBets
