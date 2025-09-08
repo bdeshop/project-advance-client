@@ -14,6 +14,8 @@ import {
   FaMoneyBillWave,
   FaBars,
   FaTimes,
+  FaTelegram,
+  FaWhatsapp,
 } from "react-icons/fa";
 import { Link } from "react-router";
 
@@ -27,7 +29,7 @@ const Sidebar = () => {
   return (
     <>
       {/* Mobile Menu Icon */}
-      <div className="md:hidden p-4 bg-black/50 z-40 transform text-white flex justify-between items-center">
+      <div className="hidden p-4 bg-black/50 z-40 transform text-white flex justify-between items-center">
         <h1 className="text-lg font-bold">My Profile</h1>
         <button onClick={toggleSidebar} className="text-xl">
           {isOpen ? <FaTimes /> : <FaBars />}
@@ -48,7 +50,7 @@ const Sidebar = () => {
               <h2 className="text-lg font-semibold">akash31</h2>
               <p className="text-yellow-400 text-sm">৳ 0.00</p>
 
-              <div className="flex items-center justify-between w-full mt-3 text-xs text-gray-400">
+              <div className="flex items-center justify-between w-full mt-3 text-xs ">
                 <span>Silver</span>
                 <div className="flex-grow mx-2 bg-gray-600 h-2 rounded">
                   <div className="w-1/6 bg-yellow-400 h-full rounded"></div>
@@ -56,21 +58,27 @@ const Sidebar = () => {
                 <span>Elite</span>
               </div>
 
-              <div className="mt-4 w-full flex flex-col gap-2">
-                <button className="bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 py-2 px-4 rounded">
+              <div className="mt-4 w-full flex justify-around">
+                <div>
+                  <button className="bg-gray-600 hover:bg-pink-700 p-4 rounded-full hover:cursor-pointer">
                   <FaMoneyBillWave />
-                  Deposit
                 </button>
-                <button className="bg-pink-600 hover:bg-pink-700 flex items-center justify-center gap-2 py-2 px-4 rounded">
+                <br />
+                <span>Deposit</span>
+                </div>
+                <div>
+                   <button className="bg-gray-600 hover:bg-pink-700 p-4 rounded-full hover:cursor-pointer">
                   <FaMoneyBillWave />
-                  Withdrawal
                 </button>
+                <br />
+                <span>Withdraw</span>
+                </div>
               </div>
             </div>
 
             {/* Funds */}
             <div className="mt-6">
-              <h3 className="text-sm font-bold text-gray-400 mb-2">Funds</h3>
+              <h3 className="text-sm font-bold  mb-2">Funds</h3>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaHistory /> Betting Records
@@ -92,7 +100,7 @@ const Sidebar = () => {
 
             {/* Profile */}
             <div className="mt-6">
-              <h3 className="text-sm font-bold text-gray-400 mb-2">Profile</h3>
+              <h3 className="text-sm font-bold mb-2">Profile</h3>
               <ul className="space-y-2">
                 <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaUser /> Personal Info
@@ -111,13 +119,27 @@ const Sidebar = () => {
           </div>
 
           {/* Social */}
-          <div className="mt-6 flex gap-3 justify-between">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm">
+          <div className="relative mt-5">
+            <span className="absolute ">Social Community</span>
+          <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
               <FaYoutube /> Youtube
             </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
               <FaTelegramPlane /> Telegram
             </button>
+          </div>
+          </div>
+          <div className="relative mt-5">
+            <span className="absolute ">Community CS</span>
+          <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+              <FaWhatsapp /> Whatsapp
+            </button>
+            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+              <FaTelegram /> Telegram
+            </button>
+          </div>
           </div>
         </div>
       </div>

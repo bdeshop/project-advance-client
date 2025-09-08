@@ -9,7 +9,7 @@ const Profile = () => {
   return (
     <div className="flex flex-col md:flex-row">
       <Sidebar />
-      <div className="flex-1 p-4 bg-gray-100 ">
+      <div className="flex-1">
         <Outlet />
 
       </div>
