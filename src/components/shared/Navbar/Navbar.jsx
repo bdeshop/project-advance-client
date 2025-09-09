@@ -14,6 +14,7 @@ import {
   FaSignInAlt,
   FaEyeSlash,
   FaEye,
+  FaWallet,
 } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { MdArrowDropDown } from "react-icons/md";
@@ -37,9 +38,11 @@ const Navbar = () => {
             </Link>
           )}
           {isLoggedIn && (
-            <h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
-              baji365
-            </h1>
+            <Link to="/">
+              <h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
+                baji365
+              </h1>
+            </Link>
           )}
           <div className="hidden lg:flex">
             <input
@@ -98,7 +101,7 @@ const Navbar = () => {
                 Login
               </button>
               <button className="lg:hidden bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white">
-                <Link to="login">Login</Link>
+                <Link onClick={() => setIsLoggedIn(true)}>Login</Link>
               </button>
 
               <button className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white">
@@ -107,14 +110,18 @@ const Navbar = () => {
             </div>
           ) : (
             <div className="flex items-center gap-2">
+              {/* wallet */}
+              <div className="flex items-center gap-1">
+                <FaWallet size={14} /> wallet
+              </div>
               {/* Balance Section */}
-              <div className="flex items-center border border-white rounded px-3 py-1 text-yellow-400 text-sm">
-                <span>Main Balance</span>
-                <span className="font-bold ml-1">PTH 0</span>
-                <span className="ml-2">Exposure</span>
-                <span className="ml-1 bg-red-600 text-white px-2 rounded text-xs">
-                  0
+              <div className="flex items-center border border-white rounded px-3 py-1  text-sm">
+                <span className="text-[10px] text-white font-bold">
+                  Main BDT{" "}
                 </span>
+                <span className="font-bold ml-1 text-white">0</span>
+                <span className="ml-2 text-white">Exposure</span>
+                <span className=" text-red-600 px-1 rounded text-xs">0</span>
                 <button className="ml-2 bg-green-600 text-white px-2 rounded text-xs font-bold">
                   +5
                 </button>
@@ -143,28 +150,70 @@ const Navbar = () => {
                       <span className="text-xs text-gray-500">GMT+5:30</span>
                     </div>
                     <ul className="text-sm">
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                        <Link to="/profile">My Profile</Link>
-                      </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <Link to="/profile">
+                        <li
+                          onClick={() => {
+                            setAccountOpen(false);
+                          }}
+                          className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                        >
+                          My Profile
+                        </li>
+                      </Link>
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Balance Overview
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Account Statement
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         My Bets
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Bets History
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Profit & Loss
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Results
                       </li>
-                      <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                      <li
+                        onClick={() => {
+                          setAccountOpen(false);
+                        }}
+                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      >
                         Activity Log
                       </li>
                     </ul>

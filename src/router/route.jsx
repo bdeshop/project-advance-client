@@ -11,6 +11,7 @@ import MyProfile from "../pages/Profile/ProfilePages/MyProfile/MyProfile";
 import SignUp from "../pages/SignUp/SignUp";
 import Login from "../pages/Login/Login";
 import MyBets from "../pages/MyBets/MyBets";
+import MobileAccount from "../pages/Account/MobileAccount/MobileAccount";
 
 export const router = createBrowserRouter([
   {
@@ -65,4 +66,8 @@ export const router = createBrowserRouter([
       },
     ],
   },
+  {
+    path: "my-account",
+    Component:MobileAccount,
+  }
 ]);

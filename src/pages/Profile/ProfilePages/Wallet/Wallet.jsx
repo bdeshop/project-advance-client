@@ -2,7 +2,7 @@ import React from 'react';
 
 const Wallet = () => {
     return (
-        <div className=''>
+        <div className='mt-28'>
             My Wallet Page
         </div>
     );

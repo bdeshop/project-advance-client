@@ -6,7 +6,7 @@ import { FaWhatsapp, FaExclamationTriangle } from "react-icons/fa";
 const MobileProfile = () => {
   return (
     <>
-      <div className="md:hidden  bg-gray-900 text-white flex flex-col mt-16">
+      <div className="md:hidden  bg-gray-900 text-white flex flex-col mt-12">
         {/* Header */}
         <div className="flex items-center p-3 border-b border-gray-700 bg-gray-800">
           <Link to={"/"}>

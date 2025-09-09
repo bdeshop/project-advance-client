@@ -17,7 +17,7 @@ import {
   FaTelegram,
   FaWhatsapp,
 } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -47,7 +47,7 @@ const Sidebar = () => {
           <div>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-gray-700 rounded-full mb-2"></div>
-              <h2 className="text-lg font-semibold">akash31</h2>
+              <h2 className="text-lg font-semibold">Ria21</h2>
               <p className="text-yellow-400 text-sm">৳ 0.00</p>
 
               <div className="flex items-center justify-between w-full mt-3 text-xs ">
@@ -80,21 +80,21 @@ const Sidebar = () => {
             <div className="mt-6">
               <h3 className="text-sm font-bold  mb-2">Funds</h3>
               <ul className="space-y-2">
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaHistory /> Betting Records
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaWallet /> <Link to="wallet">My Wallet</Link>
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaSyncAlt /> Turnover
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaUserShield /> VIP
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaFileAlt /> Transaction Records
-                </li>
+                </NavLink>
               </ul>
             </div>
 
@@ -102,18 +102,18 @@ const Sidebar = () => {
             <div className="mt-6">
               <h3 className="text-sm font-bold mb-2">Profile</h3>
               <ul className="space-y-2">
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                <NavLink to='/profile' className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaUser /> Personal Info
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaKey /> Reset Password
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaEnvelope /> Inbox
-                </li>
-                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                </NavLink>
+                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaUsers /> Referral Program
-                </li>
+                </NavLink>
               </ul>
             </div>
           </div>
