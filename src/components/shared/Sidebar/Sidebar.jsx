@@ -17,6 +17,7 @@ import {
   FaTelegram,
   FaWhatsapp,
 } from "react-icons/fa";
+import { PiHandDepositBold, PiHandWithdrawFill } from "react-icons/pi";
 import { Link, NavLink } from "react-router";
 
 const Sidebar = () => {
@@ -60,18 +61,27 @@ const Sidebar = () => {
 
               <div className="mt-4 w-full flex justify-around">
                 <div>
-                  <button className="bg-gray-600 hover:bg-pink-700 p-4 rounded-full hover:cursor-pointer">
-                  <FaMoneyBillWave />
-                </button>
-                <br />
-                <span>Deposit</span>
+                  <button className="bg-gray-600 hover:bg-pink-700 p-3 rounded-full hover:cursor-pointer">
+                    <NavLink to={"my-wallet"}>
+                      {" "}
+                      <PiHandDepositBold size={20} />
+                    </NavLink>
+                  </button>
+                  <br />
+                  <span>Deposit</span>
                 </div>
                 <div>
-                   <button className="bg-gray-600 hover:bg-pink-700 p-4 rounded-full hover:cursor-pointer">
-                  <FaMoneyBillWave />
-                </button>
-                <br />
-                <span>Withdraw</span>
+                  <button
+                    to={"my-wallet"}
+                    className="bg-gray-600 hover:bg-pink-700 p-3 rounded-full hover:cursor-pointer"
+                  >
+                    <NavLink to={"my-wallet"}>
+                      <PiHandWithdrawFill size={20}/>
+
+                    </NavLink>
+                  </button>
+                  <br />
+                  <span>Withdraw</span>
                 </div>
               </div>
             </div>
@@ -81,11 +91,11 @@ const Sidebar = () => {
               <h3 className="text-sm font-bold  mb-2">Funds</h3>
               <ul className="space-y-2">
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaHistory /> Betting Records
+                  <FaHistory /><Link to={"billing-records"}> Betting Records</Link>
                 </NavLink>
-                <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaWallet /> <Link to="wallet">My Wallet</Link>
-                </NavLink>
+                <li className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                    <FaWallet /> <Link to={"my-wallet"}> My Wallet</Link>
+                </li>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaSyncAlt /> Turnover
                 </NavLink>
@@ -102,7 +112,10 @@ const Sidebar = () => {
             <div className="mt-6">
               <h3 className="text-sm font-bold mb-2">Profile</h3>
               <ul className="space-y-2">
-                <NavLink to='/profile' className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
+                <NavLink
+                  to="/profile"
+                  className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer"
+                >
                   <FaUser /> Personal Info
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
@@ -121,25 +134,25 @@ const Sidebar = () => {
           {/* Social */}
           <div className="relative mt-5">
             <span className="absolute ">Social Community</span>
-          <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
-              <FaYoutube /> Youtube
-            </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
-              <FaTelegramPlane /> Telegram
-            </button>
-          </div>
+            <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
+              <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+                <FaYoutube /> Youtube
+              </button>
+              <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+                <FaTelegramPlane /> Telegram
+              </button>
+            </div>
           </div>
           <div className="relative mt-5">
             <span className="absolute ">Community CS</span>
-          <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
-              <FaWhatsapp /> Whatsapp
-            </button>
-            <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
-              <FaTelegram /> Telegram
-            </button>
-          </div>
+            <div className="mt-6 flex gap-3 justify-between hover:cursor-pointer">
+              <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+                <FaWhatsapp /> Whatsapp
+              </button>
+              <button className="flex-1 flex items-center justify-center gap-2 bg-gray-800 hover:bg-gray-700 py-2 rounded text-sm hover:cursor-pointer">
+                <FaTelegram /> Telegram
+              </button>
+            </div>
           </div>
         </div>
       </div>

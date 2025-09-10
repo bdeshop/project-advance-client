@@ -109,23 +109,23 @@ const Navbar = () => {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
               {/* wallet */}
               <div className="flex items-center gap-1">
                 <FaWallet size={14} /> wallet
               </div>
               {/* Balance Section */}
-              <div className="flex items-center border border-white rounded px-3 py-1  text-sm">
-                <span className="text-[10px] text-white font-bold">
+              <div className="flex items-center border border-white rounded px-1 py-1  text-sm">
+                <span className="flex text-[8px] md:text-[16px] text-white font-bold">
                   Main BDT{" "}
                 </span>
                 <span className="font-bold ml-1 text-white">0</span>
-                <span className="ml-2 text-white">Exposure</span>
+                <span className="ml-1 text-white">Exposure</span>
                 <span className=" text-red-600 px-1 rounded text-xs">0</span>
-                <button className="ml-2 bg-green-600 text-white px-2 rounded text-xs font-bold">
+                <button className="ml-1 bg-green-600 text-white px-2 rounded text-xs font-bold">
                   +5
                 </button>
-                <button className="ml-2 text-white border border-white rounded-full px-2">
+                <button className="ml-1 text-white border border-white rounded-full px-2">
                   &#8635;
                 </button>
               </div>

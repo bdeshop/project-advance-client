@@ -90,7 +90,10 @@ const MobileAccount = () => {
             {/* Deposit */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaMoneyBillWave className="text-white text-xl" />
+                <NavLink to="/profile/my-wallet">
+                  {" "}
+                  <FaWallet className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Deposit</p>
             </div>
@@ -106,7 +109,10 @@ const MobileAccount = () => {
             {/* My Wallet */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaWallet className="text-white text-xl" />
+                <NavLink to="/profile/my-wallet">
+                  {" "}
+                  <FaWallet className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">My Wallet</p>
             </div>
@@ -193,12 +199,13 @@ const MobileAccount = () => {
           <div className="grid grid-cols-4 gap-3 text-center">
             {/* Deposit */}
             <div className="flex flex-col items-center">
-            
-                <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                   <NavLink to="/profile"> <IoInformationCircleOutline className="text-white text-xl" /></NavLink>
-                </div>
-                <p className="text-white mt-1">Personal Info</p>
-              
+              <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
+                <NavLink to="/profile">
+                  {" "}
+                  <IoInformationCircleOutline className="text-white text-xl" />
+                </NavLink>
+              </div>
+              <p className="text-white mt-1">Personal Info</p>
             </div>
 
             {/* Dispute */}
