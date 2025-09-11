@@ -119,10 +119,10 @@ const Sidebar = () => {
                   <FaUser /> Personal Info
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaKey /> Reset Password
+                  <FaKey /> <Link to={"/profile/reset-password"}> Reset Password</Link>
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaEnvelope /> Inbox
+                  <FaEnvelope /><Link to='/profile/inbox'> Inbox</Link>
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaUsers /> Referral Program

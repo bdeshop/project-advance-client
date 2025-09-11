@@ -17,6 +17,8 @@ import Deposit from "../pages/Account/MyWallet/Diposit/Deposite";
 import BillingLayout from "../layouts/BillingLayout";
 import Sattled from "../pages/Account/BillingRecords/Sattled/Sattled";
 import Unsattled from "../pages/Account/BillingRecords/Unsattled/Unsattled";
+import ResetPassword from "../pages/Account/ResetPassword/ResetPassword";
+import Inbox from "../pages/Account/Inbox/Inbox";
 
 export const router = createBrowserRouter([
   {
@@ -62,6 +64,14 @@ export const router = createBrowserRouter([
                 Component: Unsattled,
               },
             ],
+          },
+          {
+            path: "reset-password",
+            Component: ResetPassword,
+          },
+          {
+            path: "inbox",
+            Component: Inbox,
           },
         ],
       },

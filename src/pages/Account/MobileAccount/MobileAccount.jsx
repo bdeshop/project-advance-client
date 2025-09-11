@@ -171,7 +171,9 @@ const MobileAccount = () => {
             {/* Deposit */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaMoneyBillWave className="text-white text-xl" />
+                <NavLink to="/profile/billing-records">
+                  <FaMoneyBillWave className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Betting Records</p>
             </div>
@@ -214,7 +216,9 @@ const MobileAccount = () => {
             {/* Dispute */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaLock className="text-white text-xl" />
+                <NavLink to="/profile/reset-password">
+                  <FaLock className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Reset Password</p>
             </div>
@@ -222,7 +226,9 @@ const MobileAccount = () => {
             {/* My Wallet */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <IoIosMail className="text-white text-xl" />
+                <NavLink to="/profile/inbox">
+                  <IoIosMail className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Inbox</p>
             </div>
