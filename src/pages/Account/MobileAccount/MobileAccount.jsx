@@ -120,7 +120,10 @@ const MobileAccount = () => {
             {/* Withdrawal */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaHandHoldingUsd className="text-white text-xl" />
+                <NavLink to="/profile/my-wallet/withdraw">
+                  {" "}
+                  <FaHandHoldingUsd className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Withdrawal</p>
             </div>

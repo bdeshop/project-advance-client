@@ -75,7 +75,7 @@ const Sidebar = () => {
                     to={"my-wallet"}
                     className="bg-gray-600 hover:bg-pink-700 p-3 rounded-full hover:cursor-pointer"
                   >
-                    <NavLink to={"my-wallet"}>
+                    <NavLink to={"my-wallet/withdraw"}>
                       <PiHandWithdrawFill size={20}/>
 
                     </NavLink>

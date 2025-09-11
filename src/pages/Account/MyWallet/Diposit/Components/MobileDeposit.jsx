@@ -1,18 +1,30 @@
 import React, { useState } from "react";
 import { FaArrowCircleLeft } from "react-icons/fa";
-import { Link } from "react-router";
+import { Link, NavLink } from "react-router";
 
 const MobileDeposit = () => {
-  const [activeTab, setActiveTab] = useState("deposit");
   const [promotion, setPromotion] = useState("Normal");
   //   const [paymentMethod, setPaymentMethod] = useState("Nagad");
   const [amount, setAmount] = useState(0);
 
   const amountOptions = [100, 500, 1000, 2000, 5000, 10000, 20000, 25000];
   const paymentOptions = [
-    { id: 1, name: "Nagad", image: "https://i.ibb.co.com/sdgCF1HP/icon-256x256.png" },
-    { id: 2, name: "Bkash", image: "https://i.ibb.co.com/kszjQzZn/unnamed.webp" },
-    { id: 3, name: "Rocket", image: "https://i.ibb.co.com/S4JZ706r/dutch-bangla-rocket-logo-png-seeklogo-317692.png" },
+    {
+      id: 1,
+      name: "Nagad",
+      image: "https://i.ibb.co.com/sdgCF1HP/icon-256x256.png",
+    },
+    {
+      id: 2,
+      name: "Bkash",
+      image: "https://i.ibb.co.com/kszjQzZn/unnamed.webp",
+    },
+    {
+      id: 3,
+      name: "Rocket",
+      image:
+        "https://i.ibb.co.com/S4JZ706r/dutch-bangla-rocket-logo-png-seeklogo-317692.png",
+    },
   ];
   return (
     <div className="bg-gray-900 min-h-screen text-white">
@@ -27,27 +39,24 @@ const MobileDeposit = () => {
       </div>
 
       {/* Tabs */}
-      <div className="flex">
-        <button
-          onClick={() => setActiveTab("deposit")}
-          className={`flex-1 py-2 font-bold ${
-            activeTab === "deposit"
-              ? "bg-black text-white"
-              : "bg-gray-700 text-gray-300"
-          }`}
+      <div className="flex items-center justify-between ">
+        <NavLink
+          className={({ isActive }) =>
+            `px-6 py-2 font-bold w-full text-center ${
+              isActive ? "bg-black text-white text-lg" : "bg-gray-500 text-white"
+            }`
+          }
         >
           Deposit
-        </button>
-        <button
-          onClick={() => setActiveTab("withdrawal")}
-          className={`flex-1 py-2 font-bold ${
-            activeTab === "withdrawal"
-              ? "bg-black text-white"
-              : "bg-gray-700 text-gray-300"
-          }`}
+        </NavLink>
+
+        {/* Withdrawal */}
+        <Link
+          to="/profile/my-wallet/withdraw"
+          className='px-6 py-2 bg-gray-500 text-white w-full text-center'
         >
           Withdrawal
-        </button>
+        </Link>
       </div>
 
       {/* Select Promotion */}
@@ -74,7 +83,11 @@ const MobileDeposit = () => {
               className="items-center py-2 px-5 border-1 border-solid"
               key={value.id}
             >
-              <img src={value.image} alt="" className="w-full h-10 rounded-4xl"/>
+              <img
+                src={value.image}
+                alt=""
+                className="w-full h-10 rounded-4xl"
+              />
               <p>{value.name}</p>
             </div>
           ))}
@@ -88,8 +101,10 @@ const MobileDeposit = () => {
         </p>
         {/* Amount */}
         <div className="flex items-center justify-between border-b border-gray-400 mb-3">
-            <p className="font-bold mb-2"><span className="text-2xl text-yellow-400">|</span> Amount</p>
-        <p className="text-gray-400 font-bold">৳100.00 - ৳25000.00</p>
+          <p className="font-bold mb-2">
+            <span className="text-2xl text-yellow-400">|</span> Amount
+          </p>
+          <p className="text-gray-400 font-bold">৳100.00 - ৳25000.00</p>
         </div>
 
         {/* Amount Buttons */}

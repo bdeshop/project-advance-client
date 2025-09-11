@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { FaExclamationCircle, FaWallet } from "react-icons/fa";
+import { NavLink } from "react-router";
 
 const DesktopDeposit = () => {
   const [showPromotions, setShowPromotions] = useState(false);
@@ -32,12 +33,31 @@ const DesktopDeposit = () => {
               </h3>
             </div>
             <div>
-              <button className="bg-yellow-500 text-white px-12 py-2 rounded font-bold">
+              <NavLink
+                className={({ isActive }) =>
+                  `px-12 py-2 rounded font-bold ${
+                    isActive
+                      ? "bg-yellow-500 text-white"
+                      : "bg-gray-500 text-white"
+                  }`
+                }
+              >
                 Deposit
-              </button>
-              <button className="bg-gray-500 px-12 py-2 rounded text-white">
+              </NavLink>
+
+              {/* Withdrawal */}
+              <NavLink
+                to="/profile/my-wallet/withdraw"
+                className={({ isActive }) =>
+                  `px-12 py-2 rounded font-bold ${
+                    isActive
+                      ? "bg-yellow-500 text-white"
+                      : "bg-gray-500 text-white"
+                  }`
+                }
+              >
                 Withdrawal
-              </button>
+              </NavLink>
             </div>
           </div>
 
@@ -109,9 +129,11 @@ const DesktopDeposit = () => {
             </div>
 
             {/* Note Box */}
-            <div className="bg-blue-900 text-blue-200 p-4 rounded mb-6 text-sm font-bold">
-              <p className="flex items-center gap-1"><FaExclamationCircle /> Dear all member, to speed up your deposit please remind player
-                MUST enter UTR or order will be failed.
+            <div className="bg-blue-900 text-white p-4 rounded mb-6 text-sm font-bold">
+              <p className="flex items-center gap-1">
+                <FaExclamationCircle /> Dear all member, to speed up your
+                deposit please remind player MUST enter UTR or order will be
+                failed.
               </p>
               <ol className="list-decimal list-inside mt-2">
                 <li>Fill in correct UPI which he is paying.</li>

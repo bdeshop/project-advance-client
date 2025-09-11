@@ -6,13 +6,15 @@ import Account from "../pages/Account/Account";
 import Sports from "../pages/Sports/Sports";
 import PlayIn from "../pages/PlayIn/PlayIn";
 import Multi from "../pages/Multi/Multi";
-import Wallet from "../pages/Account/MyWallet/Wallet";
+import WalletLayout from "../layouts/WalletLayout";
 import DekstopMyProfile from "../pages/Account/ProfilePages/DekstopMyProfile";
 import SignUp from "../pages/SignUp/SignUp";
 import Login from "../pages/Login/Login";
 import MyBets from "../pages/MyBets/MyBets";
 import MobileAccount from "../pages/Account/MobileAccount/MobileAccount";
 import DekstopBilling from "../pages/Account/BillingRecords/DesktopBilling";
+import Withdraw from "../pages/Account/MyWallet/Withdraw/Withdraw";
+import Deposit from "../pages/Account/MyWallet/Diposit/Deposite";
 
 export const router = createBrowserRouter([
   {
@@ -33,7 +35,17 @@ export const router = createBrowserRouter([
           },
           {
             path: "my-wallet",
-            Component: Wallet,
+            Component: WalletLayout,
+            children: [
+              {
+                index: true,
+                Component: Deposit,
+              },
+              {
+                path: "withdraw",
+                Component: Withdraw,
+              },
+            ],
           },
           {
             path: "billing-records",
