@@ -103,7 +103,7 @@ const Sidebar = () => {
                   <FaUserShield /> VIP
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaFileAlt /> Transaction Records
+                  <FaFileAlt /> <Link to={"/profile/transaction-records"}> Transaction Records</Link>
                 </NavLink>
               </ul>
             </div>

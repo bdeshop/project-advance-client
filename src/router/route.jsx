@@ -19,6 +19,7 @@ import Sattled from "../pages/Account/BillingRecords/Sattled/Sattled";
 import Unsattled from "../pages/Account/BillingRecords/Unsattled/Unsattled";
 import ResetPassword from "../pages/Account/ResetPassword/ResetPassword";
 import Inbox from "../pages/Account/Inbox/Inbox";
+import Transaction from "../pages/Account/Transaction Records/Transaction";
 
 export const router = createBrowserRouter([
   {
@@ -73,6 +74,10 @@ export const router = createBrowserRouter([
             path: "inbox",
             Component: Inbox,
           },
+          {
+            path: "transaction-records",
+            Component: Transaction,
+          }
         ],
       },
       {
