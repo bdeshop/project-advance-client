@@ -12,9 +12,11 @@ import SignUp from "../pages/SignUp/SignUp";
 import Login from "../pages/Login/Login";
 import MyBets from "../pages/MyBets/MyBets";
 import MobileAccount from "../pages/Account/MobileAccount/MobileAccount";
-import DekstopBilling from "../pages/Account/BillingRecords/DesktopBilling";
 import Withdraw from "../pages/Account/MyWallet/Withdraw/Withdraw";
 import Deposit from "../pages/Account/MyWallet/Diposit/Deposite";
+import BillingLayout from "../layouts/BillingLayout";
+import Sattled from "../pages/Account/BillingRecords/Sattled/Sattled";
+import Unsattled from "../pages/Account/BillingRecords/Unsattled/Unsattled";
 
 export const router = createBrowserRouter([
   {
@@ -49,7 +51,17 @@ export const router = createBrowserRouter([
           },
           {
             path: "billing-records",
-            Component: DekstopBilling,
+            Component: BillingLayout,
+            children: [
+              {
+                index: true,
+                Component: Sattled,
+              },
+              {
+                path: "unsettled",
+                Component: Unsattled,
+              },
+            ],
           },
         ],
       },

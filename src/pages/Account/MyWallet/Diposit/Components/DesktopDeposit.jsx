@@ -35,7 +35,7 @@ const DesktopDeposit = () => {
             <div>
               <NavLink
                 className={({ isActive }) =>
-                  `px-12 py-2 rounded font-bold ${
+                  `px-12 py-2 font-bold ${
                     isActive
                       ? "bg-yellow-500 text-white"
                       : "bg-gray-500 text-white"
@@ -49,7 +49,7 @@ const DesktopDeposit = () => {
               <NavLink
                 to="/profile/my-wallet/withdraw"
                 className={({ isActive }) =>
-                  `px-12 py-2 rounded font-bold ${
+                  `px-12 py-2  ${
                     isActive
                       ? "bg-yellow-500 text-white"
                       : "bg-gray-500 text-white"
