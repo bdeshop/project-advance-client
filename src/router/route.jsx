@@ -20,6 +20,12 @@ import Unsattled from "../pages/Account/BillingRecords/Unsattled/Unsattled";
 import ResetPassword from "../pages/Account/ResetPassword/ResetPassword";
 import Inbox from "../pages/Account/Inbox/Inbox";
 import Transaction from "../pages/Account/Transaction Records/Transaction";
+import VIPLayout from "../layouts/VIPLayout";
+import VIP from "../pages/Account/VIP/VIP";
+import MYVIP from "../pages/Account/VIP/MyVIP/MYVIP";
+import VIPReceived from "../pages/Account/VIP/VIPReceived/VIPReceived";
+import VIPUsed from "../pages/Account/VIP/VIPUsed/VIPUsed";
+import VIPHistory from "../pages/Account/VIP/VIPHistory/VIPHIstory";
 
 export const router = createBrowserRouter([
   {
@@ -67,6 +73,28 @@ export const router = createBrowserRouter([
             ],
           },
           {
+            path: "vip",
+            Component: VIPLayout,
+            children: [
+              {
+                index: true,
+                Component: MYVIP,
+              },
+              {
+                path: "vip-received",
+                Component: VIPReceived,
+              },
+              {
+                path: "vip-used",
+                Component: VIPUsed,
+              },
+              {
+                path: "vip-history",
+                Component: VIPHistory,
+              },
+            ],
+          },
+          {
             path: "reset-password",
             Component: ResetPassword,
           },
@@ -77,7 +105,7 @@ export const router = createBrowserRouter([
           {
             path: "transaction-records",
             Component: Transaction,
-          }
+          },
         ],
       },
       {

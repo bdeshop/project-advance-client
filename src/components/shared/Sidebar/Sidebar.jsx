@@ -100,7 +100,7 @@ const Sidebar = () => {
                   <FaSyncAlt /> Turnover
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
-                  <FaUserShield /> VIP
+                  <FaUserShield /> <Link to={'/profile/vip'}>VIP</Link>
                 </NavLink>
                 <NavLink className="flex items-center gap-2 hover:text-white text-gray-300 cursor-pointer">
                   <FaFileAlt /> <Link to={"/profile/transaction-records"}> Transaction Records</Link>
