@@ -21,11 +21,22 @@ import ResetPassword from "../pages/Account/ResetPassword/ResetPassword";
 import Inbox from "../pages/Account/Inbox/Inbox";
 import Transaction from "../pages/Account/Transaction Records/Transaction";
 import VIPLayout from "../layouts/VIPLayout";
-import VIP from "../pages/Account/VIP/VIP";
 import MYVIP from "../pages/Account/VIP/MyVIP/MYVIP";
 import VIPReceived from "../pages/Account/VIP/VIPReceived/VIPReceived";
 import VIPUsed from "../pages/Account/VIP/VIPUsed/VIPUsed";
 import VIPHistory from "../pages/Account/VIP/VIPHistory/VIPHIstory";
+import Transactions from "../pages/Account/MobileAccount/Transactions/Transactions";
+import RealWalletLayout from "../layouts/RealWalletLayout";
+import Rewards from "../pages/Account/MobileAccount/Rewards/Rewards";
+import VIPs from "../pages/Account/MobileAccount/VIPs/VIPs";
+import Referral from "../pages/Account/MobileAccount/Referral/Referral";
+import PL from "../pages/Account/MobileAccount/PL/PL";
+import Completed from "../pages/Account/MobileAccount/Completed/Completed";
+import Bonus from "../pages/Account/MobileAccount/Bonus/Bonus";
+import Active from "../pages/Account/MobileAccount/Active/Active";
+import PLAll from "../pages/Account/MobileAccount/PL/PLAll/PLAll";
+import PLLayout from "../layouts/PLLayout";
+import PLAccount from "../pages/Account/MobileAccount/PL/PLAccount/PLAccount";
 
 export const router = createBrowserRouter([
   {
@@ -105,6 +116,58 @@ export const router = createBrowserRouter([
           {
             path: "transaction-records",
             Component: Transaction,
+          },
+          {
+            path: "real-wallet",
+            Component: RealWalletLayout,
+            children: [
+              {
+                path: "transactions",
+                Component: Transactions,
+              },
+              {
+                path: "rewards",
+                Component: Rewards,
+              },
+              {
+                path: "vips",
+                Component: VIPs,
+              },
+              {
+                path: "referral",
+                Component: Referral,
+              },
+              {
+                path: "pl",
+                Component: PLLayout,
+                children: [
+                  {
+                    path:"pl-all",
+                    Component: PLAll,
+                  },
+                  {
+                    path: "p-l",
+                    Component: PL,
+                  },
+                  {
+                    path: "pl-account",
+                    Component: PLAccount,
+                  },
+                ],
+              },
+              {
+                path: "completed",
+                Component: Completed,
+              },
+              {
+                path: "bonus",
+                Component: Bonus,
+              },
+              {
+                path: "active",
+                Component: Active,
+              },
+            ],
           },
         ],
       },

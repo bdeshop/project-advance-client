@@ -189,7 +189,9 @@ const MobileAccount = () => {
             {/* My Wallet */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaWallet className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/transactions">
+                  <FaSync className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Transaction Records</p>
             </div>
