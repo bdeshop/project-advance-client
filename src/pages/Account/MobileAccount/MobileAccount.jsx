@@ -101,7 +101,10 @@ const MobileAccount = () => {
             {/* Dispute */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaExchangeAlt className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/transactions">
+                  {" "}
+                  <FaEyeSlash className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Dispute</p>
             </div>
@@ -139,7 +142,9 @@ const MobileAccount = () => {
             {/* Deposit */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <MdBarChart className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/active">
+                  <MdBarChart className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">turnover</p>
             </div>
@@ -147,7 +152,9 @@ const MobileAccount = () => {
             {/* Dispute */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <IoGiftSharp className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/rewards">
+                  <IoGiftSharp className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">My Reward</p>
             </div>
@@ -155,9 +162,11 @@ const MobileAccount = () => {
             {/* My Wallet */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <MdEnergySavingsLeaf className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/pl/pl-all">
+                  <MdEnergySavingsLeaf className="text-white text-xl" />
+                </NavLink>
               </div>
-              <p className="text-white mt-1">MY P&L</p>
+              <p className="text-white mt-1">P&L</p>
             </div>
           </div>
         </div>
@@ -181,7 +190,9 @@ const MobileAccount = () => {
             {/* Dispute */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <FaExchangeAlt className="text-white text-xl" />
+                <NavLink to="/profile/parley-records">
+                  <FaExchangeAlt className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Parley Records</p>
             </div>
@@ -238,7 +249,10 @@ const MobileAccount = () => {
             {/* Withdrawal */}
             <div className="flex flex-col items-center">
               <div className="bg-gray-700 w-12 h-12 flex items-center justify-center rounded-md">
-                <MdGroupAdd className="text-white text-xl" />
+                <NavLink to="/profile/real-wallet/referral">
+                  {" "}
+                  <MdGroupAdd className="text-white text-xl" />
+                </NavLink>
               </div>
               <p className="text-white mt-1">Referral</p>
             </div>

@@ -37,6 +37,7 @@ import Active from "../pages/Account/MobileAccount/Active/Active";
 import PLAll from "../pages/Account/MobileAccount/PL/PLAll/PLAll";
 import PLLayout from "../layouts/PLLayout";
 import PLAccount from "../pages/Account/MobileAccount/PL/PLAccount/PLAccount";
+import ParleyRecords from "../pages/Account/ParleyRecords/ParleyRecords";
 
 export const router = createBrowserRouter([
   {
@@ -142,7 +143,7 @@ export const router = createBrowserRouter([
                 Component: PLLayout,
                 children: [
                   {
-                    path:"pl-all",
+                    path: "pl-all",
                     Component: PLAll,
                   },
                   {
@@ -168,6 +169,10 @@ export const router = createBrowserRouter([
                 Component: Active,
               },
             ],
+          },
+          {
+            path: "parley-records",
+            Component: ParleyRecords,
           },
         ],
       },
