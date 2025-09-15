@@ -38,6 +38,40 @@ import PLAll from "../pages/Account/MobileAccount/PL/PLAll/PLAll";
 import PLLayout from "../layouts/PLLayout";
 import PLAccount from "../pages/Account/MobileAccount/PL/PLAccount/PLAccount";
 import ParleyRecords from "../pages/Account/ParleyRecords/ParleyRecords";
+import AdminLayout from "../Admindashboard/layouts/AdminLayout";
+import AdHome from "../Admindashboard/pages/AdHome/AdHome";
+import MyAccount from "../Admindashboard/pages/MyAccount/MyAccount";
+import BetList from "../Admindashboard/pages/BetList/BetList";
+import User from "../Admindashboard/pages/User/User";
+import SubAgent from "../Admindashboard/pages/SubAgent/SubAgent";
+import Agent from "../Admindashboard/pages/Agent/Agent";
+import Master from "../Admindashboard/pages/Master/Master";
+import SubAdmin from "../Admindashboard/pages/SubAdmin/SubAdmin";
+import Admin from "../Admindashboard/pages/Admin/Admin";
+import GeneralSetting from "../Admindashboard/pages/GeneralSetting/GeneralSetting";
+import AdminSetting from "../Admindashboard/pages/AdminSetting/AdminSetting";
+import GameApiKey from "../Admindashboard/pages/GameApiKey/GameApiKey";
+import HomeControl from "../Admindashboard/pages/HomeControl/HomeControl";
+import ColorControl from "../Admindashboard/pages/ColorControl/ColorControl";
+import AddGameApiKey from "../Admindashboard/pages/AddGameApiKey/AddGameApiKey";
+import LiveGame from "../Admindashboard/pages/LiveGame/LiveGame";
+import ActiveGame from "../Admindashboard/pages/ActiveGame/ActiveGame";
+import DeactiveGame from "../Admindashboard/pages/DeactiveGame/DeactiveGame";
+import GameFileImport from "../Admindashboard/pages/GameFileImport/GameFileImport";
+import ApiImport from "../Admindashboard/pages/ApiImport/ApiImport";
+import PragmaticPlay from "../Admindashboard/pages/PragmaticPlay/PragmaticPlay";
+import Evolution from "../Admindashboard/pages/Evolution/Evolution";
+import BGaming from "../Admindashboard/pages/BGaming/BGaming";
+import Amusnet from "../Admindashboard/pages/Amusnet/Amusnet";
+import PGSoft from "../Admindashboard/pages/PGSoft/PGSoft";
+import PlayAndGo from "../Admindashboard/pages/PlayAndGo/PlayAndGo";
+import PlayTech from "../Admindashboard/pages/PlayTech/PlayTech";
+import NoLimitCity from "../Admindashboard/pages/NoLimitCity/NoLimitCity";
+import HackSaw from "../Admindashboard/pages/HackSaw/HackSaw";
+import BetListLive from "../Admindashboard/pages/BetListLive/BetListLive";
+import Banking from "../Admindashboard/pages/Banking/Banking";
+import Message from "../Admindashboard/pages/Message/Message";
+import RiskManagement from "../Admindashboard/pages/RiskManagement/RiskManagement";
 
 export const router = createBrowserRouter([
   {
@@ -209,5 +243,140 @@ export const router = createBrowserRouter([
   {
     path: "my-account",
     Component: MobileAccount,
+  },
+  {
+    path: "/admin-dashboard",
+    element: <AdminLayout />,
+    children: [
+      { index: true, element: <AdHome /> },
+      {
+        path: "my-account",
+        element: <MyAccount />,
+      },
+      {
+        path: "bet-lists",
+        element: <BetList />,
+      },
+      {
+        path: "users",
+        element: <User />,
+      },
+      {
+        path: "sub-agent",
+        element: <SubAgent />,
+      },
+      {
+        path: "agent",
+        element: <Agent />,
+      },
+      {
+        path: "master",
+        element: <Master />,
+      },
+      {
+        path: "sub-admin",
+        element: <SubAdmin />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
+      },
+      {
+        path: "general-setting",
+        element: <GeneralSetting />,
+      },
+      {
+        path: "admin-setting",
+        element: <AdminSetting />,
+      },
+      {
+        path: "game-api-key",
+        element: <GameApiKey />,
+      },
+      {
+        path: "home-control",
+        element: <HomeControl />,
+      },
+      {
+        path: "color-control",
+        element: <ColorControl />,
+      },
+      {
+        path: "add-game-api-key",
+        element: <AddGameApiKey />,
+      },
+      {
+        path: "live-game",
+        element: <LiveGame />,
+      },
+      {
+        path: "active-game",
+        element: <ActiveGame />,
+      },
+      {
+        path: "deactive-game",
+        element: <DeactiveGame />,
+      },
+      {
+        path: "game-file-import",
+        element: <GameFileImport />,
+      },
+      {
+        path: "api-import",
+        element: <ApiImport />,
+      },
+      {
+        path: "progmatic-play",
+        element: <PragmaticPlay />,
+      },
+      {
+        path: "evolution",
+        element: <Evolution />,
+      },
+      {
+        path: "b-gaming",
+        element: <BGaming />,
+      },
+      {
+        path: "amusnet",
+        element: <Amusnet />,
+      },
+      {
+        path: "pg-soft",
+        element: <PGSoft />,
+      },
+      {
+        path: "play-and-go",
+        element: <PlayAndGo />,
+      },
+      {
+        path: "play-tech",
+        element: <PlayTech />,
+      },
+      {
+        path: "no-limit-city",
+        element: <NoLimitCity />,
+      },
+      {
+        path: "hack-saw",
+        element: <HackSaw />,
+      },
+      {
+        path: "bet-list-live",
+        element: <BetListLive />,
+      },
+      {
+        path: "banking",
+        element: <Banking />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "risk-management",
+        element: <RiskManagement />,
+      },
+    ],
   },
 ]);
