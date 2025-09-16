@@ -72,6 +72,9 @@ import BetListLive from "../Admindashboard/pages/BetListLive/BetListLive";
 import Banking from "../Admindashboard/pages/Banking/Banking";
 import Message from "../Admindashboard/pages/Message/Message";
 import RiskManagement from "../Admindashboard/pages/RiskManagement/RiskManagement";
+import AdminLogin from "../pages/AdminLogin/AdminLogin";
+import PrivateRoute from "../routes/PrivateRoute";
+import Unauthorized from "../pages/Unauthorized/Unauthorized";
 
 export const router = createBrowserRouter([
   {
@@ -245,8 +248,16 @@ export const router = createBrowserRouter([
     Component: MobileAccount,
   },
   {
+    path: "admin-login",
+    element: <AdminLogin />,
+  },
+  {
     path: "/admin-dashboard",
-    element: <AdminLayout />,
+    element: (
+      <PrivateRoute allowedRoles={["admin", "superadmin", "motheradmin"]}>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
     children: [
       { index: true, element: <AdHome /> },
       {
@@ -378,5 +389,9 @@ export const router = createBrowserRouter([
         element: <RiskManagement />,
       },
     ],
+  },
+  {
+    path: "unauthorized",
+    element: <Unauthorized />,
   },
 ]);
