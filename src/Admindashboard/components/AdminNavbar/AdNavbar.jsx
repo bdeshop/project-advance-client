@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router"; // react-router-dom ব্যবহার করতে হবে
 import {
   FaBars,
@@ -8,10 +8,12 @@ import {
   FaSignOutAlt,
   FaMicrophone,
 } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
 
 const AdNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const { user ,logout} = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -98,8 +100,8 @@ const AdNavbar = () => {
           {/* Desktop & Tablet Right Section */}
           <div className="hidden md:flex items-center gap-4 text-sm text-white">
             <span>
-              <strong className="text-xl">admisn8383</strong>{" "}
-              <span className="text-gray-400 text-sm">(mother-admin)</span>
+              <strong className="text-xl">{user.username}</strong>{" "}
+              <span className="text-gray-400 text-sm">({user.role})</span>
             </span>
             <span className="text-yellow-500 font-semibold text-xl">
               - Main Balance: <span className="text-white">0 USD</span>
@@ -110,7 +112,7 @@ const AdNavbar = () => {
               <FaRedo className="text-white" />
             </button>
             <button className="p-2 hover:bg-gray-700 rounded-full hover:cursor-pointer">
-              <FaSignOutAlt className="text-white" />
+              <FaSignOutAlt onClick={logout} className="text-white" />
             </button>
           </div>
 
@@ -128,8 +130,8 @@ const AdNavbar = () => {
         {/* Mobile User Info */}
         <div className="flex  items-center justify-between mt-2 text-xs text-white md:hidden">
           <span className="flex justify-center items-center">
-            <strong className="text-[14px]">admisn8383</strong>{" "}
-            <span className="text-gray-400">(mother-admin)</span>
+            <strong className="text-[14px]">{user.username}</strong>{" "}
+            <span className="text-gray-400">({user.role})</span>
           </span>
           <span className="text-yellow-500 font-semibold flex justify-center items-center text-[14px]">
             - Main Balance: <span className="text-white">0 USD</span>

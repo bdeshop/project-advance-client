@@ -73,8 +73,8 @@ import Banking from "../Admindashboard/pages/Banking/Banking";
 import Message from "../Admindashboard/pages/Message/Message";
 import RiskManagement from "../Admindashboard/pages/RiskManagement/RiskManagement";
 import AdminLogin from "../pages/AdminLogin/AdminLogin";
-import PrivateRoute from "../routes/PrivateRoute";
 import Unauthorized from "../pages/Unauthorized/Unauthorized";
+import PrivateRoute from "../routes/PrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -254,7 +254,7 @@ export const router = createBrowserRouter([
   {
     path: "/admin-dashboard",
     element: (
-      <PrivateRoute allowedRoles={["admin", "superadmin", "motheradmin"]}>
+      <PrivateRoute>
         <AdminLayout />
       </PrivateRoute>
     ),

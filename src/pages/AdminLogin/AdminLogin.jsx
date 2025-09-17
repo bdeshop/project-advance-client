@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaRedo } from "react-icons/fa";
+import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
-// import { useAuth } from "../../hooks/useAuth";
+
 
 const AdminLogin = () => {
   // Validation code state
   const [code, setCode] = useState(generateCode());
-  const navigate = useNavigate();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+
 
   // Function to generate random 4-digit code
   function generateCode() {
@@ -21,34 +24,25 @@ const AdminLogin = () => {
     setCode(generateCode());
   };
 
-  // ✅ Handle Login function
-  const handleLogin = async (e) => {
+ 
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    const res = await fetch("http://localhost:3000/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
 
-    try {
-      console.log("Sending:", { email, password }); // debug ফ্রন্টএন্ড
-      const res = await fetch("http://localhost:5000/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const data = await res.json();
-      console.log("Response:", data);
-
-      if (!res.ok) {
-        alert(data.message || "Login failed");
-        return;
-      }
-
-      // Token & user info handling
-      localStorage.setItem("token", data.token);
-      alert("Login successful!");
-    } catch (error) {
-      console.error(error);
+    const data = await res.json();
+    if (res.ok) {
+      login(data.user); // Save user to context & localStorage
+      navigate("/admin-dashboard"); // Redirect to dashboard
+    } else {
+      alert(data.message);
     }
   };
-
+  
   return (
     <>
       <div
@@ -76,12 +70,12 @@ const AdminLogin = () => {
               <h2 className="text-white text-lg font-semibold mb-6">
                 Mother Admin Login
               </h2>
-     
+
               {/* Form */}
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Username */}
                 <input
-                  type="email"
+                  type="text"
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}

@@ -1,17 +1,15 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // user = { name, email, role }
-  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // NEW
 
   useEffect(() => {
-    const savedUser = JSON.parse(localStorage.getItem("user"));
-    if (savedUser) {
-      setUser(savedUser);
-    }
-    setLoading(false);
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) setUser(JSON.parse(storedUser));
+    setLoading(false); // Finished loading
   }, []);
 
   const login = (userData) => {
@@ -24,14 +22,12 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("user");
   };
 
-  const adminInfo = {
-    user,
-    login,
-    logout,
-    loading,
-  };
+  // While loading, don’t render children to prevent flicker
+  if (loading) return null;
 
-  return <AuthContext value={adminInfo}>{children}</AuthContext>;
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
-
-

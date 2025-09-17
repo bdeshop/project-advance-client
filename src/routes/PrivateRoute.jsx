@@ -1,21 +1,15 @@
+// components/PrivateRoute.jsx
+import { useContext } from "react";
 import { Navigate } from "react-router";
-import { useAuth } from "../hooks/useAuth";
+import { AuthContext } from "../context/AuthContext";
+import { useLocation } from "react-router";
 
 
+const PrivateRoute = ({ children }) => {
+  const { user } = useContext(AuthContext);
+    const location = useLocation();
 
-const PrivateRoute = ({ children, allowedRoles }) => {
-  const { user, loading } = useAuth();
-
-  if (loading) return <p>Loading...</p>;
-
-  if (!user) {
-    return <Navigate to="/login" replace />;
-  }
-
-  if (allowedRoles && !allowedRoles.includes(user.role)) {
-    return <Navigate to="/unauthorized" replace />;
-  }
-
+  if (!user) return <Navigate to="/admin-login" state={location?.pathname}/>; // Not logged in
   return children;
 };
 
