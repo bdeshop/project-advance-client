@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
-import { FaUserCircle, FaCog } from "react-icons/fa";
+import { FaCog } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
 
 const AdHome = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [openIndex, setOpenIndex] = useState(null); // row wise dropdown open
   const menuRef = useRef(null);
-
+  const [openIndex, setOpenIndex] = useState(null);
+  const { user } = useContext(AuthContext);
   // বাইরে ক্লিক করলে dropdown বন্ধ হবে
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -21,122 +22,272 @@ const AdHome = () => {
     };
   }, []);
 
-  const data = [
-    {
-      username: "admin88",
-      fullname: "",
-      email: "",
-      balance: 0,
-      joinedAt: "16th Aug 2025, 5:05 pm",
-      lastLogin: "a month ago",
-      role: "",
-      status: "Activated",
-    },
-    {
-      username: "adminsn8383",
-      fullname: "",
-      email: "",
-      balance: 0,
-      joinedAt: "16th Aug 2025, 5:48 pm",
-      lastLogin: "2 minutes ago",
-      role: "mother-admin",
-      status: "Activated",
-    },
-    {
-      username: "demoUser",
-      fullname: "",
-      email: "demo@gmail.com",
-      balance: 0,
-      joinedAt: "14th Sep 2025, 11:48 pm",
-      lastLogin: "6 days ago",
-      role: "",
-      status: "Activated",
-    },
-  ];
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    username: "",
+    role: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  // ✅ Fetch admins from API
+  const fetchAdmins = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:5000/admins"); // backend port
+      const data = await res.json();
+      setAdmins(data); // এখানে সরাসরি array আসবে
+    } catch (err) {
+      console.error("Error fetching admins", err);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  // ✅ Handle input change
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  // ✅ Create new admin
+  const handleCreate = async () => {
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    const newAdmin = {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      fullname: `${formData.firstName} ${formData.lastName}`,
+      email: formData.email,
+      username: formData.username,
+      role: formData.role,
+      password: formData.password,
+    };
+
+    try {
+      const res = await fetch("http://localhost:5000/api/admins", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newAdmin),
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        alert("✅ Admin created successfully!");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          username: "",
+          role: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setIsOpen(false);
+        fetchAdmins(); // refresh list
+      } else {
+        alert("❌ Failed to create admin: " + data.message);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("❌ Error creating admin");
+    }
+  };
+
+  const handleBan = async (id) => {
+    if (user.role !== "Mother Admin") {
+      alert("Only Mother Admin can perform this action!");
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:5000/api/admins/${id}/ban`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ role: user.role }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setAdmins((prev) =>
+          prev.map((admin) =>
+            admin._id === id ? { ...admin, status: "Banned" } : admin
+          )
+        );
+      } else alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+  };
+
+  // Mother Admin actions
+  const handleDeactivate = async (id) => {
+    if (user.role !== "Mother Admin") {
+      alert("Only Mother Admin can perform this action!");
+      return;
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/admins/${id}/deactivate`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: user.role }),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        setAdmins((prev) =>
+          prev.map((admin) =>
+            admin._id === id ? { ...admin, status: "Deactivated" } : admin
+          )
+        );
+      } else alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+  };
+
+  const handleActivate = async (id) => {
+    if (user.role !== "Mother Admin") {
+      alert("Only Mother Admin can perform this action!");
+      return;
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/admins/${id}/activate`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ role: user.role }),
+        }
+      );
+      const data = await res.json();
+      if (data.success) {
+        setAdmins((prev) =>
+          prev.map((admin) =>
+            admin._id === id ? { ...admin, status: "Activated" } : admin
+          )
+        );
+      } else alert(data.message);
+    } catch (err) {
+      console.error(err);
+      alert("Something went wrong!");
+    }
+  };
 
   return (
     <>
+      {/* start */}
       <div className="p-4 space-y-6">
-        {/* Top Search & Actions */}
+        {" "}
+        {/* Top Search & Actions */}{" "}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          {/* Left Side */}
+          {" "}
+          {/* Left Side */}{" "}
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+            {" "}
             <div className="flex items-center gap-2">
+              {" "}
               <input
                 type="text"
                 placeholder="Find Member"
                 className="input input-bordered w-60"
-              />
-              <button className="btn bg-yellow-600 text-white">Search</button>
-            </div>
-
+              />{" "}
+              <button className="btn bg-yellow-600 text-white">Search</button>{" "}
+            </div>{" "}
             <div className="flex items-center gap-2">
-              <span className="font-medium">Admin List</span>
+              {" "}
+              <span className="font-medium">Admin List</span>{" "}
               <select className="select select-bordered w-32">
-                <option>Active</option>
-                <option>Inactive</option>
-                <option>Pending</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Right Side */}
+                {" "}
+                <option>Active</option> <option>Inactive</option>{" "}
+                <option>Pending</option>{" "}
+              </select>{" "}
+            </div>{" "}
+          </div>{" "}
+          {/* Right Side */}{" "}
           <div className="flex items-center gap-3">
-            <span className="font-medium">Total records: 4</span>
+            {" "}
+            <span className="font-medium">
+              Total records: {admins.length}
+            </span>{" "}
             <button
               onClick={() => setIsOpen(true)}
               className="btn btn-outline flex items-center gap-2"
             >
-              <FaUsers /> Add Client
-            </button>
-            <button className="btn btn-outline">
-              <IoReload />
-            </button>
-          </div>
-        </div>
-
-        {/* Stats Cards */}
+              {" "}
+              <FaUsers /> Add Client{" "}
+            </button>{" "}
+            <button onClick={fetchAdmins} className="btn btn-outline">
+              {" "}
+              <IoReload />{" "}
+            </button>{" "}
+          </div>{" "}
+        </div>{" "}
+        {/* Stats Cards */}{" "}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          {" "}
           <div className="bg-black text-center rounded-md p-4">
-            <h3 className="text-white font-semibold">Total Balance</h3>
+            {" "}
+            <h3 className="text-white font-semibold">Total Balance</h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
-              USD (0.00)
-            </div>
-          </div>
-
+              {" "}
+              USD (0.00){" "}
+            </div>{" "}
+          </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
-            <h3 className="text-white font-semibold">Remaining Balance</h3>
+            {" "}
+            <h3 className="text-white font-semibold">Remaining Balance</h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
-              USD (0.00)
-            </div>
-          </div>
-
+              {" "}
+              USD (0.00){" "}
+            </div>{" "}
+          </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
-            <h3 className="text-white font-semibold">Total Self Deposit</h3>
+            {" "}
+            <h3 className="text-white font-semibold">
+              Total Self Deposit
+            </h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
-              USD (0.00)
-            </div>
-          </div>
-
+              {" "}
+              USD (0.00){" "}
+            </div>{" "}
+          </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
-            <h3 className="text-white font-semibold">Total Exposure</h3>
+            {" "}
+            <h3 className="text-white font-semibold">Total Exposure</h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
-              USD (0.00)
-            </div>
-          </div>
-
+              {" "}
+              USD (0.00){" "}
+            </div>{" "}
+          </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
-            <h3 className="text-white font-semibold">Total Self Withdrawal</h3>
+            {" "}
+            <h3 className="text-white font-semibold">
+              Total Self Withdrawal
+            </h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
-              USD (0.00)
-            </div>
-          </div>
-        </div>
+              {" "}
+              USD (0.00){" "}
+            </div>{" "}
+          </div>{" "}
+        </div>{" "}
       </div>
-
+      {/* Table */}
       <div className="overflow-x-auto rounded-md p-4 ">
-        <table className="table table-zebra w-full border-collapse">
-          {/* Table Head */}
+        <table className="table w-full border-collapse">
           <thead className="bg-gray-100 text-gray-800">
             <tr>
               <th className="border px-4 py-2">USERNAME</th>
@@ -151,85 +302,111 @@ const AdHome = () => {
             </tr>
           </thead>
 
-          {/* Table Body */}
           <tbody>
-            {data.map((row, idx) => (
-              <tr key={idx} className="text-center">
-                {/* Username */}
-                <td className="border px-4 py-2">
-                  <div className="flex items-center gap-2">
-                    <span className="px-2 py-1 bg-green-500 text-white rounded-sm">
-                      AD
-                    </span>
-                    <span className="text-blue-600">{row.username}</span>
-                  </div>
-                </td>
-
-                {/* Full Name */}
-                <td className="border px-4 py-2">{row.fullname}</td>
-
-                {/* Email */}
-                <td className="border px-4 py-2">
-                  <span className="text-red-600">{row.email}</span>
-                </td>
-
-                {/* Balance */}
-                <td className="border px-4 py-2">{row.balance}</td>
-
-                {/* Joined At */}
-                <td className="border px-4 py-2 text-nowrap">{row.joinedAt}</td>
-
-                {/* Last Login */}
-                <td className="border px-4 py-2">{row.lastLogin}</td>
-
-                {/* Role */}
-                <td className="border px-4 py-2 text-nowrap">{row.role}</td>
-
-                {/* Status */}
-                <td className="border px-4 py-2">
-                  <span className="bg-green-100 text-green-700 px-3 py-1 rounded flex items-center justify-center gap-1">
-                    <span className="w-2 h-2 rounded-full bg-green-600"></span>
-                    {row.status}
-                  </span>
-                </td>
-
-                {/* Actions */}
-                <td className="border px-4 py-2">
-                  <div className="flex justify-center gap-2">
-                    <button className="btn btn-xs bg-gray-200">BS</button>
-                    <div
-                      className="relative inline-block text-left"
-                      ref={menuRef}
-                    >
-                      {/* Settings Button */}
-                      <button
-                        className="btn btn-xs bg-gray-200 p-2 rounded"
-                        onClick={() =>
-                          setOpenIndex(openIndex === idx ? null : idx)
-                        }
-                      >
-                        <FaCog />
-                      </button>
-
-                      {/* Dropdown Menu */}
-                      {openIndex === idx && (
-                        <div className="absolute mt-2 right-0 w-40 bg-white border rounded shadow-lg z-10">
-                          <button className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100">
-                            Ban User
-                          </button>
-                          <button className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100">
-                            Deactivate
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    <button className="btn btn-xs bg-gray-200">
-                      <FaUsers />
-                    </button>
-                  </div>
+            {loading ? (
+              <tr>
+                <td colSpan="9" className="text-center p-4">
+                  Loading...
                 </td>
               </tr>
-            ))}
+            ) : admins.length > 0 ? (
+              admins.map(
+                (
+                  row,
+                  idx // ✅ index declare করা হলো এখানে
+                ) => (
+                  <tr key={row._id} className="text-center">
+                    <td className="border px-4 py-2">
+                      <div className="flex items-center gap-2 justify-start">
+                        <span className="px-2 py-1 bg-green-500 text-white rounded-sm">
+                          AD
+                        </span>
+                        <span className="text-blue-600 text-nowrap">
+                          {row.username}
+                        </span>
+                      </div>
+                    </td>
+                    <td className="border px-4 py-2 text-nowrap">
+                      {row.fullname}
+                    </td>
+                    <td className="border px-4 py-2 text-nowrap">
+                      <span className="text-red-600">{row.email}</span>
+                    </td>
+                    <td className="border px-4 py-2">{row.balance}</td>
+                    <td className="border px-4 py-2 text-nowrap">
+                      {new Date(row.joinedAt).toLocaleString()}
+                    </td>
+                    <td className="border px-4 py-2 text-nowrap">
+                      {row.lastLogin}
+                    </td>
+                    <td className="border px-4 py-2 text-nowrap">{row.role}</td>
+                    <td className="border px-4 py-2">
+                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded flex items-center justify-center gap-1">
+                        <span className="w-2 h-2 rounded-full bg-green-600"></span>
+                        {row.status}
+                      </span>
+                    </td>
+
+                    {/* Actions */}
+                    <td className="border px-4 py-2">
+                      <div className="flex justify-center gap-2">
+                        <div
+                          className="relative inline-block text-left"
+                          ref={menuRef}
+                        >
+                          <button
+                            className="btn btn-xs bg-gray-200 p-2 rounded"
+                            onClick={() =>
+                              setOpenIndex(openIndex === idx ? null : idx)
+                            }
+                          >
+                            <FaCog />
+                          </button>
+                          {/* Dropdown */}{" "}
+                          {openIndex === idx && (
+                            <div className="absolute mt-2 right-0 w-40 bg-white border rounded shadow-lg z-10">
+                              {" "}
+                              {row.status === "Activated" ? (
+                                <button
+                                onClick={() => handleDeactivate(row._id)}
+                                  
+                                  className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
+                                >
+                                  {" "}
+                                  Deactivate{" "}
+                                </button>
+                              ) : (
+                                
+                                <button
+                                  onClick={() => handleActivate(row._id)}
+                                  className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
+                                >
+                                  {" "}
+                                  Activate{" "}
+                                </button>
+                              )}
+                              <button
+                                onClick={() => handleBan(row._id)}
+                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
+                              >
+                                {" "}
+                                Ban User{" "}
+                              </button>{" "}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              )
+            ) : (
+              <tr>
+                <td colSpan="9" className="text-center p-4">
+                  No admins found
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -239,11 +416,11 @@ const AdHome = () => {
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
           <div className="bg-white rounded-md shadow-lg w-full max-w-sm p-2">
             {/* Header */}
-            <div className="flex justify-between items-center  px-4 py-2">
+            <div className="flex justify-between items-center px-4 py-2">
               <h2 className="text-lg font-semibold">Create user</h2>
               <button
                 onClick={() => setIsOpen(false)}
-                className="text-gray-500 hover:text-gray-700 text-xl hover:cursor-pointer"
+                className="text-gray-500 hover:text-gray-700 text-xl"
               >
                 ✕
               </button>
@@ -251,12 +428,14 @@ const AdHome = () => {
 
             {/* Body */}
             <div className="p-4 space-y-3">
-              {/* First & Last Name */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="mb-2 font-bold">First Name</label>
                   <input
                     type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleChange}
                     placeholder="First Name"
                     className="input input-bordered w-full"
                   />
@@ -265,34 +444,43 @@ const AdHome = () => {
                   <label className="mb-2 font-bold">Last Name</label>
                   <input
                     type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleChange}
                     placeholder="Last Name"
                     className="input input-bordered w-full"
                   />
                 </div>
               </div>
 
-              {/* Email */}
               <label className="mb-2 font-bold">Email</label>
               <input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Email"
                 className="input input-bordered w-full"
               />
 
-              {/* Username */}
               <label className="mb-2 font-bold">Username</label>
               <input
                 type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
                 placeholder="Username"
                 className="input input-bordered w-full"
               />
 
-              {/* Role Dropdown */}
               <label className="mb-2 font-bold">Role</label>
-              <select className="select select-bordered w-full">
-                <option disabled selected>
-                  Select a role
-                </option>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="select select-bordered w-full"
+              >
+                <option value="">Select a role</option>
                 <option>User</option>
                 <option>Sub Agent</option>
                 <option>Agent</option>
@@ -301,18 +489,22 @@ const AdHome = () => {
                 <option>Admin</option>
               </select>
 
-              {/* Password */}
               <label className="mb-2 font-bold">Password</label>
               <input
                 type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
                 placeholder="Password"
                 className="input input-bordered w-full"
               />
 
-              {/* Confirm Password */}
               <label className="mb-2 font-bold">Confirm Password</label>
               <input
                 type="password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
                 placeholder="Confirm Password"
                 className="input input-bordered w-full"
               />
@@ -321,7 +513,7 @@ const AdHome = () => {
             {/* Footer */}
             <div className="flex justify-end px-4 py-2">
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleCreate}
                 className="btn bg-yellow-700 hover:bg-yellow-800 text-white"
               >
                 Create

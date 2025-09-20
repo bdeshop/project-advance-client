@@ -100,7 +100,7 @@ const AdNavbar = () => {
           {/* Desktop & Tablet Right Section */}
           <div className="hidden md:flex items-center gap-4 text-sm text-white">
             <span>
-              <strong className="text-xl">{user.username}</strong>{" "}
+              <strong className="text-xl">{user.fullname}</strong>{" "}
               <span className="text-gray-400 text-sm">({user.role})</span>
             </span>
             <span className="text-yellow-500 font-semibold text-xl">
