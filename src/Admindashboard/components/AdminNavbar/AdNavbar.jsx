@@ -13,7 +13,7 @@ import { AuthContext } from "../../../context/AuthContext";
 const AdNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const { user ,logout} = useContext(AuthContext);
+  const { user ,logout,logo} = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -91,9 +91,10 @@ const AdNavbar = () => {
           {/* Left Logo */}
           <div className="flex items-center gap-2">
             <img
-              src="https://i.ibb.co/3FW7ptF/logo.png" // এখানে আপনার logo দিবেন
+              src={logo} // এখানে আপনার logo দিবেন
+            
               alt="Logo"
-              className="h-10 md:h-12"
+              className="h-10 w-10 md:h-12"
             />
           </div>
 
@@ -170,11 +171,7 @@ const AdNavbar = () => {
                       {item.name} <FaChevronDown className="ml-1 text-xs" />
                     </button>
                     {activeDropdown === item.name && (
-                      <div className="absolute left-0 top-full w-44 border border-gray-300 bg-gray-100">
-                        {/* Header */}
-                        {/* <div className="bg-yellow-400 px-4 py-2 font-semibold text-black border-b border-gray-300">
-                        {item.name}
-                      </div> */}
+                      <div className="absolute z-50 left-0 top-full w-44 border border-gray-300 bg-gray-100">
                         {/* Dropdown Items */}
                         {item.dropdown.map((drop, i) => (
                           <NavLink
@@ -218,7 +215,7 @@ const AdNavbar = () => {
 
         {/* Mobile Sidebar */}
         <div
-          className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-yellow-600 text-black transform transition-transform duration-300 ${
+          className={`lg:hidden fixed top-0 left-0 h-full w-64 bg-yellow-600 text-black transform transition-transform duration-300 z-50 ${
             isOpen ? "translate-x-0" : "-translate-x-full"
           }`}
         >

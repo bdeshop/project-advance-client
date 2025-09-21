@@ -3,6 +3,7 @@ import { FaUsers } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
 import { FaCog } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
+import { TiUserAdd } from "react-icons/ti";
 
 const AdHome = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,41 @@ const AdHome = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const allRoles = [
+    "Select User Role",
+    "Sub Agent",
+    "Agent",
+    "Master",
+    "Sub Admin",
+    "Mother Admin",
+  ];
+
+  // role অনুযায়ী ফিল্টার
+  const getFilteredRoles = (role) => {
+    if (role === "Mother Admin") {
+      return allRoles;
+    }
+    if (role === "Sub Admin") {
+      return ["Sub Admin", "Master", "Agent", "Sub Agent"];
+    }
+    if (role === "Master") {
+      return ["Master", "Agent", "Sub Agent"];
+    }
+    if (role === "Agent") {
+      return ["Agent", "Sub Agent"];
+    }
+    if (role === "Sub Agent") {
+      return ["Sub Agent"];
+    }
+    if (role === "User") {
+      return ["User"];
+    }
+    return [];
+  };
+
+  const filteredRoles = getFilteredRoles(user.role);
+  const [selectedRole, setSelectedRole] = useState(filteredRoles[0] || "");
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -190,7 +226,7 @@ const AdHome = () => {
   return (
     <>
       {/* start */}
-      <div className="p-4 space-y-6">
+      <div className="p-4 space-y-6 ">
         {" "}
         {/* Top Search & Actions */}{" "}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -341,8 +377,30 @@ const AdHome = () => {
                     </td>
                     <td className="border px-4 py-2 text-nowrap">{row.role}</td>
                     <td className="border px-4 py-2">
-                      <span className="bg-green-100 text-green-700 px-3 py-1 rounded flex items-center justify-center gap-1">
-                        <span className="w-2 h-2 rounded-full bg-green-600"></span>
+                      <span
+                        className={`px-3 py-1 rounded flex items-center justify-center gap-1
+    ${
+      row.status === "active"
+        ? "bg-green-100 text-green-700"
+        : row.status === "deactive"
+        ? "bg-red-100 text-red-700"
+        : row.status === "banned"
+        ? "bg-yellow-100 text-yellow-700"
+        : "bg-gray-100 text-gray-700"
+    }`}
+                      >
+                        <span
+                          className={`w-2 h-2 rounded-full
+      ${
+        row.status === "Activated"
+          ? "bg-green-600"
+          : row.status === "Deactivated"
+          ? "bg-red-600"
+          : row.status === "Banned"
+          ? "bg-yellow-600"
+          : "bg-gray-600"
+      }`}
+                        ></span>
                         {row.status}
                       </span>
                     </td>
@@ -350,6 +408,7 @@ const AdHome = () => {
                     {/* Actions */}
                     <td className="border px-4 py-2">
                       <div className="flex justify-center gap-2">
+                        <button className="btn btn-xs bg-gray-200">BS</button>
                         <div
                           className="relative inline-block text-left"
                           ref={menuRef}
@@ -368,18 +427,16 @@ const AdHome = () => {
                               {" "}
                               {row.status === "Activated" ? (
                                 <button
-                                onClick={() => handleDeactivate(row._id)}
-                                  
-                                  className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
+                                  onClick={() => handleDeactivate(row._id)}
+                                  className={`w-full text-left px-4 py-2 text-red-600 hover:bg-red-100`}
                                 >
                                   {" "}
                                   Deactivate{" "}
                                 </button>
                               ) : (
-                                
                                 <button
                                   onClick={() => handleActivate(row._id)}
-                                  className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
+                                  className="w-full text-left px-4 py-2 text-green-600 hover:bg-green-100"
                                 >
                                   {" "}
                                   Activate{" "}
@@ -387,7 +444,7 @@ const AdHome = () => {
                               )}
                               <button
                                 onClick={() => handleBan(row._id)}
-                                className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
+                                className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
                               >
                                 {" "}
                                 Ban User{" "}
@@ -395,6 +452,10 @@ const AdHome = () => {
                             </div>
                           )}
                         </div>
+                        <button className="btn btn-xs bg-gray-200">
+                          {" "}
+                          <TiUserAdd />
+                        </button>
                       </div>
                     </td>
                   </tr>
@@ -475,18 +536,15 @@ const AdHome = () => {
 
               <label className="mb-2 font-bold">Role</label>
               <select
-                name="role"
-                value={formData.role}
-                onChange={handleChange}
-                className="select select-bordered w-full"
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="select selected-border w-full p-2 rounded"
               >
-                <option value="">Select a role</option>
-                <option>User</option>
-                <option>Sub Agent</option>
-                <option>Agent</option>
-                <option>Master</option>
-                <option>Sub Admin</option>
-                <option>Admin</option>
+                {filteredRoles.map((role, idx) => (
+                  <option key={idx} value={role}>
+                    {role}
+                  </option>
+                ))}
               </select>
 
               <label className="mb-2 font-bold">Password</label>
