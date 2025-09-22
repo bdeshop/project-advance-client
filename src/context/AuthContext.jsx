@@ -7,7 +7,9 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true); // NEW
   const [logo, setLogo] = useState(null);
-
+  const [id, setId] = useState(null);
+  const [sliders, setSliders] = useState([]);
+  const [settings, setSettings] = useState({ title: "", favicon: "" });
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -33,6 +35,8 @@ export const AuthProvider = ({ children }) => {
       // যদি ডাটাবেসে logo থাকে
       if (data && data.logoUrl) {
         setLogo(data.logoUrl);
+        setId(data._id);
+        console.log(logo);
         console.log("Fetched logo:", data.logoUrl);
       } else {
         console.log("No logo found in DB");
@@ -42,17 +46,72 @@ export const AuthProvider = ({ children }) => {
       console.error("Error fetching logo:", error);
     }
   };
-    useEffect(() => {
+  useEffect(() => {
     fetchLogo();
   }, []);
 
+  // ✅ স্লাইডার ডাটা ফেচ
+  const fetchSliders = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/sliders");
+      setSliders(res.data);
+      console.log(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSliders();
+  }, []);
+
+  // favicon and title change
+  const fetchSettings = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/settings");
+      if (data) {
+        setSettings(data);
+
+        // ✅ title apply করা
+        if (data.title) {
+          document.title = data.title;
+        }
+
+        // ✅ favicon apply করা
+        if (data.faviconUrl) {
+          let link =
+            document.querySelector("link[rel~='icon']") ||
+            document.createElement("link");
+          link.rel = "icon";
+          link.href = data.faviconUrl;
+          document.head.appendChild(link);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
 
   return (
     <AuthContext.Provider
-      value={{ user, login, logout, logo, setLogo, fetchLogo }}
+      value={{
+        user,
+        login,
+        logout,
+        logo,
+        setLogo,
+        fetchLogo,
+        id,
+        setId,
+        sliders,
+      }}
     >
       {children}
     </AuthContext.Provider>

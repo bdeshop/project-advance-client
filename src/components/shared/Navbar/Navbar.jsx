@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   FaBars,
   FaTimes,
@@ -19,12 +19,14 @@ import {
 import { IoSettings } from "react-icons/io5";
 import { MdArrowDropDown } from "react-icons/md";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { logo } = useContext(AuthContext);
 
   return (
     <nav className="w-full bg-[#047857] text-white fixed top-0 left-0 z-50">
@@ -34,13 +36,13 @@ const Navbar = () => {
         <div className="flex items-center space-x-3">
           {!isLoggedIn && (
             <Link to="/" className="text-2xl font-bold text-yellow-400">
-              baji365
+              <img src={logo} alt="" className="w-14 h-10" />
             </Link>
           )}
           {isLoggedIn && (
             <Link to="/">
               <h1 className="hidden md:flex text-2xl font-bold text-yellow-400">
-                baji365
+                <img src={logo} alt="" className="w-14 h-10" />
               </h1>
             </Link>
           )}
