@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { Link } from "react-router";
+import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { loginImage } = useContext(AuthContext);
 
   return (
     <div className="lg:hidden flex items-center justify-center bg-gray-200 mt-12">
@@ -12,7 +14,7 @@ const Login = () => {
         {/* Top Banner */}
         <div className="relative">
           <img
-            src="https://i.ibb.co.com/hJSHdMXN/edf588c5-1a55-4fb4-b241-7e3da79d52f0-table-games-new-website.jpg" // replace with your image path
+            src={loginImage} // replace with your image path
             alt="Login Banner"
             className="w-full"
           />

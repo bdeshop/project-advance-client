@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaArrowRight, FaEye, FaEyeSlash } from "react-icons/fa";
 import { ImSpinner11 } from "react-icons/im";
+import { AuthContext } from "../../context/AuthContext";
 
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const { signupImage } = useContext(AuthContext);
+
+  console.log(signupImage)
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-400 lg:mt-26">
       <div className="w-full max-w-7xl bg-gray-400 border-2 border-blue-500 rounded-md p-6 md:flex">
@@ -152,7 +157,7 @@ const SignUp = () => {
         {/* Right Side - Banner (Desktop Only) */}
         <div className="hidden md:flex w-4/5 items-center justify-center">
           <img
-            src="https://i.ibb.co.com/wFWTNcjJ/GFTW-Craps-Throw-2000x1250-0.jpg" // Replace with your actual banner image path
+            src={signupImage} // Replace with your actual banner image path
             alt="Signup Banner"
             className="rounded"
           />

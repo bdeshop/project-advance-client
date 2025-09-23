@@ -10,6 +10,12 @@ export const AuthProvider = ({ children }) => {
   const [id, setId] = useState(null);
   const [sliders, setSliders] = useState([]);
   const [settings, setSettings] = useState({ title: "", favicon: "" });
+  const [signupImage, setSignupImage] = useState(null);
+  const [signupId, setSignupId] = useState(null);
+
+  const [loginImage, setLoginImage] = useState(null);
+  const [loginImageId, setLoginImageId] = useState(null);
+  const [AdminLoginImage, setAdminLoginImage] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -96,6 +102,61 @@ export const AuthProvider = ({ children }) => {
     fetchSettings();
   }, []);
 
+  const fetchSignupImage = async () => {
+    try {
+      const { data } = await axios.get(
+        "http://localhost:5000/api/signup-image"
+      );
+      if (data && data.imageUrl) {
+        setSignupImage(data.imageUrl);
+        setSignupId(data._id);
+      } else {
+      }
+    } catch (err) {
+      console.error("Error fetching signup image:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchSignupImage();
+  }, []);
+
+  const fetchLoginImage = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/login-image");
+      if (data && data.imageUrl) {
+        setLoginImage(data.imageUrl);
+        setLoginImageId(data._id);
+      } else {
+        setLoginImage(null);
+      }
+    } catch (error) {
+      console.error("Error fetching login image:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchLoginImage();
+  }, []);
+
+  // Fetch Login Image
+  const fetchAdminLoginImage = async () => {
+    try {
+      const { data } = await axios.get("http://localhost:5000/api/admin-login-image");
+      if (data && data.loginImageUrl) {
+        setAdminLoginImage(data.loginImageUrl);
+        console.log(data.loginImageUrl)
+        setId(data._id);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAdminLoginImage();
+  }, []);
+
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
 
@@ -111,6 +172,16 @@ export const AuthProvider = ({ children }) => {
         id,
         setId,
         sliders,
+        signupId,
+        signupImage,
+        setSignupId,
+        fetchSignupImage,
+        fetchLoginImage,
+        setLoginImage,
+        setLoginImageId,
+        loginImage,
+        loginImageId,
+        AdminLoginImage,
       }}
     >
       {children}

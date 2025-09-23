@@ -9,7 +9,8 @@ const AdminLogin = () => {
   const [code, setCode] = useState(generateCode());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login } = useContext(AuthContext);
+  const { login ,AdminLoginImage} = useContext(AuthContext);
+  console.log(AdminLoginImage)
   const navigate = useNavigate();
 
 
@@ -52,7 +53,7 @@ const AdminLogin = () => {
         <div className="flex justify-center items-center ">
           <div className="hidden lg:block rounded-2xl pl-2 pt-2 pb-2">
             <img
-              src="https://i.ibb.co.com/dJ6vjC1V/msid-110593191-width-96-height-65.webp"
+              src={AdminLoginImage}
               alt="picture"
               className="mx-auto h-[402px] rounded-l-2xl"
             />
