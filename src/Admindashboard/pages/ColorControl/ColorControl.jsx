@@ -1,9 +1,10 @@
 import React from 'react';
+import NavbarControl from '../../components/NavbarControl/NavbarControl';
 
 const ColorControl = () => {
     return (
         <div>
-            Color Control
+            <NavbarControl></NavbarControl>
         </div>
     );
 };

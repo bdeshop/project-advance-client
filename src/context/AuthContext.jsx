@@ -12,10 +12,14 @@ export const AuthProvider = ({ children }) => {
   const [settings, setSettings] = useState({ title: "", favicon: "" });
   const [signupImage, setSignupImage] = useState(null);
   const [signupId, setSignupId] = useState(null);
-
   const [loginImage, setLoginImage] = useState(null);
   const [loginImageId, setLoginImageId] = useState(null);
   const [AdminLoginImage, setAdminLoginImage] = useState(null);
+  const [navbar, setNavbar] = useState({
+    bgColor: "#ffffff",
+    textColor: "#000000",
+    fontSize: 16,
+  });
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -142,10 +146,11 @@ export const AuthProvider = ({ children }) => {
   // Fetch Login Image
   const fetchAdminLoginImage = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5000/api/admin-login-image");
+      const { data } = await axios.get(
+        "http://localhost:5000/api/admin-login-image"
+      );
       if (data && data.loginImageUrl) {
         setAdminLoginImage(data.loginImageUrl);
-        console.log(data.loginImageUrl)
         setId(data._id);
       }
     } catch (err) {
@@ -155,6 +160,21 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     fetchAdminLoginImage();
+  }, []);
+
+  useEffect(() => {
+    // Navbar settings fetch
+    const fetchNavbar = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/navbar");
+        setNavbar(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchNavbar();
   }, []);
 
   // While loading, don’t render children to prevent flicker
@@ -182,6 +202,7 @@ export const AuthProvider = ({ children }) => {
         loginImage,
         loginImageId,
         AdminLoginImage,
+        navbar,
       }}
     >
       {children}

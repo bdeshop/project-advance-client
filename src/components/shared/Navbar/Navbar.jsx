@@ -26,10 +26,19 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo } = useContext(AuthContext);
+  const { logo, navbar } = useContext(AuthContext);
+  const { bgColor, textColor, fontSize } = navbar;
+  console.log(bgColor);
 
   return (
-    <nav className="w-full bg-[#047857] text-white fixed top-0 left-0 z-50">
+    <nav
+      className="w-full text-white fixed top-0 left-0 z-50"
+      style={{
+        backgroundColor: bgColor,
+        color: textColor,
+        fontSize: `${fontSize}px`,
+      }}
+    >
       {/* Top Section */}
       <div className="flex justify-between items-center px-4 md:px-8 py-2 lg:py-4">
         {/* Left Logo */}
