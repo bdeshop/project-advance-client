@@ -6,16 +6,20 @@ const NavbarControl = () => {
   const [textColor, setTextColor] = useState("#000000");
   const [fontSize, setFontSize] = useState(16);
   const [isEditing, setIsEditing] = useState(false);
-
+  const [bgButtonColor, setBgButtonColor] = useState("#ffffff"); // ✅ নাম ঠিক করলাম
+  const [signUpButtonBgColor,setSignUpButtonColor] = useState("#ffffff")
   useEffect(() => {
-    axios.get("http://localhost:5000/api/navbar")
-      .then(res => {
+    axios
+      .get("http://localhost:5000/api/navbar")
+      .then((res) => {
         const data = res.data;
         setBgColor(data.bgColor || "#ffffff");
         setTextColor(data.textColor || "#000000");
         setFontSize(data.fontSize || 16);
+        setBgButtonColor(data.bgButtonColor || "#ffffff"); // ✅ একই নাম
+        signUpButtonBgColor(data.signUpButtonBgColor || "#ffffff")
       })
-      .catch(err => console.error(err));
+      .catch((err) => console.error(err));
   }, []);
 
   const handleSubmit = async (e) => {
@@ -23,9 +27,11 @@ const NavbarControl = () => {
     if (!isEditing) return;
 
     try {
-      const res = await axios.post("http://localhost:5000/api/navbar", {
+      await axios.post("http://localhost:5000/api/navbar", {
         bgColor,
         textColor,
+        bgButtonColor, // ✅ backend এর সাথে match করলাম
+        signUpButtonBgColor,
         fontSize: Number(fontSize),
       });
       alert("✅ Navbar settings saved!");
@@ -39,15 +45,18 @@ const NavbarControl = () => {
   return (
     <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-yellow-600">Navbar Settings</h2>
+        <h2 className="text-xl font-semibold text-yellow-600">
+          Home page navbar color control
+        </h2>
         <button
-           onClick={() => setIsEditing(true)}
+          onClick={() => setIsEditing(true)}
           className={`px-3 py-1 rounded text-white font-medium ${
-            isEditing ? "bg-gray-400 cursor-not-allowed" : "bg-green-500 hover:bg-green-600"
+            isEditing
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-500 hover:bg-green-600"
           }`}
-          disabled={isEditing} // prevent re-click while editing
+          disabled={isEditing}
         >
-        
           Edit
         </button>
       </div>
@@ -73,6 +82,53 @@ const NavbarControl = () => {
             />
           </div>
         </div>
+
+        {/* Login Button Background Color */}
+        <div>
+          <label className="block mb-1 font-medium">
+          Login  Button Background Color:
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={bgButtonColor}
+              onChange={(e) => setBgButtonColor(e.target.value)}
+              disabled={!isEditing}
+              className="w-16 h-10 rounded border"
+            />
+            <input
+              type="text"
+              value={bgButtonColor}
+              onChange={(e) => setBgButtonColor(e.target.value)}
+              disabled={!isEditing}
+              className="border px-2 py-1 rounded w-48"
+            />
+          </div>
+        </div>
+
+        {/* Sign Up Button Background Color */}
+        <div>
+          <label className="block mb-1 font-medium">
+          SignUp  Button Background Color:
+          </label>
+          <div className="flex items-center gap-2">
+            <input
+              type="color"
+              value={signUpButtonBgColor}
+              onChange={(e) => setSignUpButtonColor(e.target.value)}
+              disabled={!isEditing}
+              className="w-16 h-10 rounded border"
+            />
+            <input
+              type="text"
+              value={signUpButtonBgColor}
+              onChange={(e) => setSignUpButtonColor(e.target.value)}
+              disabled={!isEditing}
+              className="border px-2 py-1 rounded w-48"
+            />
+          </div>
+        </div>
+
 
         {/* Text Color */}
         <div>
@@ -111,7 +167,9 @@ const NavbarControl = () => {
         <button
           type="submit"
           className={`w-full py-2 rounded text-white font-semibold mt-2 ${
-            isEditing ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"
+            isEditing
+              ? "bg-yellow-500 hover:bg-yellow-600"
+              : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isEditing}
         >

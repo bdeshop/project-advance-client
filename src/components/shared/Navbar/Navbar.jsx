@@ -1,4 +1,6 @@
 import React, { useContext, useState } from "react";
+import "./Navbar.css";
+
 import {
   FaBars,
   FaTimes,
@@ -26,9 +28,16 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo, navbar } = useContext(AuthContext);
-  const { bgColor, textColor, fontSize } = navbar;
-  console.log(bgColor);
+  const { logo, navbar, webMenu } = useContext(AuthContext);
+  const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
+    navbar;
+  const {
+    webMenuBgColor,
+    webMenuTextColor,
+    webMenuFontSize,
+    webMenuHoverColor,
+  } = webMenu;
+  console.log(webMenu);
 
   return (
     <nav
@@ -106,16 +115,35 @@ const Navbar = () => {
                 </div>
               </div>
               <button
-                className="hidden lg:flex bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white"
+                className="hidden lg:flex px-3 py-1 rounded"
+                style={{
+                  backgroundColor: bgButtonColor,
+                  color: textColor,
+                  fontSize: `${fontSize}px`,
+                }}
                 onClick={() => setIsLoggedIn(true)}
               >
                 Login
               </button>
-              <button className="lg:hidden bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white">
+              <button
+                className="lg:hidden px-3 py-1 rounded "
+                style={{
+                  backgroundColor: bgButtonColor,
+                  color: textColor,
+                  fontSize: `${fontSize}px`,
+                }}
+              >
                 <Link onClick={() => setIsLoggedIn(true)}>Login</Link>
               </button>
 
-              <button className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded text-white">
+              <button
+                className="px-3 py-1 rounded "
+                style={{
+                  backgroundColor: signUpButtonBgColor,
+                  color: textColor,
+                  fontSize: `${fontSize}px`,
+                }}
+              >
                 <Link to="signup">Signup</Link>
               </button>
             </div>
@@ -256,50 +284,69 @@ const Navbar = () => {
       </div>
 
       {/* Bottom Menu (Desktop) */}
-      <div className="hidden lg:flex bg-yellow-400 text-black ">
-        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              `${isActive ? "font-extrabold underline" : ""}`
-            }
-          >
-            Home
-          </NavLink>
-          <NavLink
-            to="/play-in"
-            className={({ isActive }) =>
-              `${isActive ? "font-extrabold underline" : ""}`
-            }
-          >
-            Play-In
-          </NavLink>
-          <NavLink
-            to="/multi"
-            className={({ isActive }) =>
-              `${isActive ? "font-extrabold underline" : ""}`
-            }
-          >
-            Multi
-          </NavLink>
-          <a href="#">Cricket</a>
-          <a href="#">Soccer</a>
-          <a href="#">Tennis</a>
-          <a href="#">Result</a>
-          <a href="#" className="bg-red-600 text-white px-2 rounded-md">
-            Casino
-          </a>
-        </div>
-        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
-          <a href="">Time Zone</a>
-          <a href="" className="bg-black text-white px-4">
-            On Click Bet
-          </a>
-          <a href="" className="flex items-center">
-            <IoSettings size={16} /> <span className="ml-1">Settings</span>
-          </a>
-        </div>
-      </div>
+      {/* Bottom Menu (Desktop) */}
+<div
+  className="hidden lg:flex web-menu-btn"
+  style={{
+    backgroundColor: webMenuBgColor,
+    color: webMenuTextColor,
+    fontSize: `${webMenuFontSize}px`,
+  }}
+>
+  <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
+    {["Home", "Play-In", "Multi", "Cricket", "Soccer", "Tennis", "Result"].map((item, index) => {
+      const [hover, setHover] = React.useState(false);
+      return (
+        <NavLink
+          key={index}
+          to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+          className={({ isActive }) =>
+            `relative ${isActive ? "font-extrabold underline" : ""}`
+          }
+          style={{
+            color: hover ? webMenuHoverColor : webMenuTextColor,
+            transition: "color 0.3s",
+          }}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+        >
+          {item}
+        </NavLink>
+      );
+    })}
+    <a
+      href="#"
+      style={{
+        color: webMenuTextColor,
+        transition: "color 0.3s",
+      }}
+      onMouseEnter={(e) => (e.currentTarget.style.color = webMenuHoverColor)}
+      onMouseLeave={(e) => (e.currentTarget.style.color = webMenuTextColor)}
+    >
+      Casino
+    </a>
+  </div>
+
+  <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
+    {["Time Zone", "On Click Bet", "Settings"].map((item, idx) => (
+      <a
+        key={idx}
+        href="#"
+        className="flex items-center"
+        style={{
+          color: webMenuTextColor,
+          transition: "color 0.3s",
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = webMenuHoverColor)}
+        onMouseLeave={(e) => (e.currentTarget.style.color = webMenuTextColor)}
+      >
+        {item === "Settings" && <IoSettings size={16} className="mr-1" />}
+        {item}
+      </a>
+    ))}
+  </div>
+</div>
+
 
       {/* Mobile Sidebar Menu */}
       <div

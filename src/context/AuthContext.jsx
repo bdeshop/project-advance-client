@@ -15,11 +15,9 @@ export const AuthProvider = ({ children }) => {
   const [loginImage, setLoginImage] = useState(null);
   const [loginImageId, setLoginImageId] = useState(null);
   const [AdminLoginImage, setAdminLoginImage] = useState(null);
-  const [navbar, setNavbar] = useState({
-    bgColor: "#ffffff",
-    textColor: "#000000",
-    fontSize: 16,
-  });
+  const [navbar, setNavbar] = useState({});
+  const [webMenu,setWebMenu] = useState({})
+  
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -177,6 +175,24 @@ export const AuthProvider = ({ children }) => {
     fetchNavbar();
   }, []);
 
+  
+// WebMenu settings fetch
+  useEffect(() => {
+    
+    const fetchWebMenu = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/webmenu");
+        setWebMenu(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchWebMenu();
+  }, []);
+
+
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
 
@@ -203,6 +219,7 @@ export const AuthProvider = ({ children }) => {
         loginImageId,
         AdminLoginImage,
         navbar,
+        webMenu,
       }}
     >
       {children}
