@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
   const [mobileMenu, setMobileMenu] = useState({});
   const [mobileMenuSidebar, setMobileMenuSidebar] = useState({});
   const [footer, setFooter] = useState({});
+  const [sidebarData, setSidebarData] = useState(null);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -238,6 +239,24 @@ export const AuthProvider = ({ children }) => {
     fetchFooter();
   }, []);
 
+  
+
+
+  useEffect(() => {
+    const fetchUrl = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/sidebar-menu");
+        setSidebarData(res.data.sidebarMenu);
+        console.log(res.data.sidebarMenu);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchUrl();
+  }, []);
+  
+
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
 
@@ -267,7 +286,8 @@ export const AuthProvider = ({ children }) => {
         webMenu,
         mobileMenu,
         mobileMenuSidebar,
-        footer
+        footer,
+        sidebarData
       }}
     >
       {children}

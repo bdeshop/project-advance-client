@@ -28,8 +28,9 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar } =
+  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar, sidebarData } =
     useContext(AuthContext);
+console.log(sidebarData)
   const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
     navbar;
   const {
@@ -430,29 +431,52 @@ const Navbar = () => {
 
           {/* Menu Items */}
           <div className="grid grid-cols-2 gap-3">
-            {[
-              { icon: <FaGift size={20} />, label: "Promotions" },
-              { icon: <FaUsers size={20} />, label: "Referral" },
-              { icon: <FaShareAlt size={20} />, label: "Affiliate" },
-              { icon: <FaComments size={20} />, label: "24/7 Chat" },
-              { icon: <FaComments size={20} />, label: "Forum" },
-              { icon: <FaFacebook size={20} />, label: "Facebook" },
-              { icon: <FaTwitter size={20} />, label: "Twitter" },
-              { icon: <FaInstagram size={20} />, label: "Instagram" },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                style={{
-                  backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
-                  color: sideTextColor,
-                  fontSize: `${fontSize}px`,
-                }}
-                className="flex flex-col items-center p-3 rounded"
-              >
-                {item.icon}
-                <span className="text-sm">{item.label}</span>
-              </div>
-            ))}
+            {(sidebarData || []).map((item, idx) => {
+              let IconComponent;
+              switch (item.icon) {
+                case "FaGift":
+                  IconComponent = FaGift;
+                  break;
+                case "FaUsers":
+                  IconComponent = FaUsers;
+                  break;
+                case "FaShareAlt":
+                  IconComponent = FaShareAlt;
+                  break;
+                case "FaComments":
+                  IconComponent = FaComments;
+                  break;
+                case "FaFacebook":
+                  IconComponent = FaFacebook;
+                  break;
+                case "FaTwitter":
+                  IconComponent = FaTwitter;
+                  break;
+                case "FaInstagram":
+                  IconComponent = FaInstagram;
+                  break;
+                default:
+                  IconComponent = FaGift;
+              }
+
+              return (
+                <a
+                  key={idx}
+                  href={item.url || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+                    color: sideTextColor,
+                    fontSize: `${fontSize}px`,
+                  }}
+                  className="flex flex-col items-center p-3 rounded"
+                >
+                  <IconComponent size={20} />
+                  <span className="text-sm">{item.label}</span>
+                </a>
+              );
+            })}
           </div>
 
           {/* Bottom Buttons */}
@@ -486,9 +510,10 @@ const Navbar = () => {
                   color: sideTextColor,
                 }}
                 className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
+                onClick={() => setIsLoggedIn(false)}
               >
                 <FaSignInAlt />
-                <span onClick={() => setIsLoggedIn(false)}>Log out</span>
+                <span>Log out</span>
               </div>
             )}
           </div>
