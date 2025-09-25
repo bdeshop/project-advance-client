@@ -6,19 +6,29 @@ import { AuthContext } from "../../context/AuthContext";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const { signupImage } = useContext(AuthContext);
-
-  console.log(signupImage)
+  const { signupImage ,mobileMenu} = useContext(AuthContext);
+  const { signupBtnColor, btnFontSize ,buttonFontColor ,pageBgColor ,pageFontSize} = mobileMenu;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-400 lg:mt-26">
-      <div className="w-full max-w-7xl bg-gray-400 border-2 border-blue-500 rounded-md p-6 md:flex">
+    <div style={
+      {backgroundColor:pageBgColor,
+        
+      }
+    } className="flex items-center justify-center min-h-screen  mt-4 lg:mt-26">
+      <div className="w-full max-w-7xl  border-2 border-blue-500 rounded-md p-6 md:flex">
         {/* Left Side - Form */}
-        <div className="w-full md:w-1/2 bg-gray-400 p-6">
-          <h2 className="text-center text-yellow-500 text-xl font-semibold border-b border-yellow-500 pb-2 mb-6">
+        <div className="w-full md:w-1/2 p-6">
+          <h2 style={{
+                color:buttonFontColor,
+                borderColor: buttonFontColor, 
+              }} className="text-center  text-xl font-semibold border-b border-yellow-500 pb-2 mb-6">
             Sign up
           </h2>
-          <form className="space-y-4">
+          <form style={
+            {
+              fontSize: `${pageFontSize}px`,
+            }
+          } className="space-y-4">
             {/* User ID */}
             <div>
               <label className="block text-white mb-1">User Id</label>
@@ -118,7 +128,11 @@ const SignUp = () => {
                     placeholder="Enter 4 digit code"
                     className="flex-1 px-4 py-2 rounded bg-gray-600 text-white focus:outline-none"
                   />
-                  <span className="bg-yellow-500 px-3 py-2 rounded text-black font-bold absolute ml-36">
+                  <span style={{
+                backgroundColor:signupBtnColor,
+                color:buttonFontColor,
+                fontSize: `${btnFontSize}px`,
+              }} className="px-3 py-2 rounded font-bold absolute ml-36">
                     <span className="flex items-center gap-1">
                       7278 <ImSpinner11 />
                     </span>
@@ -127,7 +141,11 @@ const SignUp = () => {
               </div>
 
               {/* Confirm Button */}
-              <button className="w-full py-2 bg-yellow-500 text-black font-semibold rounded mt-4">
+              <button style={{
+                backgroundColor:signupBtnColor,
+                color:buttonFontColor,
+                fontSize: `${btnFontSize}px`,
+              }} className="w-full py-2 font-semibold rounded mt-4">
                 Confirm
               </button>
               <p className="text-xs text-center text-white mt-2">
@@ -147,7 +165,11 @@ const SignUp = () => {
 
             {/* Submit Button Desktop */}
             <div className="hidden md:flex justify-end">
-              <button className="bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full hover:cursor-pointer">
+              <button  style={{
+                color:buttonFontColor,
+                backgroundColor:signupBtnColor,
+                fontSize: `${btnFontSize}px`,
+              }} className=" p-3 rounded-full hover:cursor-pointer">
                 <FaArrowRight size={20} />
               </button>
             </div>

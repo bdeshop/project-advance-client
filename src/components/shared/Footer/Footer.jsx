@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaAndroid } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Footer = () => {
+  const { footer } = useContext(AuthContext);
+  const { footerFontSize, footerTextColor } = footer;
   return (
     <footer className="bg-white border-t text-gray-700 text-sm mb-10">
       {/* Top Section */}
       <div className="max-w-6xl mx-auto px-4 py-6 grid gap-6 md:grid-cols-3 text-center md:text-left">
-        
         {/* Gaming License */}
         <div>
           <h3 className="font-semibold mb-2">Gaming License</h3>
@@ -38,26 +40,68 @@ const Footer = () => {
         <div>
           <h3 className="font-semibold mb-2">Payment Methods</h3>
           <div className="flex flex-wrap justify-center md:justify-start gap-3">
-            <img src="https://i.ibb.co.com/v4DkM6Ss/pngtree-vector-bank-icon-png-image-708538.jpg" alt="Bank" className="h-8 hover:cursor-pointer" />
-            <img src="https://i.ibb.co.com/4wyV8NWk/Bkash-Logo.jpg" alt="Bkash" className="h-8 hover:cursor-pointer" />
-            <img src="https://i.ibb.co.com/MKG5MYM/vectorseek-com-Nagad-Logo-Vector.png" alt="Nagad" className="h-8 hover:cursor-pointer" />
-            <img src="https://i.ibb.co.com/JW6pKzNd/dutch-bangla-rocket-logo-png-seeklogo-317692.png" alt="Rocket" className="h-8 hover:cursor-pointer" />
-            <img src="https://i.ibb.co.com/20C7SY9b/images.png" alt="Upay" className="h-8 hover:cursor-pointer" />
+            <img
+              src="https://i.ibb.co.com/v4DkM6Ss/pngtree-vector-bank-icon-png-image-708538.jpg"
+              alt="Bank"
+              className="h-8 hover:cursor-pointer"
+            />
+            <img
+              src="https://i.ibb.co.com/4wyV8NWk/Bkash-Logo.jpg"
+              alt="Bkash"
+              className="h-8 hover:cursor-pointer"
+            />
+            <img
+              src="https://i.ibb.co.com/MKG5MYM/vectorseek-com-Nagad-Logo-Vector.png"
+              alt="Nagad"
+              className="h-8 hover:cursor-pointer"
+            />
+            <img
+              src="https://i.ibb.co.com/JW6pKzNd/dutch-bangla-rocket-logo-png-seeklogo-317692.png"
+              alt="Rocket"
+              className="h-8 hover:cursor-pointer"
+            />
+            <img
+              src="https://i.ibb.co.com/20C7SY9b/images.png"
+              alt="Upay"
+              className="h-8 hover:cursor-pointer"
+            />
           </div>
         </div>
       </div>
 
       {/* Links */}
-      <div className="bg-gray-100 py-4">
-        <div className="max-w-6xl mx-auto px-4 flex flex-wrap justify-center gap-4 text-xs md:text-sm">
-          <a href="#" className="hover:underline">Privacy Policy</a>
-          <a href="#" className="hover:underline">Terms and Conditions</a>
-          <a href="#" className="hover:underline">Rules and Regulations</a>
-          <a href="#" className="hover:underline">KYC</a>
-          <a href="#" className="hover:underline">Responsible Gaming</a>
-          <a href="#" className="hover:underline">About Us</a>
-          <a href="#" className="hover:underline">Self-Exclusion Policy</a>
-          <a href="#" className="hover:underline">Underage Policy</a>
+      <div
+        style={{
+          color: footerTextColor,
+          fontSize: `${footerFontSize}px`,
+        }}
+        className=" py-4"
+      >
+        <div className="max-w-6xl mx-auto px-4 flex flex-wrap justify-center gap-4">
+          <a href="#" className="hover:underline">
+            Privacy Policy
+          </a>
+          <a href="#" className="hover:underline">
+            Terms and Conditions
+          </a>
+          <a href="#" className="hover:underline">
+            Rules and Regulations
+          </a>
+          <a href="#" className="hover:underline">
+            KYC
+          </a>
+          <a href="#" className="hover:underline">
+            Responsible Gaming
+          </a>
+          <a href="#" className="hover:underline">
+            About Us
+          </a>
+          <a href="#" className="hover:underline">
+            Self-Exclusion Policy
+          </a>
+          <a href="#" className="hover:underline">
+            Underage Policy
+          </a>
         </div>
       </div>
 

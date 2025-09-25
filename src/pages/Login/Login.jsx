@@ -6,11 +6,14 @@ import { AuthContext } from "../../context/AuthContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { loginImage } = useContext(AuthContext);
+  const { loginImage,mobileMenu } = useContext(AuthContext);
+  const { loginBtnColor, btnFontSize ,buttonFontColor ,loginPageBgColor} = mobileMenu;
 
   return (
-    <div className="lg:hidden flex items-center justify-center bg-gray-200 mt-12">
-      <div className="w-full bg-green-700 overflow-hidden shadow-lg">
+    <div className="lg:hidden flex items-center justify-center mt-12">
+      <div 
+      
+      className="w-full overflow-hidden shadow-lg">
         {/* Top Banner */}
         <div className="relative">
           <img
@@ -18,16 +21,15 @@ const Login = () => {
             alt="Login Banner"
             className="w-full"
           />
-          {/* Close Button */}
-          {/* <button className="absolute top-2 right-2 bg-black text-white rounded-full p-2">
-            <Link to="/">
-              <ImCross size={20} />
-            </Link>
-          </button> */}
+          
         </div>
 
         {/* Form Section */}
-        <div className="bg-green-700 px-6 py-6 space-y-4">
+        <div style={
+        {
+          backgroundColor:loginPageBgColor,
+        }
+      } className=" px-6 py-6 space-y-4">
           {/* User Id */}
           <input
             type="text"
@@ -64,7 +66,14 @@ const Login = () => {
           </div>
 
           {/* Login Button */}
-          <button className="w-full py-2 bg-yellow-500 text-black font-semibold rounded mt-2">
+          <button
+          style={
+        {
+          backgroundColor:loginBtnColor,
+          color:buttonFontColor,
+          fontSize:`${btnFontSize}px`
+        }
+      } className="w-full py-2 font-semibold rounded mt-2">
             Login
           </button>
         </div>

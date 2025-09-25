@@ -16,8 +16,10 @@ export const AuthProvider = ({ children }) => {
   const [loginImageId, setLoginImageId] = useState(null);
   const [AdminLoginImage, setAdminLoginImage] = useState(null);
   const [navbar, setNavbar] = useState({});
-  const [webMenu,setWebMenu] = useState({})
-  
+  const [webMenu, setWebMenu] = useState({});
+  const [mobileMenu, setMobileMenu] = useState({});
+  const [mobileMenuSidebar, setMobileMenuSidebar] = useState({});
+  const [footer, setFooter] = useState({});
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -175,10 +177,8 @@ export const AuthProvider = ({ children }) => {
     fetchNavbar();
   }, []);
 
-  
-// WebMenu settings fetch
+  // WebMenu settings fetch
   useEffect(() => {
-    
     const fetchWebMenu = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/webmenu");
@@ -192,6 +192,51 @@ export const AuthProvider = ({ children }) => {
     fetchWebMenu();
   }, []);
 
+  // Mobile Menu Settings
+
+  useEffect(() => {
+    const fetchMobileMenu = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/mobilemenu");
+        setMobileMenu(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchMobileMenu();
+  }, []);
+
+  useEffect(() => {
+    const fetchMobileMenu = async () => {
+      try {
+        const res = await axios.get(
+          "http://localhost:5000/api/mobile-sidebar-style"
+        );
+        setMobileMenuSidebar(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchMobileMenu();
+  }, []);
+
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/footer");
+        setFooter(res.data);
+        console.log(res.data);
+      } catch (error) {
+        console.error("Navbar API error:", error);
+      }
+    };
+
+    fetchFooter();
+  }, []);
 
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
@@ -220,6 +265,9 @@ export const AuthProvider = ({ children }) => {
         AdminLoginImage,
         navbar,
         webMenu,
+        mobileMenu,
+        mobileMenuSidebar,
+        footer
       }}
     >
       {children}

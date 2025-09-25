@@ -28,7 +28,8 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo, navbar, webMenu } = useContext(AuthContext);
+  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar } =
+    useContext(AuthContext);
   const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
     navbar;
   const {
@@ -38,6 +39,22 @@ const Navbar = () => {
     webMenuHoverColor,
   } = webMenu;
   console.log(webMenu);
+
+  const { loginBtnColor, signupBtnColor, btnFontSize, buttonFontColor } =
+    mobileMenu;
+
+  const { gradientDirection, gradientFrom, gradientTo, sideTextColor } =
+    mobileMenuSidebar;
+
+  // gradient direction map
+  const directionMap = {
+    "to-t": "to top",
+    "to-b": "to bottom",
+    "to-l": "to left",
+    "to-r": "to right",
+  };
+
+  const gradientCSSDirection = directionMap[gradientDirection] || "to right";
 
   return (
     <nav
@@ -285,68 +302,83 @@ const Navbar = () => {
 
       {/* Bottom Menu (Desktop) */}
       {/* Bottom Menu (Desktop) */}
-<div
-  className="hidden lg:flex web-menu-btn"
-  style={{
-    backgroundColor: webMenuBgColor,
-    color: webMenuTextColor,
-    fontSize: `${webMenuFontSize}px`,
-  }}
->
-  <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
-    {["Home", "Play-In", "Multi", "Cricket", "Soccer", "Tennis", "Result"].map((item, index) => {
-      const [hover, setHover] = React.useState(false);
-      return (
-        <NavLink
-          key={index}
-          to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
-          className={({ isActive }) =>
-            `relative ${isActive ? "font-extrabold underline" : ""}`
-          }
-          style={{
-            color: hover ? webMenuHoverColor : webMenuTextColor,
-            transition: "color 0.3s",
-          }}
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          {item}
-        </NavLink>
-      );
-    })}
-    <a
-      href="#"
-      style={{
-        color: webMenuTextColor,
-        transition: "color 0.3s",
-      }}
-      onMouseEnter={(e) => (e.currentTarget.style.color = webMenuHoverColor)}
-      onMouseLeave={(e) => (e.currentTarget.style.color = webMenuTextColor)}
-    >
-      Casino
-    </a>
-  </div>
-
-  <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
-    {["Time Zone", "On Click Bet", "Settings"].map((item, idx) => (
-      <a
-        key={idx}
-        href="#"
-        className="flex items-center"
+      <div
+        className="hidden lg:flex web-menu-btn"
         style={{
+          backgroundColor: webMenuBgColor,
           color: webMenuTextColor,
-          transition: "color 0.3s",
+          fontSize: `${webMenuFontSize}px`,
         }}
-        onMouseEnter={(e) => (e.currentTarget.style.color = webMenuHoverColor)}
-        onMouseLeave={(e) => (e.currentTarget.style.color = webMenuTextColor)}
       >
-        {item === "Settings" && <IoSettings size={16} className="mr-1" />}
-        {item}
-      </a>
-    ))}
-  </div>
-</div>
+        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium">
+          {[
+            "Home",
+            "Play-In",
+            "Multi",
+            "Cricket",
+            "Soccer",
+            "Tennis",
+            "Result",
+          ].map((item, index) => {
+            const [hover, setHover] = React.useState(false);
+            return (
+              <NavLink
+                key={index}
+                to={item === "Home" ? "/" : `/${item.toLowerCase()}`}
+                className={({ isActive }) =>
+                  `relative ${isActive ? "font-extrabold underline" : ""}`
+                }
+                style={{
+                  color: hover ? webMenuHoverColor : webMenuTextColor,
+                  transition: "color 0.3s",
+                }}
+                onMouseEnter={() => setHover(true)}
+                onMouseLeave={() => setHover(false)}
+              >
+                {item}
+              </NavLink>
+            );
+          })}
+          <a
+            href="#"
+            style={{
+              color: webMenuTextColor,
+              transition: "color 0.3s",
+            }}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.color = webMenuHoverColor)
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = webMenuTextColor)
+            }
+          >
+            Casino
+          </a>
+        </div>
 
+        <div className="flex px-4 md:px-8 py-2 space-x-6 font-medium ml-auto">
+          {["Time Zone", "On Click Bet", "Settings"].map((item, idx) => (
+            <a
+              key={idx}
+              href="#"
+              className="flex items-center"
+              style={{
+                color: webMenuTextColor,
+                transition: "color 0.3s",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.color = webMenuHoverColor)
+              }
+              onMouseLeave={(e) =>
+                (e.currentTarget.style.color = webMenuTextColor)
+              }
+            >
+              {item === "Settings" && <IoSettings size={16} className="mr-1" />}
+              {item}
+            </a>
+          ))}
+        </div>
+      </div>
 
       {/* Mobile Sidebar Menu */}
       <div
@@ -354,16 +386,40 @@ const Navbar = () => {
           open ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 ease-in-out lg:hidden`}
       >
-        <div className=" h-full p-4 flex flex-col space-y-4 overflow-y-auto">
+        <div className="h-full p-4 flex flex-col space-y-4 overflow-y-auto">
           {/* Profile Section */}
-          <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white p-3 rounded-md">
+          <div
+            style={{
+              backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+              color: sideTextColor,
+              fontSize: `${fontSize}px`,
+            }}
+            className="p-3 rounded-md"
+          >
             <p className="font-medium">Hi, welcome.</p>
             {!isLoggedIn ? (
               <div className="flex space-x-2 mt-2">
-                <button className="bg-yellow-400 text-black px-3 py-1 rounded">
+                {/* Login Button */}
+                <button
+                  style={{
+                    backgroundColor: loginBtnColor,
+                    fontSize: `${btnFontSize}px`,
+                    color: buttonFontColor,
+                  }}
+                  className="px-3 py-1 rounded"
+                >
                   <Link to="login">Login</Link>
                 </button>
-                <button className="bg-yellow-400 text-black px-3 py-1 rounded">
+
+                {/* Signup Button */}
+                <button
+                  style={{
+                    backgroundColor: signupBtnColor,
+                    fontSize: `${btnFontSize}px`,
+                    color: buttonFontColor,
+                  }}
+                  className="px-3 py-1 rounded"
+                >
                   <Link to="signup">Sign Up</Link>
                 </button>
               </div>
@@ -374,53 +430,63 @@ const Navbar = () => {
 
           {/* Menu Items */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaGift size={20} />
-              <span className="text-sm">Promotions</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaUsers size={20} />
-              <span className="text-sm">Referral</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaShareAlt size={20} />
-              <span className="text-sm">Affiliate</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaComments size={20} />
-              <span className="text-sm">24/7 Chat</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaComments size={20} />
-              <span className="text-sm">Forum</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaFacebook size={20} />
-              <span className="text-sm">Facebook</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaTwitter size={20} />
-              <span className="text-sm">Twitter</span>
-            </div>
-            <div className="bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex flex-col items-center p-3 rounded">
-              <FaInstagram size={20} />
-              <span className="text-sm">Instagram</span>
-            </div>
+            {[
+              { icon: <FaGift size={20} />, label: "Promotions" },
+              { icon: <FaUsers size={20} />, label: "Referral" },
+              { icon: <FaShareAlt size={20} />, label: "Affiliate" },
+              { icon: <FaComments size={20} />, label: "24/7 Chat" },
+              { icon: <FaComments size={20} />, label: "Forum" },
+              { icon: <FaFacebook size={20} />, label: "Facebook" },
+              { icon: <FaTwitter size={20} />, label: "Twitter" },
+              { icon: <FaInstagram size={20} />, label: "Instagram" },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                style={{
+                  backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+                  color: sideTextColor,
+                  fontSize: `${fontSize}px`,
+                }}
+                className="flex flex-col items-center p-3 rounded"
+              >
+                {item.icon}
+                <span className="text-sm">{item.label}</span>
+              </div>
+            ))}
           </div>
 
           {/* Bottom Buttons */}
           <div className="mt-auto flex space-x-3">
-            <div className="flex-1 bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex items-center justify-center space-x-2 p-2 rounded">
+            <div
+              style={{
+                backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+                color: sideTextColor,
+              }}
+              className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
+            >
               <FaHome />
               <span>Home</span>
             </div>
+
             {!isLoggedIn ? (
-              <div className="flex-1 bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex items-center justify-center space-x-2 p-2 rounded">
+              <div
+                style={{
+                  backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+                  color: sideTextColor,
+                }}
+                className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
+              >
                 <FaSignInAlt />
                 <Link to="login">Login</Link>
               </div>
             ) : (
-              <div className="flex-1 bg-gradient-to-r from-[#706D6D] to-[#000000] text-white flex items-center justify-center space-x-2 p-2 rounded">
+              <div
+                style={{
+                  backgroundImage: `linear-gradient(${gradientCSSDirection}, ${gradientFrom}, ${gradientTo})`,
+                  color: sideTextColor,
+                }}
+                className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
+              >
                 <FaSignInAlt />
                 <span onClick={() => setIsLoggedIn(false)}>Log out</span>
               </div>
