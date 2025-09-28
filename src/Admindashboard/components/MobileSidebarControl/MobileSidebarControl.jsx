@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MobileSideBarControl = () => {
   const [gradientDirection, setGradientDirection] = useState("to-r");
@@ -35,19 +36,19 @@ const MobileSideBarControl = () => {
         sideTextColor,
         fontSize: Number(fontSize),
       });
-      alert("✅ Sidebar style saved!");
+      toast.success("Sidebar style saved!");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to save sidebar style!");
+      toast.error("Failed to save sidebar style!");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-blue-600">
-          Mobile Sidebar Settings
+        <h2 className="text-xl font-semibold text-yellow-600">
+          Mobile Sidebar Settings 
         </h2>
         <button
           onClick={() => setIsEditing(true)}
@@ -159,7 +160,7 @@ const MobileSideBarControl = () => {
           type="submit"
           className={`w-full py-2 rounded text-white font-semibold mt-2 ${
             isEditing
-              ? "bg-blue-500 hover:bg-blue-600"
+              ? "bg-yellow-500 hover:bg-yellow-600"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isEditing}

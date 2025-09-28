@@ -4,12 +4,16 @@ import { IoReload } from "react-icons/io5";
 import { FaCog } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
 import { TiUserAdd } from "react-icons/ti";
+import { Link } from "react-router";
 
 const AdHome = () => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef(null);
   const [openIndex, setOpenIndex] = useState(null);
   const { user } = useContext(AuthContext);
+  const [admins, setAdmins] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   // বাইরে ক্লিক করলে dropdown বন্ধ হবে
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -25,12 +29,14 @@ const AdHome = () => {
 
   const allRoles = [
     "Select User Role",
+    "User",
     "Sub Agent",
     "Agent",
     "Master",
     "Sub Admin",
     "Mother Admin",
   ];
+
 
   // role অনুযায়ী ফিল্টার
   const getFilteredRoles = (role) => {
@@ -63,13 +69,10 @@ const AdHome = () => {
     lastName: "",
     email: "",
     username: "",
-    role: "",
+    role: selectedRole,
     password: "",
     confirmPassword: "",
   });
-
-  const [admins, setAdmins] = useState([]);
-  const [loading, setLoading] = useState(false);
 
   // ✅ Fetch admins from API
   const fetchAdmins = async () => {
@@ -166,57 +169,43 @@ const AdHome = () => {
     }
   };
 
-  // Mother Admin actions
-  const handleDeactivate = async (id) => {
-    if (user.role !== "Mother Admin") {
-      alert("Only Mother Admin can perform this action!");
-      return;
-    }
-    try {
-      const res = await fetch(
-        `http://localhost:5000/api/admins/${id}/deactivate`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: user.role }),
-        }
-      );
-      const data = await res.json();
-      if (data.success) {
-        setAdmins((prev) =>
-          prev.map((admin) =>
-            admin._id === id ? { ...admin, status: "Deactivated" } : admin
-          )
-        );
-      } else alert(data.message);
-    } catch (err) {
-      console.error(err);
-      alert("Something went wrong!");
-    }
+  // Allowed role hierarchy (frontend check)
+  const roleHierarchy = {
+    "Mother Admin": ["Sub Admin", "Master", "Agent", "Sub Agent", "User"],
+    "Sub Admin": ["Master", "Agent", "Sub Agent", "User"],
+    Master: ["Agent", "Sub Agent", "User"],
+    Agent: ["Sub Agent", "User"],
+    "Sub Agent": ["User"],
+    User: [],
   };
-
-  const handleActivate = async (id) => {
-    if (user.role !== "Mother Admin") {
-      alert("Only Mother Admin can perform this action!");
-      return;
-    }
+  // ✅ Handle Activate / Deactivate
+  const handleStatusChange = async (id, action, targetRole) => {
     try {
-      const res = await fetch(
-        `http://localhost:5000/api/admins/${id}/activate`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ role: user.role }),
-        }
-      );
+      const res = await fetch(`http://localhost:5000/api/admins/${id}/status`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action,
+          requesterRole: user.role,
+          targetRole,
+        }),
+      });
+
       const data = await res.json();
       if (data.success) {
         setAdmins((prev) =>
           prev.map((admin) =>
-            admin._id === id ? { ...admin, status: "Activated" } : admin
+            admin._id === id
+              ? {
+                  ...admin,
+                  status: action === "Activate" ? "Activated" : "Deactivated",
+                }
+              : admin
           )
         );
-      } else alert(data.message);
+      } else {
+        alert(data.message);
+      }
     } catch (err) {
       console.error(err);
       alert("Something went wrong!");
@@ -338,7 +327,7 @@ const AdHome = () => {
             </tr>
           </thead>
 
-          <tbody>
+          <tbody ref={menuRef}>
             {loading ? (
               <tr>
                 <td colSpan="9" className="text-center p-4">
@@ -357,8 +346,12 @@ const AdHome = () => {
                         <span className="px-2 py-1 bg-green-500 text-white rounded-sm">
                           AD
                         </span>
-                        <span className="text-blue-600 text-nowrap">
-                          {row.username}
+                        <span className="text-blue-600 text-nowrap hover:underline">
+                          <Link
+                            to={`/admin-dashboard/modify-profile/${row._id}`}
+                          >
+                            {row.username}
+                          </Link>
                         </span>
                       </div>
                     </td>
@@ -380,7 +373,7 @@ const AdHome = () => {
                       <span
                         className={`px-3 py-1 rounded flex items-center justify-center gap-1
     ${
-      row.status === "active"
+      row.status === "Active"
         ? "bg-green-100 text-green-700"
         : row.status === "deactive"
         ? "bg-red-100 text-red-700"
@@ -406,13 +399,11 @@ const AdHome = () => {
                     </td>
 
                     {/* Actions */}
+                    {/* Actions */}
                     <td className="border px-4 py-2">
                       <div className="flex justify-center gap-2">
                         <button className="btn btn-xs bg-gray-200">BS</button>
-                        <div
-                          className="relative inline-block text-left"
-                          ref={menuRef}
-                        >
+                        <div className="relative inline-block text-left">
                           <button
                             className="btn btn-xs bg-gray-200 p-2 rounded"
                             onClick={() =>
@@ -421,39 +412,55 @@ const AdHome = () => {
                           >
                             <FaCog />
                           </button>
-                          {/* Dropdown */}{" "}
+
+                          {/* Dropdown */}
                           {openIndex === idx && (
                             <div className="absolute mt-2 right-0 w-40 bg-white border rounded shadow-lg z-10">
-                              {" "}
-                              {row.status === "Activated" ? (
+                              {/* ✅ Active/Deactivate */}
+                              {roleHierarchy[user.role]?.includes(row.role) ||
+                              user.role === "Mother Admin" ? (
+                                row.status === "Activated" ? (
+                                  <button
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        row._id,
+                                        "Deactivate",
+                                        row.role
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 text-red-600 hover:bg-red-100"
+                                  >
+                                    Deactivate
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() =>
+                                      handleStatusChange(
+                                        row._id,
+                                        "Activate",
+                                        row.role
+                                      )
+                                    }
+                                    className="w-full text-left px-4 py-2 text-green-600 hover:bg-green-100"
+                                  >
+                                    Activate
+                                  </button>
+                                )
+                              ) : null}
+
+                              {/* ✅ Ban only Mother Admin */}
+                              {user.role === "Mother Admin" && (
                                 <button
-                                  onClick={() => handleDeactivate(row._id)}
-                                  className={`w-full text-left px-4 py-2 text-red-600 hover:bg-red-100`}
+                                  onClick={() => handleBan(row._id)}
+                                  className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
                                 >
-                                  {" "}
-                                  Deactivate{" "}
-                                </button>
-                              ) : (
-                                <button
-                                  onClick={() => handleActivate(row._id)}
-                                  className="w-full text-left px-4 py-2 text-green-600 hover:bg-green-100"
-                                >
-                                  {" "}
-                                  Activate{" "}
+                                  Ban User
                                 </button>
                               )}
-                              <button
-                                onClick={() => handleBan(row._id)}
-                                className="w-full text-left px-4 py-2 text-yellow-600 hover:bg-yellow-100"
-                              >
-                                {" "}
-                                Ban User{" "}
-                              </button>{" "}
                             </div>
                           )}
                         </div>
                         <button className="btn btn-xs bg-gray-200">
-                          {" "}
                           <TiUserAdd />
                         </button>
                       </div>

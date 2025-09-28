@@ -75,6 +75,11 @@ import RiskManagement from "../Admindashboard/pages/RiskManagement/RiskManagemen
 import AdminLogin from "../pages/AdminLogin/AdminLogin";
 import Unauthorized from "../pages/Unauthorized/Unauthorized";
 import PrivateRoute from "../routes/PrivateRoute";
+import Statement from "../Admindashboard/components/Statement/Statement";
+import Summary from "../Admindashboard/components/Summary/Summary";
+import AdminProfile from "../Admindashboard/components/AdminProfile/AdminProfile";
+import AccountDetails from "../Admindashboard/components/AccountDetails/AccountDetails";
+import ModifyProfile from "../Admindashboard/pages/ModifyProfile/ModifyProfile";
 
 export const router = createBrowserRouter([
   {
@@ -262,7 +267,28 @@ export const router = createBrowserRouter([
       { index: true, element: <AdHome /> },
       {
         path: "my-account",
-        element: <MyAccount />,
+
+        element: (
+         
+            <MyAccount />
+        ),
+        children:[
+          {
+            path:"statement",
+            element:<Statement></Statement>
+          },{
+            path:"summary",
+            element:<Summary></Summary>
+          },{
+            path:"profile",
+            element:<AdminProfile></AdminProfile>
+          },{
+            path:"active-log"
+          },{
+            path:"account-details",
+            element:<AccountDetails></AccountDetails>
+          }
+        ],
       },
       {
         path: "bet-lists",
@@ -388,6 +414,10 @@ export const router = createBrowserRouter([
         path: "risk-management",
         element: <RiskManagement />,
       },
+      {
+        path:'modify-profile/:id',
+        element:<ModifyProfile></ModifyProfile>
+      }
     ],
   },
   {

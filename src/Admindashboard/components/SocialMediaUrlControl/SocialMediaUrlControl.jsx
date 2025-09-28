@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const SocialMediaUrlControl = () => {
   const [menuItems, setMenuItems] = useState([]);
@@ -23,18 +24,18 @@ const SocialMediaUrlControl = () => {
 
     try {
       await axios.post("http://localhost:5000/api/sidebar-menu", { sidebarMenu: menuItems });
-      alert("✅ Sidebar menu links updated!");
+      toast.success("Sidebar menu links updated!");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to update sidebar menu links!");
+      toast.error("Failed to update sidebar menu links!");
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-blue-600">Sidebar Menu Links</h2>
+        <h2 className="text-xl font-semibold text-yellow-600">Social Media Links</h2>
         <button
           onClick={() => setIsEditing(true)}
           className={`px-3 py-1 rounded text-white font-medium ${
@@ -64,7 +65,7 @@ const SocialMediaUrlControl = () => {
         <button
           type="submit"
           className={`w-full py-2 rounded text-white font-semibold mt-4 ${
-            isEditing ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400 cursor-not-allowed"
+            isEditing ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isEditing}
         >

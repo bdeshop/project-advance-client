@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const MobileMenuControl = () => {
   const [loginBtnColor, setLoginBtnColor] = useState("#4CAF50");
@@ -42,18 +43,18 @@ const [loginPageBgColor,setLoginPageBgColor] = useState("#ffffff")
         buttonFontColor,
         loginPageBgColor,
       });
-      alert("✅ Mobile Menu settings saved!");
+      toast.success("Mobile Menu settings saved!");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to save mobile menu settings!");
+      toast.error("Failed to save mobile menu settings!");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-xl font-semibold text-blue-600">
+        <h2 className="text-xl font-semibold text-yellow-600">
           Mobile Menu Control
         </h2>
         <button
@@ -205,7 +206,7 @@ const [loginPageBgColor,setLoginPageBgColor] = useState("#ffffff")
           type="submit"
           className={`w-full py-2 rounded text-white font-semibold mt-2 ${
             isEditing
-              ? "bg-blue-500 hover:bg-blue-600"
+              ? "bg-yellow-500 hover:bg-yellow-600"
               : "bg-gray-400 cursor-not-allowed"
           }`}
           disabled={!isEditing}

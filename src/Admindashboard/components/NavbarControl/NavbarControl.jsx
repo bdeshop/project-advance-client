@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const NavbarControl = () => {
   const [bgColor, setBgColor] = useState("#ffffff");
@@ -34,16 +35,16 @@ const NavbarControl = () => {
         signUpButtonBgColor,
         fontSize: Number(fontSize),
       });
-      alert("✅ Navbar settings saved!");
+      toast.success("Navbar settings saved!");
       setIsEditing(false);
     } catch (err) {
       console.error(err);
-      alert("❌ Failed to save navbar settings!");
+      toast.error("Failed to save navbar settings!");
     }
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+    <div className="max-w-sm mx-auto mt-10 p-6 bg-white rounded shadow">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-semibold text-yellow-600">
           Home page navbar color control

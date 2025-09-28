@@ -8,7 +8,7 @@ import SocialMediaUrlControl from '../../components/SocialMediaUrlControl/Social
 
 const ColorControl = () => {
     return (
-        <div>
+        <div className='grid gap-6 grid-cols-1 lg:grid-cols-4'>
             <NavbarControl></NavbarControl>
             <WebMenuControl></WebMenuControl>
             <MobileMenuControl></MobileMenuControl>
