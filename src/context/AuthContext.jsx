@@ -21,22 +21,49 @@ export const AuthProvider = ({ children }) => {
   const [mobileMenuSidebar, setMobileMenuSidebar] = useState({});
   const [footer, setFooter] = useState({});
   const [sidebarData, setSidebarData] = useState(null);
+  const [balance,setBalance] = useState('')
+
+ useEffect(() => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) setUser(JSON.parse(storedUser));
+  setLoading(false); // Finished loading
+}, []);
+
+const login = (userData) => {
+  setUser(userData);
+  localStorage.setItem("user", JSON.stringify(userData));
+};
+
+const logout = () => {
+  setUser(null);
+  localStorage.removeItem("user");
+};
+
+// ---------------- Get Mother Admin Balance ----------------
+  const fetchBalance = async () => {
+    if (!user) return;
+
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/admin/balance`,
+        {
+          params: { role: user.role, id: user._id }, // id পাঠানো হচ্ছে
+        }
+      );
+
+      if (res.data?.balance !== undefined) {
+        setBalance(res.data.balance);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to fetch balance");
+    }
+  };
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
-    setLoading(false); // Finished loading
-  }, []);
+    fetchBalance();
+  }, [user]);
 
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
-  };
-
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-  };
 
   // backend থেকে logo ফেচ
   const fetchLogo = async () => {
@@ -47,8 +74,8 @@ export const AuthProvider = ({ children }) => {
       if (data && data.logoUrl) {
         setLogo(data.logoUrl);
         setId(data._id);
-        console.log(logo);
-        console.log("Fetched logo:", data.logoUrl);
+
+
       } else {
         console.log("No logo found in DB");
         setLogo(null); // fallback
@@ -66,7 +93,6 @@ export const AuthProvider = ({ children }) => {
     try {
       const res = await axios.get("http://localhost:5000/api/sliders");
       setSliders(res.data);
-      console.log(res.data);
     } catch (err) {
       console.error(err);
     }
@@ -169,7 +195,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.get("http://localhost:5000/api/navbar");
         setNavbar(res.data);
-        console.log(res.data);
+
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -184,7 +210,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.get("http://localhost:5000/api/webmenu");
         setWebMenu(res.data);
-        console.log(res.data);
+
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -200,7 +226,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.get("http://localhost:5000/api/mobilemenu");
         setMobileMenu(res.data);
-        console.log(res.data);
+
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -216,7 +242,7 @@ export const AuthProvider = ({ children }) => {
           "http://localhost:5000/api/mobile-sidebar-style"
         );
         setMobileMenuSidebar(res.data);
-        console.log(res.data);
+
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -230,7 +256,7 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.get("http://localhost:5000/api/footer");
         setFooter(res.data);
-        console.log(res.data);
+
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -247,7 +273,6 @@ export const AuthProvider = ({ children }) => {
       try {
         const res = await axios.get("http://localhost:5000/api/sidebar-menu");
         setSidebarData(res.data.sidebarMenu);
-        console.log(res.data.sidebarMenu);
       } catch (error) {
         console.error("Navbar API error:", error);
       }
@@ -264,6 +289,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{
         user,
+        setUser,
         login,
         logout,
         logo,
@@ -287,7 +313,8 @@ export const AuthProvider = ({ children }) => {
         mobileMenu,
         mobileMenuSidebar,
         footer,
-        sidebarData
+        sidebarData,
+        balance
       }}
     >
       {children}
