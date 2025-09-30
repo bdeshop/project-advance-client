@@ -1,53 +1,85 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
+import { AuthContext } from "../../../context/AuthContext";
+import { toast } from "react-toastify";
 
 const AdminProfile = () => {
+ const {user} = useContext(AuthContext)
+ console.log(user._id)
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullname: "",
+    username: "",
     email: "",
-    contact: "",
     password: "",
   });
 
+  // Fetch admin data
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/admins/${user._id}`);
+        setFormData({
+          fullname: res.data.fullname,
+          username: res.data.username,
+          email: res.data.email,
+          password: "", // password ফাঁকা রাখা হবে
+        });
+        console.log(res.data)
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchProfile();
+  }, [user._id]);
+
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Updated Data:", formData);
-    // এখানে আপনি API কল দিয়ে ডাটাবেজে আপডেট করতে পারবেন
+
+    if (!formData.fullname || !formData.email || !formData.username) {
+      toast.error("Fullname, Email এবং Username আবশ্যক!");
+      return;
+    }
+    try {
+      const payload = { ...formData };
+      if (!payload.password) delete payload.password;
+
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/profile/${user._id}`, payload);
+
+      toast.success("Profile updated successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error(err.response?.data?.error || "Update failed!");
+    } 
   };
 
   return (
     <div className="max-w-lg p-6">
       <h2 className="text-2xl font-bold mb-6">Profile</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* First Name */}
+        {/* Full Name */}
         <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-          <label className="w-40 font-medium">First Name</label>
+          <label className="w-40 font-medium">Full Name</label>
           <input
             type="text"
-            name="firstName"
-            value={formData.firstName}
+            name="fullname"
+            value={formData.fullname}
             onChange={handleChange}
-            placeholder="First Name"
             className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
 
-        {/* Last Name */}
+        {/* User Name */}
         <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-          <label className="w-40 font-medium">Last Name</label>
+          <label className="w-40 font-medium">User Name</label>
           <input
             type="text"
-            name="lastName"
-            value={formData.lastName}
+            name="username"
+            value={formData.username}
             onChange={handleChange}
-            placeholder="Last Name"
             className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
@@ -60,20 +92,6 @@ const AdminProfile = () => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            placeholder="Email"
-            className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
-          />
-        </div>
-
-        {/* Contact Number */}
-        <div className="flex flex-col md:flex-row md:items-center md:space-x-4">
-          <label className="w-40 font-medium">Contact Number</label>
-          <input
-            type="text"
-            name="contact"
-            value={formData.contact}
-            onChange={handleChange}
-            placeholder="Contact Number"
             className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
@@ -86,12 +104,11 @@ const AdminProfile = () => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            placeholder="Password (leave blank to keep current)"
+            placeholder="Leave blank to keep old password"
             className="flex-1 border rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
 
-        {/* Update Button */}
         <div className="flex justify-end">
           <button
             type="submit"

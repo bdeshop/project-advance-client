@@ -80,6 +80,7 @@ import Summary from "../Admindashboard/components/Summary/Summary";
 import AdminProfile from "../Admindashboard/components/AdminProfile/AdminProfile";
 import AccountDetails from "../Admindashboard/components/AccountDetails/AccountDetails";
 import ModifyProfile from "../Admindashboard/pages/ModifyProfile/ModifyProfile";
+import Activelog from "../Admindashboard/components/Activelog/Activelog";
 
 export const router = createBrowserRouter([
   {
@@ -283,11 +284,12 @@ export const router = createBrowserRouter([
             path:"profile",
             element:<AdminProfile></AdminProfile>
           },{
-            path:"active-log"
+            path:"active-log",
+            element:<Activelog></Activelog>
           },{
             path:"account-details",
             element:<AccountDetails></AccountDetails>
-          }
+          },
         ],
       },
       {

@@ -135,7 +135,7 @@ const AdNavbar = () => {
             <span className="text-gray-400">({user.role})</span>
           </span>
           <span className="text-yellow-500 font-semibold flex justify-center items-center text-[14px]">
-            - Main Balance: <span className="text-white">0 USD</span>
+            - Main Balance: <span className="text-white">{balance} USD</span>
           </span>
         </div>
       </nav>
