@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AuthContext } from "../../../context/AuthContext";
+import MoneyTransfer from "../../components/MoneyTransfer/MoneyTransfer";
 
 const Banking = () => {
   const [amount, setAmount] = useState("");
@@ -61,7 +62,8 @@ const Banking = () => {
   }, [user]);
 
   return (
-    <div className="p-4 bg-gray-100 min-h-screen">
+    <>
+    <div className="p-4 bg-gray-100">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {/* Total User Balance */}
         <div className="bg-black text-white rounded-lg p-4 shadow-md">
@@ -127,6 +129,8 @@ const Banking = () => {
         </div>
       </div>
     </div>
+    <MoneyTransfer></MoneyTransfer>
+    </>
   );
 };
 

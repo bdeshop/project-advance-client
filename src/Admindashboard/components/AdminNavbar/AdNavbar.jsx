@@ -33,7 +33,7 @@ const AdNavbar = () => {
         { name: "Agent", path: "/admin-dashboard/agent" },
         { name: "Master", path: "/admin-dashboard/master" },
         { name: "Sub Admin", path: "/admin-dashboard/sub-admin" },
-        { name: "Admin", path: "/admin-dashboard/admin" },
+        { name: "Mother Admin", path: "/admin-dashboard/admin" },
       ],
     },
     {

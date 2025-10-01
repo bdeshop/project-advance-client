@@ -14,7 +14,7 @@ const MyAccount = () => {
   return (
     <div className="md:flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="static translate-x-0 top-0 left-0 h-full lg:w-60 lg:ml-10 lg:mt-10 bg-white shadow-md z-50 transform transition-transform duration-300">
+      <div className="static translate-x-0 top-0 left-0 h-full lg:w-60 lg:ml-10 lg:mt-10 bg-white shadow-md transform transition-transform duration-300">
         <div className="p-4 font-bold bg-gray-800 text-white">Position</div>
         <ul className="divide-y">
           {menuItems.map((item) => (

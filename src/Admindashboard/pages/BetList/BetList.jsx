@@ -1,9 +1,10 @@
 import React from 'react';
+import PaymentHistory from '../../components/PaymentHistory/PaymentHistory';
 
 const BetList = () => {
     return (
         <div>
-            Bet List
+            <PaymentHistory></PaymentHistory>
         </div>
     );
 };

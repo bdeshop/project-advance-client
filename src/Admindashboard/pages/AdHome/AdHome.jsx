@@ -1,3 +1,5 @@
+// AdHome.jsx
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import { IoReload } from "react-icons/io5";
@@ -5,6 +7,7 @@ import { FaCog } from "react-icons/fa";
 import { AuthContext } from "../../../context/AuthContext";
 import { TiUserAdd } from "react-icons/ti";
 import { Link } from "react-router";
+import { toast } from "react-toastify";
 
 const AdHome = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,6 +16,10 @@ const AdHome = () => {
   const { user } = useContext(AuthContext);
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchInput, setSearchInput] = useState('');
+  const [total, setTotal] = useState(0); // Added to track total admins
+  const limit = 15;
 
   // বাইরে ক্লিক করলে dropdown বন্ধ হবে
   useEffect(() => {
@@ -28,7 +35,6 @@ const AdHome = () => {
   }, []);
 
   const allRoles = [
-    "Select User Role",
     "User",
     "Sub Agent",
     "Agent",
@@ -37,23 +43,22 @@ const AdHome = () => {
     "Mother Admin",
   ];
 
-
   // role অনুযায়ী ফিল্টার
   const getFilteredRoles = (role) => {
     if (role === "Mother Admin") {
       return allRoles;
     }
     if (role === "Sub Admin") {
-      return ["Sub Admin", "Master", "Agent", "Sub Agent"];
+      return ["Sub Admin", "Master", "Agent", "Sub Agent", "User"];
     }
     if (role === "Master") {
-      return ["Master", "Agent", "Sub Agent"];
+      return ["Master", "Agent", "Sub Agent","User"];
     }
     if (role === "Agent") {
-      return ["Agent", "Sub Agent"];
+      return ["Agent", "Sub Agent","User"];
     }
     if (role === "Sub Agent") {
-      return ["Sub Agent"];
+      return ["Sub Agent","User"];
     }
     if (role === "User") {
       return ["User"];
@@ -74,13 +79,14 @@ const AdHome = () => {
     confirmPassword: "",
   });
 
-  // ✅ Fetch admins from API
+  // ✅ Fetch admins from API with pagination and search
   const fetchAdmins = async () => {
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/admins"); // backend port
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/admins?search=${searchInput}&page=${currentPage}&limit=${limit}`);
       const data = await res.json();
-      setAdmins(data); // এখানে সরাসরি array আসবে
+      setAdmins(data.admins);
+      setTotal(data.total); // Set total from backend response
     } catch (err) {
       console.error("Error fetching admins", err);
     }
@@ -89,7 +95,7 @@ const AdHome = () => {
 
   useEffect(() => {
     fetchAdmins();
-  }, []);
+  }, [searchInput, currentPage]);
 
   // ✅ Handle input change
   const handleChange = (e) => {
@@ -110,12 +116,12 @@ const AdHome = () => {
       fullname: `${formData.firstName} ${formData.lastName}`,
       email: formData.email,
       username: formData.username,
-      role: formData.role,
+      role: selectedRole,
       password: formData.password,
     };
 
     try {
-      const res = await fetch("http://localhost:5000/api/admins", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newAdmin),
@@ -123,7 +129,7 @@ const AdHome = () => {
 
       const data = await res.json();
       if (data.success) {
-        alert("✅ Admin created successfully!");
+        toast.success("Admin created successfully!");
         setFormData({
           firstName: "",
           lastName: "",
@@ -136,11 +142,11 @@ const AdHome = () => {
         setIsOpen(false);
         fetchAdmins(); // refresh list
       } else {
-        alert("❌ Failed to create admin: " + data.message);
+        toast.error("Failed to create admin: " + data.message);
       }
     } catch (err) {
       console.error(err);
-      alert("❌ Error creating admin");
+      toast.error("Error creating admin");
     }
   };
 
@@ -150,7 +156,7 @@ const AdHome = () => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:5000/api/admins/${id}/ban`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/${id}/ban`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ role: user.role }),
@@ -162,10 +168,10 @@ const AdHome = () => {
             admin._id === id ? { ...admin, status: "Banned" } : admin
           )
         );
-      } else alert(data.message);
+      } else toast.error(data.message);
     } catch (err) {
       console.error(err);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!");
     }
   };
 
@@ -173,15 +179,15 @@ const AdHome = () => {
   const roleHierarchy = {
     "Mother Admin": ["Sub Admin", "Master", "Agent", "Sub Agent", "User"],
     "Sub Admin": ["Master", "Agent", "Sub Agent", "User"],
-    Master: ["Agent", "Sub Agent", "User"],
-    Agent: ["Sub Agent", "User"],
+    "Master": ["Agent", "Sub Agent", "User"],
+    "Agent": ["Sub Agent", "User"],
     "Sub Agent": ["User"],
-    User: [],
+    "User": [],
   };
   // ✅ Handle Activate / Deactivate
   const handleStatusChange = async (id, action, targetRole) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/admins/${id}/status`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admins/${id}/status`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -204,12 +210,28 @@ const AdHome = () => {
           )
         );
       } else {
-        alert(data.message);
+        toast.error(data.message);
       }
     } catch (err) {
       console.error(err);
-      alert("Something went wrong!");
+      toast.error("Something went wrong!");
     }
+  };
+
+  // Handle search submit
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setCurrentPage(1); // Reset to first page on new search
+    fetchAdmins();
+  };
+
+  // Handle pagination
+  const totalPages = Math.ceil(total / limit);
+  const handlePrevious = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
   };
 
   return (
@@ -225,12 +247,16 @@ const AdHome = () => {
             {" "}
             <div className="flex items-center gap-2">
               {" "}
-              <input
-                type="text"
-                placeholder="Find Member"
-                className="input input-bordered w-60"
-              />{" "}
-              <button className="btn bg-yellow-600 text-white">Search</button>{" "}
+              <form onSubmit={handleSearch}>
+                <input
+                  type="text"
+                  placeholder="Find Member"
+                  className="input input-bordered w-60"
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />{" "}
+                <button type="submit" className="btn bg-yellow-600 text-white">Search</button>{" "}
+              </form>
             </div>{" "}
             <div className="flex items-center gap-2">
               {" "}
@@ -246,7 +272,7 @@ const AdHome = () => {
           <div className="flex items-center gap-3">
             {" "}
             <span className="font-medium">
-              Total records: {admins.length}
+              Total records: {total}
             </span>{" "}
             <button
               onClick={() => setIsOpen(true)}
@@ -399,7 +425,6 @@ const AdHome = () => {
                     </td>
 
                     {/* Actions */}
-                    {/* Actions */}
                     <td className="border px-4 py-2">
                       <div className="flex justify-center gap-2">
                         <button className="btn btn-xs bg-gray-200">BS</button>
@@ -479,6 +504,29 @@ const AdHome = () => {
         </table>
       </div>
 
+      {/* Pagination */}
+      {total > limit && (
+        <div className="flex justify-center items-center gap-4 mt-4 mb-4">
+          <button
+            onClick={handlePrevious}
+            disabled={currentPage === 1}
+            className="btn btn-outline"
+          >
+            Previous
+          </button>
+          <span>
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={handleNext}
+            disabled={currentPage === totalPages}
+            className="btn btn-outline"
+          >
+            Next
+          </button>
+        </div>
+      )}
+
       {/* Modal */}
       {isOpen && (
         <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50 px-4">
@@ -541,7 +589,7 @@ const AdHome = () => {
                 className="input input-bordered w-full"
               />
 
-              <label className="mb-2 font-bold">Role</label>
+              <label className="mb-2 font-bold">Select a Role</label>
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
