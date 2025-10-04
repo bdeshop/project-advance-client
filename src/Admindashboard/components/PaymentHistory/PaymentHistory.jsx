@@ -19,9 +19,9 @@ const PaymentHistory = () => {
   }, []);
 
   return (
-    <div className="p-6 mt-10">
+    <div className="p-6 mt-10 overflow-x-auto">
       <h1 className="text-xl font-bold mb-4">📜 Payment History</h1>
-      <table className="w-full border">
+      <table className="w-full border ">
         <thead className="bg-gray-100">
           <tr>
             <th className="border p-2">From</th>

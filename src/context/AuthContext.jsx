@@ -21,7 +21,8 @@ export const AuthProvider = ({ children }) => {
   const [mobileMenuSidebar, setMobileMenuSidebar] = useState({});
   const [footer, setFooter] = useState({});
   const [sidebarData, setSidebarData] = useState(null);
-  const [balance,setBalance] = useState('')
+  const [balance,setBalance] = useState('');
+  const [loginUser, setLoginUser] = useState(null);
 
  useEffect(() => {
   const storedUser = localStorage.getItem("user");
@@ -280,6 +281,29 @@ const logout = () => {
 
     fetchUrl();
   }, []);
+
+
+
+
+  // 🔹 App লোড হলে localStorage থেকে ইউজার লোড করা
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+    if (savedUser) {
+      setLoginUser(JSON.parse(savedUser));
+    }
+  }, []);
+
+  // 🔹 লগইন করার পর ইউজার সেট করা
+  const loginUserData = (userData) => {
+    setLoginUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
+  };
+
+  // 🔹 লগআউট
+  const logoutUserData = () => {
+    setLoginUser(null);
+    localStorage.removeItem("user");
+  };
   
 
   // While loading, don’t render children to prevent flicker
@@ -314,7 +338,9 @@ const logout = () => {
         mobileMenuSidebar,
         footer,
         sidebarData,
-        balance
+        balance,
+        loginUser,
+        loginUserData
       }}
     >
       {children}

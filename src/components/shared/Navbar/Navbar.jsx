@@ -28,7 +28,7 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar, sidebarData } =
+  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar, sidebarData ,loginUser} =
     useContext(AuthContext);
 console.log(sidebarData)
   const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
@@ -46,7 +46,7 @@ console.log(sidebarData)
 
   const { gradientDirection, gradientFrom, gradientTo, sideTextColor } =
     mobileMenuSidebar;
-
+console.log(loginUser)
   // gradient direction map
   const directionMap = {
     "to-t": "to top",

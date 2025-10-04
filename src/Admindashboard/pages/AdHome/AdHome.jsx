@@ -300,28 +300,28 @@ const AdHome = () => {
           </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
             {" "}
-            <h3 className="text-white font-semibold">Remaining Balance</h3>{" "}
+            <h3 className="text-white font-semibold">Total Client</h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
               {" "}
-              USD (0.00){" "}
+             0{" "}
             </div>{" "}
           </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
             {" "}
             <h3 className="text-white font-semibold">
-              Total Self Deposit
+              Total Active Games
             </h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
               {" "}
-              USD (0.00){" "}
+              0{" "}
             </div>{" "}
           </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
             {" "}
-            <h3 className="text-white font-semibold">Total Exposure</h3>{" "}
+            <h3 className="text-white font-semibold">Total Deposit</h3>{" "}
             <div className="bg-yellow-600 text-white rounded-md py-1 mt-2">
               {" "}
-              USD (0.00){" "}
+              0{" "}
             </div>{" "}
           </div>{" "}
           <div className="bg-black text-center rounded-md p-4">
@@ -339,7 +339,7 @@ const AdHome = () => {
       {/* Table */}
       <div className="overflow-x-auto rounded-md p-4 ">
         <table className="table w-full border-collapse">
-          <thead className="bg-gray-100 text-gray-800">
+          <thead className="bg-yellow-500 text-gray-800">
             <tr>
               <th className="border px-4 py-2">USERNAME</th>
               <th className="border px-4 py-2">FULL NAME</th>

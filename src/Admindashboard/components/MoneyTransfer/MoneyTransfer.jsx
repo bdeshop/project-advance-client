@@ -54,7 +54,7 @@ const MoneyTransfer = () => {
   const totalPages = Math.ceil(total / limit);
 
   return (
-    <div className="p-6 mt-10">
+    <div className="p-6 mt-10 ">
       <h1 className="text-xl font-bold mb-4">💸 Money Transfer</h1>
 
       {/* Search */}
@@ -67,8 +67,8 @@ const MoneyTransfer = () => {
       />
 
       {/* Table */}
-      <table className="w-full border">
-        <thead className="bg-gray-100">
+      <table className="w-full border overflow-x-auto">
+        <thead className="bg-yellow-500">
           <tr>
             <th className="p-2 border">Full Name</th>
             <th className="p-2 border">Username</th>
