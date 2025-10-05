@@ -9,7 +9,7 @@ import { useNavigate } from "react-router";
 const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-  const { signupImage, mobileMenu } = useContext(AuthContext);
+  const { signupImage, mobileMenu,loginUserData } = useContext(AuthContext);
   const { signupBtnColor, btnFontSize, buttonFontColor, pageBgColor, pageFontSize } =
     mobileMenu;
 
@@ -51,6 +51,7 @@ const SignUp = () => {
 
       toast.success("Signup successful!");
       navigate("/"); // ✅ হোমপেজে নেভিগেট করবে
+      loginUserData(res.data.user)
     } catch (error) {
       console.error("Signup error:", error);
       toast.error(error.response?.data?.message || "Signup failed");

@@ -1,5 +1,7 @@
 import axios from "axios";
 import { createContext, useState, useEffect } from "react";
+import { Navigate } from "react-router";
+
 
 export const AuthContext = createContext();
 
@@ -24,20 +26,21 @@ export const AuthProvider = ({ children }) => {
   const [balance,setBalance] = useState('');
   const [loginUser, setLoginUser] = useState(null);
 
+
  useEffect(() => {
-  const storedUser = localStorage.getItem("user");
+  const storedUser = localStorage.getItem("admin");
   if (storedUser) setUser(JSON.parse(storedUser));
   setLoading(false); // Finished loading
 }, []);
 
 const login = (userData) => {
   setUser(userData);
-  localStorage.setItem("user", JSON.stringify(userData));
+  localStorage.setItem("admin", JSON.stringify(userData));
 };
 
 const logout = () => {
   setUser(null);
-  localStorage.removeItem("user");
+  localStorage.removeItem("admin");
 };
 
 // ---------------- Get Mother Admin Balance ----------------
@@ -302,6 +305,7 @@ const logout = () => {
   // 🔹 লগআউট
   const logoutUserData = () => {
     setLoginUser(null);
+    <Navigate to={'/'}></Navigate>
     localStorage.removeItem("user");
   };
   
@@ -340,6 +344,7 @@ const logout = () => {
         sidebarData,
         balance,
         loginUser,
+        logoutUserData,
         loginUserData
       }}
     >

@@ -1,6 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./Navbar.css";
-
 import {
   FaBars,
   FaTimes,
@@ -20,17 +19,31 @@ import {
 } from "react-icons/fa";
 import { IoSettings } from "react-icons/io5";
 import { MdArrowDropDown } from "react-icons/md";
-import { Link, NavLink } from "react-router";
+import { Link, NavLink, useNavigate } from "react-router";
 import { AuthContext } from "../../../context/AuthContext";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
+  const [balance, setBalance] = useState(0);
   const [showPassword, setShowPassword] = useState(false);
-  const { logo, navbar, webMenu, mobileMenu, mobileMenuSidebar, sidebarData ,loginUser} =
-    useContext(AuthContext);
-console.log(sidebarData)
+  const [form, setForm] = useState({ username: "", password: "" });
+  const navigate = useNavigate();
+
+  const {
+    logo,
+    navbar,
+    webMenu,
+    mobileMenu,
+    mobileMenuSidebar,
+    sidebarData,
+    loginUser,
+    logoutUserData,
+    loginUserData,
+  } = useContext(AuthContext);
+
   const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
     navbar;
   const {
@@ -39,14 +52,72 @@ console.log(sidebarData)
     webMenuFontSize,
     webMenuHoverColor,
   } = webMenu;
-  console.log(webMenu);
 
   const { loginBtnColor, signupBtnColor, btnFontSize, buttonFontColor } =
     mobileMenu;
 
   const { gradientDirection, gradientFrom, gradientTo, sideTextColor } =
     mobileMenuSidebar;
-console.log(loginUser)
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!form.username || !form.password) {
+      toast.error("Please fill all fields");
+      return;
+    }
+
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/login-user`,
+        {
+          username: form.username.trim(),
+          password: form.password,
+        }
+      );
+
+      toast.success("Login Successful!");
+      console.log(res)
+
+      // Save to AuthContext & localStorage
+      loginUserData(res.data.user);
+
+      navigate("/");
+      setTimeout(() => window.location.reload(), 500);
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Login failed");
+      console.log(error.response?.data?.message || "Login failed");
+    }
+  };
+
+  const fetchBalance = async () => {
+    if (!loginUser) return;
+
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/admin/balance`,
+        {
+          params: { role: loginUser.role, id: loginUser._id }, // id পাঠানো হচ্ছে
+        }
+      );
+
+      if (res.data?.balance !== undefined) {
+        setBalance(res.data.balance);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to fetch balance");
+    }
+  };
+
+    useEffect(() => {
+      fetchBalance();
+    }, [loginUser]);
+
   // gradient direction map
   const directionMap = {
     "to-t": "to top",
@@ -56,6 +127,8 @@ console.log(loginUser)
   };
 
   const gradientCSSDirection = directionMap[gradientDirection] || "to right";
+
+  const isLoggedIn = !!loginUser; // ✅ Real login check
 
   return (
     <nav
@@ -99,17 +172,23 @@ console.log(loginUser)
         >
           {!isLoggedIn ? (
             // যখন লগইন হয়নি তখন লগইন ইনপুট আর বাটন দেখাবে
-            <div className="flex items-center space-x-2">
+            <form onSubmit={handleLogin} className="flex items-center space-x-2">
               <div className="hidden lg:flex items-center space-x-2">
                 <FaUser className="text-yellow-300" />
                 <input
                   type="text"
+                  name="username"
+                  value={form.username}
+                  onChange={handleChange}
                   placeholder="4-15 char, allow number"
                   className="px-2 py-1 text-black rounded-md text-sm bg-white"
                 />
                 <div className="relative w-full">
                   <input
                     type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={form.password}
+                    onChange={handleChange}
                     placeholder="8-20 char"
                     className="w-full px-2 py-1 text-black rounded-md text-sm bg-white pr-10"
                   />
@@ -134,12 +213,12 @@ console.log(loginUser)
               </div>
               <button
                 className="hidden lg:flex px-3 py-1 rounded"
+                type="submit"
                 style={{
                   backgroundColor: bgButtonColor,
                   color: textColor,
                   fontSize: `${fontSize}px`,
                 }}
-                onClick={() => setIsLoggedIn(true)}
               >
                 Login
               </button>
@@ -151,7 +230,7 @@ console.log(loginUser)
                   fontSize: `${fontSize}px`,
                 }}
               >
-                <Link onClick={() => setIsLoggedIn(true)}>Login</Link>
+                <Link to="/login">Login</Link>
               </button>
 
               <button
@@ -162,9 +241,9 @@ console.log(loginUser)
                   fontSize: `${fontSize}px`,
                 }}
               >
-                <Link to="signup">Signup</Link>
+                <Link to="/signup">Signup</Link>
               </button>
-            </div>
+            </form>
           ) : (
             <div className="flex items-center gap-1">
               {/* wallet */}
@@ -176,7 +255,9 @@ console.log(loginUser)
                 <span className="flex text-[8px] md:text-[16px] text-white font-bold">
                   Main BDT{" "}
                 </span>
-                <span className="font-bold ml-1 text-white">0</span>
+                <span className="font-bold ml-1 text-white">
+                  {balance}
+                </span>
                 <span className="ml-1 text-white">Exposure</span>
                 <span className=" text-red-600 px-1 rounded text-xs">0</span>
                 <button className="ml-1 bg-green-600 text-white px-2 rounded text-xs font-bold">
@@ -188,7 +269,6 @@ console.log(loginUser)
               </div>
 
               {/* My Account Section */}
-              {/* My Account Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setAccountOpen(!accountOpen)}
@@ -203,72 +283,56 @@ console.log(loginUser)
                 {accountOpen && (
                   <div className="absolute right-0 mt-1 w-48 bg-white text-black rounded-md shadow-lg overflow-hidden z-50">
                     <div className="px-4 py-2 border-b font-semibold text-green-800">
-                      raihan-7{" "}
+                      {loginUser?.username || "User"}{" "}
                       <span className="text-xs text-gray-500">GMT+5:30</span>
                     </div>
                     <ul className="text-sm">
                       <Link to="/profile">
                         <li
-                          onClick={() => {
-                            setAccountOpen(false);
-                          }}
+                          onClick={() => setAccountOpen(false)}
                           className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                         >
                           My Profile
                         </li>
                       </Link>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Balance Overview
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Account Statement
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         My Bets
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Bets History
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Profit & Loss
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Results
                       </li>
                       <li
-                        onClick={() => {
-                          setAccountOpen(false);
-                        }}
+                        onClick={() => setAccountOpen(false)}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
                       >
                         Activity Log
@@ -277,7 +341,7 @@ console.log(loginUser)
                     <div className="border-t">
                       <button
                         onClick={() => {
-                          setIsLoggedIn(false);
+                          logoutUserData();
                           setAccountOpen(false);
                         }}
                         className="w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100"
@@ -301,7 +365,6 @@ console.log(loginUser)
         </div>
       </div>
 
-      {/* Bottom Menu (Desktop) */}
       {/* Bottom Menu (Desktop) */}
       <div
         className="hidden lg:flex web-menu-btn"
@@ -397,10 +460,13 @@ console.log(loginUser)
             }}
             className="p-3 rounded-md"
           >
-            <p className="font-medium">Hi, welcome.</p>
+            <p className="font-medium">
+              {isLoggedIn
+                ? `Hi, ${loginUser?.username || "User"}`
+                : "Hi, welcome."}
+            </p>
             {!isLoggedIn ? (
               <div className="flex space-x-2 mt-2">
-                {/* Login Button */}
                 <button
                   style={{
                     backgroundColor: loginBtnColor,
@@ -409,10 +475,8 @@ console.log(loginUser)
                   }}
                   className="px-3 py-1 rounded"
                 >
-                  <Link to="login">Login</Link>
+                  <Link to="/login">Login</Link>
                 </button>
-
-                {/* Signup Button */}
                 <button
                   style={{
                     backgroundColor: signupBtnColor,
@@ -421,11 +485,13 @@ console.log(loginUser)
                   }}
                   className="px-3 py-1 rounded"
                 >
-                  <Link to="signup">Sign Up</Link>
+                  <Link to="/signup">Sign Up</Link>
                 </button>
               </div>
             ) : (
-              <p className="mt-2">Balance: PTH 0 | Exposure: 0</p>
+              <p className="mt-2">
+                Balance: BDT {loginUser?.balance || 0} | Exposure: 0
+              </p>
             )}
           </div>
 
@@ -501,7 +567,7 @@ console.log(loginUser)
                 className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
               >
                 <FaSignInAlt />
-                <Link to="login">Login</Link>
+                <Link to="/login">Login</Link>
               </div>
             ) : (
               <div
@@ -510,7 +576,7 @@ console.log(loginUser)
                   color: sideTextColor,
                 }}
                 className="flex-1 flex items-center justify-center space-x-2 p-2 rounded"
-                onClick={() => setIsLoggedIn(false)}
+                onClick={logoutUserData}
               >
                 <FaSignInAlt />
                 <span>Log out</span>
