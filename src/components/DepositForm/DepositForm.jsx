@@ -74,7 +74,7 @@ const DepositForm = () => {
     }
 
     // Navigate to selected payment page
-    navigate(`/payment/${selectedMethod}`, {
+    navigate(`/deposit-${selectedMethod}`, {
       state: { paymentType, amount, promotion: selectedPromo ? promo : null },
     });
   };
@@ -82,13 +82,13 @@ const DepositForm = () => {
   return (
     <div className="max-w-3xl mx-auto bg-gray-500 shadow-md rounded-md mt-8 p-5 border">
       {/* Top Banner */}
-      <div className="bg-teal-900 text-center text-white font-semibold py-2 rounded">
+      <div className="bg-yellow-500 text-center text-white font-bold py-2 rounded">
         1 PBU = 100 BDT
       </div>
 
       {/* Promotion Section */}
       <div className="mt-4">
-        <h2 className="font-semibold mb-2 text-gray-700">
+        <h2 className="font-semibold mb-2 text-white">
           Select Your Promotion
         </h2>
         <div
@@ -104,7 +104,7 @@ const DepositForm = () => {
           <div>
             <div className="font-bold">{promo.title}</div>
             <div className="text-sm">{promo.type}</div>
-            <div className="text-xs text-gray-400">
+            <div className="text-xs text-white">
               {promo.start} ~ {promo.end}
             </div>
           </div>
@@ -124,7 +124,7 @@ const DepositForm = () => {
 
       {/* Payment Method */}
       <div className="mt-6">
-        <h2 className="font-semibold mb-2 text-gray-700">
+        <h2 className="font-semibold mb-2 text-white">
           Select Payment Method <span className="text-red-500">*</span>
         </h2>
         <div className="flex flex-wrap gap-4">
@@ -154,7 +154,7 @@ const DepositForm = () => {
       {/* Payment Type Dropdown */}
       {selectedMethod && (
         <div className="mt-5">
-          <h2 className="font-semibold mb-2 text-gray-700">
+          <h2 className="font-semibold mb-2 text-white">
             Select Payment Type <span className="text-red-500">*</span>
           </h2>
           <select
@@ -194,7 +194,7 @@ const DepositForm = () => {
             className="flex-1 border rounded-md p-2"
           />
         </div>
-        <div className="text-right text-sm text-gray-600 mt-1">
+        <div className="text-right text-sm text-white mt-1">
           BDT 100 - BDT 25000
         </div>
       </div>
@@ -209,7 +209,7 @@ const DepositForm = () => {
       {/* Submit Button */}
       <button
         onClick={handleSubmit}
-        className="mt-6 w-full bg-yellow-400 text-black font-semibold py-2 rounded hover:bg-yellow-500 transition"
+        className="mt-6 w-full bg-yellow-400 text-black font-semibold py-2 rounded hover:cursor-pointer hover:bg-yellow-500 transition"
       >
         Submit
       </button>

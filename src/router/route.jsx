@@ -81,6 +81,9 @@ import AdminProfile from "../Admindashboard/components/AdminProfile/AdminProfile
 import AccountDetails from "../Admindashboard/components/AccountDetails/AccountDetails";
 import ModifyProfile from "../Admindashboard/pages/ModifyProfile/ModifyProfile";
 import Activelog from "../Admindashboard/components/Activelog/Activelog";
+import BkashDeposit from "../pages/Account/MyWallet/Diposit/Components/BkashDeposit";
+import NagadDeposit from "../pages/Account/MyWallet/Diposit/Components/NagadDeposit";
+import RocketDeposit from "../pages/Account/MyWallet/Diposit/Components/RocketDeposit";
 
 export const router = createBrowserRouter([
   {
@@ -269,26 +272,27 @@ export const router = createBrowserRouter([
       {
         path: "my-account",
 
-        element: (
-         
-            <MyAccount />
-        ),
-        children:[
+        element: <MyAccount />,
+        children: [
           {
-            path:"statement",
-            element:<Statement></Statement>
-          },{
-            path:"summary",
-            element:<Summary></Summary>
-          },{
-            path:"profile",
-            element:<AdminProfile></AdminProfile>
-          },{
-            path:"active-log",
-            element:<Activelog></Activelog>
-          },{
-            path:"account-details",
-            element:<AccountDetails></AccountDetails>
+            path: "statement",
+            element: <Statement></Statement>,
+          },
+          {
+            path: "summary",
+            element: <Summary></Summary>,
+          },
+          {
+            path: "profile",
+            element: <AdminProfile></AdminProfile>,
+          },
+          {
+            path: "active-log",
+            element: <Activelog></Activelog>,
+          },
+          {
+            path: "account-details",
+            element: <AccountDetails></AccountDetails>,
           },
         ],
       },
@@ -417,13 +421,25 @@ export const router = createBrowserRouter([
         element: <RiskManagement />,
       },
       {
-        path:'modify-profile/:id',
-        element:<ModifyProfile></ModifyProfile>
-      }
+        path: "modify-profile/:id",
+        element: <ModifyProfile></ModifyProfile>,
+      },
     ],
   },
   {
     path: "unauthorized",
     element: <Unauthorized />,
+  },
+  {
+    path: "deposit-bkash",
+    element: <BkashDeposit />,
+  },
+  {
+    path: "deposit-nagad",
+    element: <NagadDeposit />,
+  },
+  {
+    path: "deposit-rocket",
+    element: <RocketDeposit />,
   },
 ]);
