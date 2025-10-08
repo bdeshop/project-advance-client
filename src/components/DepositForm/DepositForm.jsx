@@ -1,46 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import axios from "axios";
 
 const DepositForm = () => {
+  const [settings, setSettings] = useState(null);
   const [selectedPromo, setSelectedPromo] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [amount, setAmount] = useState("");
+  const [selectedCurrency, setSelectedCurrency] = useState("");
+  const [selectedCurrency2, setSelectedCurrency2] = useState("");
   const navigate = useNavigate();
 
-  // Payment Methods
-  const paymentOptions = [
-    {
-      id: "bkash",
-      name: "bkash",
-      image: "https://i.ibb.co/kszjQzZn/unnamed.webp",
-    },
-    {
-      id: "nagad",
-      name: "nagad",
-      image: "https://i.ibb.co/sdgCF1HP/icon-256x256.png",
-    },
-    {
-      id: "rocket",
-      name: "rocket",
-      image:
-        "https://i.ibb.co/S4JZ706r/dutch-bangla-rocket-logo-png-seeklogo-317692.png",
-    },
-  ];
+  // Fetch settings from backend API
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/settings`);
+        setSettings(res.data);
+        if (res.data.currencies && res.data.currencies.length > 0) {
+          setSelectedCurrency(res.data.currencies[0]);
+        }
+      } catch (err) {
+        console.error("Error fetching deposit settings:", err);
+      }
+    };
+    fetchSettings();
+  }, []);
 
-  // Promotion Data
-  const promo = {
-    id: 1,
-    title: "Easy 5% Deposit Bonus",
-    type: "Sports",
-    start: "2025-06-01 02:00:00",
-    end: "2026-01-01 01:59:00",
-    bonusPercent: 5,
-  };
+  if (!settings) return <div className="text-center mt-10 text-white">Loading...</div>;
 
-  // 5% Bonus হিসাব
+  const paymentOptions = settings.payment_methods || [];
+  const promo = settings.promotions?.[0] || null;
+  const paymentTypes = settings.payment_types || [];
+  const currencies = settings.currencies || [];
+  const currencies2 = settings.currencies2 || [];
+  const currencyRate = settings.pbu_rate || 1;
+
+  // Total with bonus calculation
   const totalWithBonus =
-    selectedPromo && amount
+    selectedPromo && amount && promo
       ? (
           parseFloat(amount) +
           (parseFloat(amount) * promo.bonusPercent) / 100
@@ -68,14 +67,18 @@ const DepositForm = () => {
       return;
     }
 
-    if (!amount || amount < 100) {
-      alert("Please enter a valid amount (min 100 BDT).");
+    if (!selectedCurrency) {
+      alert("Please select currency.");
       return;
     }
 
-    // Navigate to selected payment page
+    if (!amount || amount < settings.min_amount) {
+      alert(`Please enter a valid amount (min ${settings.min_amount}).`);
+      return;
+    }
+
     navigate(`/deposit-${selectedMethod}`, {
-      state: { paymentType, amount, promotion: selectedPromo ? promo : null },
+      state: { paymentType, amount, currency: selectedCurrency, promotion: selectedPromo ? promo : null },
     });
   };
 
@@ -83,44 +86,42 @@ const DepositForm = () => {
     <div className="max-w-3xl mx-auto bg-gray-500 shadow-md rounded-md mt-8 p-5 border">
       {/* Top Banner */}
       <div className="bg-yellow-500 text-center text-white font-bold py-2 rounded">
-        1 PBU = 100 BDT
+        {currencyRate} {currencies} = {settings.pbu_rate2} {currencies2}
       </div>
 
       {/* Promotion Section */}
-      <div className="mt-4">
-        <h2 className="font-semibold mb-2 text-white">
-          Select Your Promotion
-        </h2>
-        <div
-          onClick={() =>
-            setSelectedPromo(selectedPromo ? null : promo.id)
-          }
-          className={`border rounded-md cursor-pointer p-4 flex justify-between items-center ${
-            selectedPromo
-              ? "border-orange-500 bg-black text-white"
-              : "border-gray-300"
-          }`}
-        >
-          <div>
-            <div className="font-bold">{promo.title}</div>
-            <div className="text-sm">{promo.type}</div>
-            <div className="text-xs text-white">
-              {promo.start} ~ {promo.end}
+      {promo && (
+        <div className="mt-4">
+          <h2 className="font-semibold mb-2 text-white">Select Your Promotion</h2>
+          <div
+            onClick={() =>
+              setSelectedPromo(selectedPromo ? null : promo.id)
+            }
+            className={`border rounded-md cursor-pointer p-4 flex justify-between items-center ${
+              selectedPromo
+                ? "border-orange-500 bg-black text-white"
+                : "border-gray-300"
+            }`}
+          >
+            <div>
+              <div className="font-bold">{promo.title}</div>
+              <div className="text-sm">{promo.type}</div>
+              <div className="text-xs text-white">
+                {promo.start} ~ {promo.end}
+              </div>
             </div>
+            <input
+              type="radio"
+              checked={selectedPromo === promo.id}
+              onChange={() => setSelectedPromo(promo.id)}
+            />
           </div>
-          <input
-            type="radio"
-            checked={selectedPromo === promo.id}
-            onChange={() => setSelectedPromo(promo.id)}
-          />
-        </div>
 
-        {!selectedPromo && (
-          <p className="text-red-500 text-sm mt-1">
-            Promotion is not selected
-          </p>
-        )}
-      </div>
+          {!selectedPromo && (
+            <p className="text-red-500 text-sm mt-1">Promotion is not selected</p>
+          )}
+        </div>
+      )}
 
       {/* Payment Method */}
       <div className="mt-6">
@@ -143,16 +144,14 @@ const DepositForm = () => {
                 alt={method.name}
                 className="w-12 h-12 object-contain"
               />
-              <span className="text-sm font-semibold mt-1">
-                {method.name}
-              </span>
+              <span className="text-sm font-semibold mt-1">{method.name}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Payment Type Dropdown */}
-      {selectedMethod && (
+      {selectedMethod && paymentTypes.length > 0 && (
         <div className="mt-5">
           <h2 className="font-semibold mb-2 text-white">
             Select Payment Type <span className="text-red-500">*</span>
@@ -163,11 +162,16 @@ const DepositForm = () => {
             onChange={(e) => setPaymentType(e.target.value)}
           >
             <option value="">-- Select Type --</option>
-            <option value="agent">Agent</option>
-            <option value="personal">Personal</option>
+            {paymentTypes.map((type) => (
+              <option key={type} value={type}>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
+              </option>
+            ))}
           </select>
         </div>
       )}
+
+      
 
       {/* Amount Section */}
       <div className="mt-5">
@@ -185,7 +189,7 @@ const DepositForm = () => {
         </div>
 
         <div className="mt-3 flex items-center">
-          <span className="font-semibold mr-2">BDT</span>
+          <span className="font-semibold mr-2">{currencies}</span>
           <input
             type="number"
             placeholder="Enter amount"
@@ -195,14 +199,14 @@ const DepositForm = () => {
           />
         </div>
         <div className="text-right text-sm text-white mt-1">
-          BDT 100 - BDT 25000
+          {currencies} {settings.min_amount} - {settings.max_amount}
         </div>
       </div>
 
       {/* Bonus Info */}
-      {selectedPromo && amount && (
+      {selectedPromo && amount && promo && (
         <div className="mt-3 text-green-700 font-medium">
-          🎁 5% Bonus Applied! Total: {totalWithBonus} BDT
+          🎁 {promo.bonusPercent}% Bonus Applied! Total: {totalWithBonus} {selectedCurrency}
         </div>
       )}
 

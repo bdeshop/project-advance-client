@@ -1,9 +1,10 @@
 import React from 'react';
+import DepositFormSettings from '../../components/DepositFormSettings/DepositFormSettings';
 
 const GeneralSetting = () => {
     return (
         <div>
-            General Setting
+            <DepositFormSettings></DepositFormSettings>
         </div>
     );
 };

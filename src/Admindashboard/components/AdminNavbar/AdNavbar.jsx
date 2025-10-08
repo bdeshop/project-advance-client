@@ -50,7 +50,10 @@ const AdNavbar = () => {
     { name: "My Account", path: "/admin-dashboard/my-account" },
     { name: "BetList", path: "/admin-dashboard/bet-lists" },
     { name: "BetListLive", path: "/admin-dashboard/bet-list-live" },
-    { name: "Banking", path: "/admin-dashboard/banking" },
+    { name: "Banking", dropdown: [
+        { name: "Money Transfer", path: "/admin-dashboard/banking" },
+        { name: "Check Users Payment", path: "/admin-dashboard/check-users-payment" },
+    ]},
     {
       name: "Casino",
       dropdown: [
