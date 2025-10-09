@@ -15,7 +15,9 @@ const DepositPage = () => {
   useEffect(() => {
     const fetchPaymentSettings = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/method/${id}`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/deposit/method/${id}`
+        );
         setPaymentSettings(res.data);
       } catch (err) {
         console.error("Error fetching payment settings:", err);
@@ -25,7 +27,8 @@ const DepositPage = () => {
     fetchPaymentSettings();
   }, [id]);
 
-  if (!paymentSettings) return <div className="text-center mt-10 text-white">লোড হচ্ছে...</div>;
+  if (!paymentSettings)
+    return <div className="text-center mt-10 text-white">লোড হচ্ছে...</div>;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -77,7 +80,9 @@ const DepositPage = () => {
             </p>
           </div>
           <div className="text-right">
-            <p className="text-2xl font-bold text-pink-600">৳ {state?.amount || 0}</p>
+            <p className="text-2xl font-bold" style={{ color: paymentSettings.formBgColor || "#f7f8fc" }}>
+              ৳ {state?.amount || 0}
+            </p>
           </div>
         </div>
 
@@ -85,7 +90,9 @@ const DepositPage = () => {
         <form onSubmit={handleSubmit} className="p-4">
           <div
             className="mt-6 px-4 py-5 rounded-xl text-white space-y-5"
-            style={{ backgroundColor: paymentSettings.formBgColor || "#e2136e" }}
+            style={{
+              backgroundColor: paymentSettings.formBgColor || "#e2136e",
+            }}
           >
             {/* Transaction ID */}
             <div>
@@ -101,7 +108,8 @@ const DepositPage = () => {
                 required
               />
               <p className="text-xs mt-1 text-pink-100">
-                {paymentSettings.transactionIdHint || "দয়া করে আপনার ট্রানজেকশন আইডি দিন"}
+                {paymentSettings.transactionIdHint ||
+                  "দয়া করে আপনার ট্রানজেকশন আইডি দিন"}
               </p>
             </div>
 
@@ -119,7 +127,8 @@ const DepositPage = () => {
                 required
               />
               <p className="text-xs mt-1 text-pink-100">
-                {paymentSettings.numberHint || "দয়া করে আপনার লেনদেন নম্বর দিন"}
+                {paymentSettings.numberHint ||
+                  "দয়া করে আপনার লেনদেন নম্বর দিন"}
               </p>
             </div>
 
@@ -129,21 +138,24 @@ const DepositPage = () => {
                 <div key={index} className="text-white">
                   <ul className="list-disc pl-4">
                     <li className="text-[13px] border-b border-pink-800 pb-2 font-bold">
-                      {instruction.text}
-                      {instruction.isNumber && (
-                        <div className="flex">
-                          <span className="bg-white text-pink-700 px-2 py-1 rounded font-bold">
-                            {paymentSettings.transactionNumber}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={copyToClipboard}
-                            className="bg-yellow-300 text-pink-700 flex items-center gap-1 px-3 py-1 rounded font-semibold hover:bg-yellow-400 transition"
-                          >
-                            <FaCopy /> কপি
-                          </button>
-                        </div>
-                      )}
+                      <div className="flex items-start gap-2">
+                        <div className="flex-1">{instruction.text}</div>
+                        {instruction.isNumber && (
+                          <div className="flex items-center gap-2 shrink-0">
+                            <span className="bg-white px-2 py-1 rounded font-bold whitespace-nowrap" style={{ color: paymentSettings.formBgColor || "#f7f8fc" }}>
+                              {paymentSettings.transactionNumber}
+                            </span>
+                            <button
+                              type="button"
+                              onClick={copyToClipboard}
+                              className="bg-yellow-300 text-pink-700 flex items-center gap-1 px-2 py-1 rounded font-semibold hover:bg-yellow-400 transition whitespace-nowrap"
+                              title="কপি করুন"
+                            >
+                              <FaCopy className="text-sm" /> কপি
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -155,7 +167,9 @@ const DepositPage = () => {
           <button
             type="submit"
             className="w-full mt-4 text-white font-semibold py-2 rounded-md hover:cursor-pointer transition"
-            style={{ backgroundColor: paymentSettings.formBgColor || "#e2136e" }}
+            style={{
+              backgroundColor: paymentSettings.formBgColor || "#e2136e",
+            }}
           >
             {paymentSettings.submitButtonText || "যাচাই করুন"}
           </button>

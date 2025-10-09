@@ -30,20 +30,25 @@ const DepositPaymentSetting = () => {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [logoFile, setLogoFile] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   // Fetch payment methods
   useEffect(() => {
-    const fetchPaymentMethods = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/methods`);
-        setPaymentMethods(res.data.filter((method) => method.id !== "settings"));
-      } catch (err) {
-        console.error("Error fetching payment methods:", err);
-        toast.error("পেমেন্ট মেথড লোড করতে ব্যর্থ!");
-      }
-    };
     fetchPaymentMethods();
   }, []);
+
+  const fetchPaymentMethods = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/methods`);
+      setPaymentMethods(res.data.filter((method) => method.id !== "settings"));
+    } catch (err) {
+      console.error("Error fetching payment methods:", err);
+      toast.error("পেমেন্ট মেথড লোড করতে ব্যর্থ!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle form input change
   const handleChange = (e) => {
@@ -53,7 +58,12 @@ const DepositPaymentSetting = () => {
 
   // Handle logo file change
   const handleLogoChange = (e) => {
-    setLogoFile(e.target.files[0]);
+    const file = e.target.files[0];
+    if (file && file.size > 5 * 1024 * 1024) {
+      toast.error("ইমেজ সাইজ 5MB এর বেশি হতে পারবে না!");
+      return;
+    }
+    setLogoFile(file);
   };
 
   // Handle instruction change
@@ -69,7 +79,9 @@ const DepositPaymentSetting = () => {
     const formDataToSend = new FormData();
     formDataToSend.append("logo", logoFile);
     try {
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/deposit/upload-logo`, formDataToSend);
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/deposit/upload-logo`, formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       return res.data.logoUrl;
     } catch (err) {
       console.error("Error uploading logo:", err);
@@ -81,9 +93,11 @@ const DepositPaymentSetting = () => {
   // Add or update payment method
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const logoUrl = await uploadLogo();
-      const updatedFormData = { ...formData, logo: logoUrl };
+      // Explicitly exclude _id from the payload
+      const { _id, ...updatedFormData } = { ...formData, logo: logoUrl };
 
       if (isEditing) {
         await axios.put(`${import.meta.env.VITE_API_URL}/api/deposit/method/${formData.id}`, updatedFormData);
@@ -93,6 +107,7 @@ const DepositPaymentSetting = () => {
         toast.success("নতুন পেমেন্ট মেথড যোগ করা হয়েছে!");
       }
 
+      // Reset form
       setFormData({
         id: "",
         name: "",
@@ -119,30 +134,37 @@ const DepositPaymentSetting = () => {
       });
       setIsEditing(false);
       setLogoFile(null);
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/methods`);
-      setPaymentMethods(res.data.filter((method) => method.id !== "settings"));
+      await fetchPaymentMethods();
     } catch (err) {
       console.error("Error saving payment method:", err);
-      toast.error("পেমেন্ট মেথড সংরক্ষণ করতে ব্যর্থ!");
+      const errorMessage = err.response?.data?.details || "পেমেন্ট মেথড সংরক্ষণ করতে ব্যর্থ!";
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   // Edit payment method
   const handleEdit = (method) => {
-    setFormData(method);
+    // Ensure _id is not included in formData
+    const { _id, ...methodWithoutId } = method;
+    setFormData(methodWithoutId);
     setIsEditing(true);
+    setLogoFile(null);
   };
 
   // Delete payment method
   const handleDelete = async (id) => {
     try {
+      setLoading(true);
       await axios.delete(`${import.meta.env.VITE_API_URL}/api/deposit/method/${id}`);
       toast.success("পেমেন্ট মেথড মুছে ফেলা হয়েছে!");
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/methods`);
-      setPaymentMethods(res.data.filter((method) => method.id !== "settings"));
+      await fetchPaymentMethods();
     } catch (err) {
       console.error("Error deleting payment method:", err);
       toast.error("পেমেন্ট মেথড মুছতে ব্যর্থ!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -186,6 +208,7 @@ const DepositPaymentSetting = () => {
               accept="image/*"
               onChange={handleLogoChange}
               className="w-full p-2 border rounded-md"
+              disabled={loading}
             />
             {formData.logo && (
               <img src={formData.logo} alt="Preview" className="mt-2 w-24 h-24 object-contain" />
@@ -319,51 +342,60 @@ const DepositPaymentSetting = () => {
         <button
           type="submit"
           className="mt-4 w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition"
+          disabled={loading}
         >
-          {isEditing ? "আপডেট করুন" : "যোগ করুন"}
+          {loading ? "প্রসেসিং..." : isEditing ? "আপডেট করুন" : "যোগ করুন"}
         </button>
       </form>
 
       {/* Payment Methods List */}
       <div className="bg-white p-6 rounded-md shadow-md">
         <h2 className="text-xl font-semibold mb-4">পেমেন্ট মেথড তালিকা</h2>
-        <table className="w-full border-collapse">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">নাম</th>
-              <th className="border p-2">লোগো</th>
-              <th className="border p-2">কোম্পানি</th>
-              <th className="border p-2">লেনদেন নম্বর</th>
-              <th className="border p-2">অ্যাকশন</th>
-            </tr>
-          </thead>
-          <tbody>
-            {paymentMethods.map((method) => (
-              <tr key={method.id} className="border">
-                <td className="border p-2">{method.name}</td>
-                <td className="border p-2">
-                  <img src={method.logo} alt={method.name} className="w-12 h-12 object-contain" />
-                </td>
-                <td className="border p-2">{method.companyName}</td>
-                <td className="border p-2">{method.transactionNumber}</td>
-                <td className="border p-2">
-                  <button
-                    onClick={() => handleEdit(method)}
-                    className="bg-yellow-400 text-black px-3 py-1 rounded-md mr-2 hover:bg-yellow-500"
-                  >
-                    এডিট
-                  </button>
-                  <button
-                    onClick={() => handleDelete(method.id)}
-                    className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
-                  >
-                    মুছুন
-                  </button>
-                </td>
+        {loading ? (
+          <div className="text-center">লোড হচ্ছে...</div>
+        ) : paymentMethods.length === 0 ? (
+          <div className="text-center">কোনো পেমেন্ট মেথড পাওয়া যায়নি</div>
+        ) : (
+          <table className="w-full border-collapse">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border p-2">নাম</th>
+                <th className="border p-2">লোগো</th>
+                <th className="border p-2">কোম্পানি</th>
+                <th className="border p-2">লেনদেন নম্বর</th>
+                <th className="border p-2">অ্যাকশন</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {paymentMethods.map((method) => (
+                <tr key={method.id} className="border">
+                  <td className="border p-2">{method.name}</td>
+                  <td className="border p-2">
+                    <img src={method.logo} alt={method.name} className="w-12 h-12 object-contain" />
+                  </td>
+                  <td className="border p-2">{method.companyName}</td>
+                  <td className="border p-2">{method.transactionNumber}</td>
+                  <td className="border p-2">
+                    <button
+                      onClick={() => handleEdit(method)}
+                      className="bg-yellow-400 text-black px-3 py-1 rounded-md mr-2 hover:bg-yellow-500"
+                      disabled={loading}
+                    >
+                      এডিট
+                    </button>
+                    <button
+                      onClick={() => handleDelete(method.id)}
+                      className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600"
+                      disabled={loading}
+                    >
+                      মুছুন
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

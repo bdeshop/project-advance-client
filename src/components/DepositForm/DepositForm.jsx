@@ -16,7 +16,7 @@ const DepositForm = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/settings`);
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit-payment/settings`);
         setSettings(res.data);
         if (res.data.currencies && res.data.currencies.length > 0) {
           setSelectedCurrency(res.data.currencies[0]);
