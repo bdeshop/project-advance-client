@@ -81,9 +81,7 @@ import AdminProfile from "../Admindashboard/components/AdminProfile/AdminProfile
 import AccountDetails from "../Admindashboard/components/AccountDetails/AccountDetails";
 import ModifyProfile from "../Admindashboard/pages/ModifyProfile/ModifyProfile";
 import Activelog from "../Admindashboard/components/Activelog/Activelog";
-import BkashDeposit from "../pages/Account/MyWallet/Diposit/Components/BkashDeposit";
-import NagadDeposit from "../pages/Account/MyWallet/Diposit/Components/NagadDeposit";
-import RocketDeposit from "../pages/Account/MyWallet/Diposit/Components/RocketDeposit";
+import DepositPage from "../pages/Account/MyWallet/Diposit/Components/Deposit";
 
 export const router = createBrowserRouter([
   {
@@ -431,15 +429,7 @@ export const router = createBrowserRouter([
     element: <Unauthorized />,
   },
   {
-    path: "deposit-bkash",
-    element: <BkashDeposit />,
-  },
-  {
-    path: "deposit-nagad",
-    element: <NagadDeposit />,
-  },
-  {
-    path: "deposit-rocket",
-    element: <RocketDeposit />,
+    path: "deposit/:id",
+    element: <DepositPage />,
   },
 ]);
