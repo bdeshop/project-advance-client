@@ -2,18 +2,16 @@ import React, { useContext, useState } from "react";
 import { FaRedo } from "react-icons/fa";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
-
+import { toast } from "react-toastify";
 
 const AdminLogin = () => {
   // Validation code state
   const [code, setCode] = useState(generateCode());
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { login ,AdminLoginImage} = useContext(AuthContext);
-  console.log(AdminLoginImage)
+  const { login, AdminLoginImage } = useContext(AuthContext);
+  console.log(AdminLoginImage);
   const navigate = useNavigate();
-
-
 
   // Function to generate random 4-digit code
   function generateCode() {
@@ -25,11 +23,9 @@ const AdminLogin = () => {
     setCode(generateCode());
   };
 
- 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:5000/api/login", {
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
@@ -38,12 +34,20 @@ const AdminLogin = () => {
     const data = await res.json();
     if (res.ok) {
       login(data.user); // Save user to context & localStorage
-      navigate("/admin-dashboard"); // Redirect to dashboard
+      if (data.user.role === "Mother Admin") {
+        navigate("/admin-dashboard"); // Only Mother Admin can access
+      } else {
+        toast.error(
+          "You do not have permission to access the admin dashboard!"
+        );
+        navigate("/restricted"); // Redirect other admins to a restricted page
+        toast.error(data.message);
+      }
     } else {
-      alert(data.message);
+      toast.error(data.message);
     }
   };
-  
+
   return (
     <>
       <div

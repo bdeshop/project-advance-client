@@ -82,6 +82,12 @@ import AccountDetails from "../Admindashboard/components/AccountDetails/AccountD
 import ModifyProfile from "../Admindashboard/pages/ModifyProfile/ModifyProfile";
 import Activelog from "../Admindashboard/components/Activelog/Activelog";
 import DepositPage from "../pages/Account/MyWallet/Diposit/Components/Deposit";
+import CheckUserPayment from "../Admindashboard/components/CheckUserPayment/CheckUserPayment";
+import DepositHistory from "../Admindashboard/pages/DepositHistory/DepositHistory";
+import SubAdminLogin from "../pages/SubAdminLogin/SubAdminLogin";
+import MasterLogin from "../pages/MasterLogin/MasterLogin";
+import AgentLogin from "../pages/AgentLogin/AgentLogin";
+import SubAgentLogin from "../pages/SubAgentLogin/SubAgentLogin";
 
 export const router = createBrowserRouter([
   {
@@ -259,6 +265,23 @@ export const router = createBrowserRouter([
     element: <AdminLogin />,
   },
   {
+    path: "sub-admin-login",
+    element: <SubAdminLogin />,
+  },
+  {
+    path: "master-login",
+    element: <MasterLogin />,
+  },
+  {
+    path: "agent-login",
+    element: <AgentLogin />,
+  },
+  {
+    path: "sub-agent-login",
+    element: <SubAgentLogin />,
+  },
+  // Mother Admin Dashboard
+  {
     path: "/admin-dashboard",
     element: (
       <PrivateRoute>
@@ -422,6 +445,709 @@ export const router = createBrowserRouter([
         path: "modify-profile/:id",
         element: <ModifyProfile></ModifyProfile>,
       },
+      {
+        path: "check-users-payment",
+        element: <CheckUserPayment></CheckUserPayment>
+      },{
+        path: "deposit-history",
+        element: <DepositHistory></DepositHistory>
+      }
+    ],
+  },
+  // Sub Admin Dashboard
+  {
+    path: "sub-admin-dashboard",
+    element: (
+      <PrivateRoute>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <AdHome /> },
+      {
+        path: "my-account",
+
+        element: <MyAccount />,
+        children: [
+          {
+            path: "statement",
+            element: <Statement></Statement>,
+          },
+          {
+            path: "summary",
+            element: <Summary></Summary>,
+          },
+          {
+            path: "profile",
+            element: <AdminProfile></AdminProfile>,
+          },
+          {
+            path: "active-log",
+            element: <Activelog></Activelog>,
+          },
+          {
+            path: "account-details",
+            element: <AccountDetails></AccountDetails>,
+          },
+        ],
+      },
+      {
+        path: "bet-lists",
+        element: <BetList />,
+      },
+      {
+        path: "users",
+        element: <User />,
+      },
+      {
+        path: "sub-agent",
+        element: <SubAgent />,
+      },
+      {
+        path: "agent",
+        element: <Agent />,
+      },
+      {
+        path: "master",
+        element: <Master />,
+      },
+      {
+        path: "sub-admin",
+        element: <SubAdmin />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
+      },
+      {
+        path: "general-setting",
+        element: <GeneralSetting />,
+      },
+      {
+        path: "admin-setting",
+        element: <AdminSetting />,
+      },
+      {
+        path: "game-api-key",
+        element: <GameApiKey />,
+      },
+      {
+        path: "home-control",
+        element: <HomeControl />,
+      },
+      {
+        path: "color-control",
+        element: <ColorControl />,
+      },
+      {
+        path: "add-game-api-key",
+        element: <AddGameApiKey />,
+      },
+      {
+        path: "live-game",
+        element: <LiveGame />,
+      },
+      {
+        path: "active-game",
+        element: <ActiveGame />,
+      },
+      {
+        path: "deactive-game",
+        element: <DeactiveGame />,
+      },
+      {
+        path: "game-file-import",
+        element: <GameFileImport />,
+      },
+      {
+        path: "api-import",
+        element: <ApiImport />,
+      },
+      {
+        path: "progmatic-play",
+        element: <PragmaticPlay />,
+      },
+      {
+        path: "evolution",
+        element: <Evolution />,
+      },
+      {
+        path: "b-gaming",
+        element: <BGaming />,
+      },
+      {
+        path: "amusnet",
+        element: <Amusnet />,
+      },
+      {
+        path: "pg-soft",
+        element: <PGSoft />,
+      },
+      {
+        path: "play-and-go",
+        element: <PlayAndGo />,
+      },
+      {
+        path: "play-tech",
+        element: <PlayTech />,
+      },
+      {
+        path: "no-limit-city",
+        element: <NoLimitCity />,
+      },
+      {
+        path: "hack-saw",
+        element: <HackSaw />,
+      },
+      {
+        path: "bet-list-live",
+        element: <BetListLive />,
+      },
+      {
+        path: "banking",
+        element: <Banking />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "risk-management",
+        element: <RiskManagement />,
+      },
+      {
+        path: "modify-profile/:id",
+        element: <ModifyProfile></ModifyProfile>,
+      },
+      {
+        path: "check-users-payment",
+        element: <CheckUserPayment></CheckUserPayment>
+      },{
+        path: "deposit-history",
+        element: <DepositHistory></DepositHistory>
+      }
+    ],
+  },
+  // Master Admin Dashboard
+  {
+    path: "master-dashboard",
+    element: (
+      <PrivateRoute>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <AdHome /> },
+      {
+        path: "my-account",
+
+        element: <MyAccount />,
+        children: [
+          {
+            path: "statement",
+            element: <Statement></Statement>,
+          },
+          {
+            path: "summary",
+            element: <Summary></Summary>,
+          },
+          {
+            path: "profile",
+            element: <AdminProfile></AdminProfile>,
+          },
+          {
+            path: "active-log",
+            element: <Activelog></Activelog>,
+          },
+          {
+            path: "account-details",
+            element: <AccountDetails></AccountDetails>,
+          },
+        ],
+      },
+      {
+        path: "bet-lists",
+        element: <BetList />,
+      },
+      {
+        path: "users",
+        element: <User />,
+      },
+      {
+        path: "sub-agent",
+        element: <SubAgent />,
+      },
+      {
+        path: "agent",
+        element: <Agent />,
+      },
+      {
+        path: "master",
+        element: <Master />,
+      },
+      {
+        path: "sub-admin",
+        element: <SubAdmin />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
+      },
+      {
+        path: "general-setting",
+        element: <GeneralSetting />,
+      },
+      {
+        path: "admin-setting",
+        element: <AdminSetting />,
+      },
+      {
+        path: "game-api-key",
+        element: <GameApiKey />,
+      },
+      {
+        path: "home-control",
+        element: <HomeControl />,
+      },
+      {
+        path: "color-control",
+        element: <ColorControl />,
+      },
+      {
+        path: "add-game-api-key",
+        element: <AddGameApiKey />,
+      },
+      {
+        path: "live-game",
+        element: <LiveGame />,
+      },
+      {
+        path: "active-game",
+        element: <ActiveGame />,
+      },
+      {
+        path: "deactive-game",
+        element: <DeactiveGame />,
+      },
+      {
+        path: "game-file-import",
+        element: <GameFileImport />,
+      },
+      {
+        path: "api-import",
+        element: <ApiImport />,
+      },
+      {
+        path: "progmatic-play",
+        element: <PragmaticPlay />,
+      },
+      {
+        path: "evolution",
+        element: <Evolution />,
+      },
+      {
+        path: "b-gaming",
+        element: <BGaming />,
+      },
+      {
+        path: "amusnet",
+        element: <Amusnet />,
+      },
+      {
+        path: "pg-soft",
+        element: <PGSoft />,
+      },
+      {
+        path: "play-and-go",
+        element: <PlayAndGo />,
+      },
+      {
+        path: "play-tech",
+        element: <PlayTech />,
+      },
+      {
+        path: "no-limit-city",
+        element: <NoLimitCity />,
+      },
+      {
+        path: "hack-saw",
+        element: <HackSaw />,
+      },
+      {
+        path: "bet-list-live",
+        element: <BetListLive />,
+      },
+      {
+        path: "banking",
+        element: <Banking />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "risk-management",
+        element: <RiskManagement />,
+      },
+      {
+        path: "modify-profile/:id",
+        element: <ModifyProfile></ModifyProfile>,
+      },
+      {
+        path: "check-users-payment",
+        element: <CheckUserPayment></CheckUserPayment>
+      },{
+        path: "deposit-history",
+        element: <DepositHistory></DepositHistory>
+      }
+    ],
+  },
+  // Agent Dashboard
+  {
+    path: "agent-dashboard",
+    element: (
+      <PrivateRoute>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <AdHome /> },
+      {
+        path: "my-account",
+
+        element: <MyAccount />,
+        children: [
+          {
+            path: "statement",
+            element: <Statement></Statement>,
+          },
+          {
+            path: "summary",
+            element: <Summary></Summary>,
+          },
+          {
+            path: "profile",
+            element: <AdminProfile></AdminProfile>,
+          },
+          {
+            path: "active-log",
+            element: <Activelog></Activelog>,
+          },
+          {
+            path: "account-details",
+            element: <AccountDetails></AccountDetails>,
+          },
+        ],
+      },
+      {
+        path: "bet-lists",
+        element: <BetList />,
+      },
+      {
+        path: "users",
+        element: <User />,
+      },
+      {
+        path: "sub-agent",
+        element: <SubAgent />,
+      },
+      {
+        path: "agent",
+        element: <Agent />,
+      },
+      {
+        path: "master",
+        element: <Master />,
+      },
+      {
+        path: "sub-admin",
+        element: <SubAdmin />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
+      },
+      {
+        path: "general-setting",
+        element: <GeneralSetting />,
+      },
+      {
+        path: "admin-setting",
+        element: <AdminSetting />,
+      },
+      {
+        path: "game-api-key",
+        element: <GameApiKey />,
+      },
+      {
+        path: "home-control",
+        element: <HomeControl />,
+      },
+      {
+        path: "color-control",
+        element: <ColorControl />,
+      },
+      {
+        path: "add-game-api-key",
+        element: <AddGameApiKey />,
+      },
+      {
+        path: "live-game",
+        element: <LiveGame />,
+      },
+      {
+        path: "active-game",
+        element: <ActiveGame />,
+      },
+      {
+        path: "deactive-game",
+        element: <DeactiveGame />,
+      },
+      {
+        path: "game-file-import",
+        element: <GameFileImport />,
+      },
+      {
+        path: "api-import",
+        element: <ApiImport />,
+      },
+      {
+        path: "progmatic-play",
+        element: <PragmaticPlay />,
+      },
+      {
+        path: "evolution",
+        element: <Evolution />,
+      },
+      {
+        path: "b-gaming",
+        element: <BGaming />,
+      },
+      {
+        path: "amusnet",
+        element: <Amusnet />,
+      },
+      {
+        path: "pg-soft",
+        element: <PGSoft />,
+      },
+      {
+        path: "play-and-go",
+        element: <PlayAndGo />,
+      },
+      {
+        path: "play-tech",
+        element: <PlayTech />,
+      },
+      {
+        path: "no-limit-city",
+        element: <NoLimitCity />,
+      },
+      {
+        path: "hack-saw",
+        element: <HackSaw />,
+      },
+      {
+        path: "bet-list-live",
+        element: <BetListLive />,
+      },
+      {
+        path: "banking",
+        element: <Banking />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "risk-management",
+        element: <RiskManagement />,
+      },
+      {
+        path: "modify-profile/:id",
+        element: <ModifyProfile></ModifyProfile>,
+      },
+      {
+        path: "check-users-payment",
+        element: <CheckUserPayment></CheckUserPayment>
+      },{
+        path: "deposit-history",
+        element: <DepositHistory></DepositHistory>
+      }
+    ],
+  },
+  // sub-agent Dashboard
+  {
+    path: "sub-agent-dashboard",
+    element: (
+      <PrivateRoute>
+        <AdminLayout />
+      </PrivateRoute>
+    ),
+    children: [
+      { index: true, element: <AdHome /> },
+      {
+        path: "my-account",
+
+        element: <MyAccount />,
+        children: [
+          {
+            path: "statement",
+            element: <Statement></Statement>,
+          },
+          {
+            path: "summary",
+            element: <Summary></Summary>,
+          },
+          {
+            path: "profile",
+            element: <AdminProfile></AdminProfile>,
+          },
+          {
+            path: "active-log",
+            element: <Activelog></Activelog>,
+          },
+          {
+            path: "account-details",
+            element: <AccountDetails></AccountDetails>,
+          },
+        ],
+      },
+      {
+        path: "bet-lists",
+        element: <BetList />,
+      },
+      {
+        path: "users",
+        element: <User />,
+      },
+      {
+        path: "sub-agent",
+        element: <SubAgent />,
+      },
+      {
+        path: "agent",
+        element: <Agent />,
+      },
+      {
+        path: "master",
+        element: <Master />,
+      },
+      {
+        path: "sub-admin",
+        element: <SubAdmin />,
+      },
+      {
+        path: "admin",
+        element: <Admin />,
+      },
+      {
+        path: "general-setting",
+        element: <GeneralSetting />,
+      },
+      {
+        path: "admin-setting",
+        element: <AdminSetting />,
+      },
+      {
+        path: "game-api-key",
+        element: <GameApiKey />,
+      },
+      {
+        path: "home-control",
+        element: <HomeControl />,
+      },
+      {
+        path: "color-control",
+        element: <ColorControl />,
+      },
+      {
+        path: "add-game-api-key",
+        element: <AddGameApiKey />,
+      },
+      {
+        path: "live-game",
+        element: <LiveGame />,
+      },
+      {
+        path: "active-game",
+        element: <ActiveGame />,
+      },
+      {
+        path: "deactive-game",
+        element: <DeactiveGame />,
+      },
+      {
+        path: "game-file-import",
+        element: <GameFileImport />,
+      },
+      {
+        path: "api-import",
+        element: <ApiImport />,
+      },
+      {
+        path: "progmatic-play",
+        element: <PragmaticPlay />,
+      },
+      {
+        path: "evolution",
+        element: <Evolution />,
+      },
+      {
+        path: "b-gaming",
+        element: <BGaming />,
+      },
+      {
+        path: "amusnet",
+        element: <Amusnet />,
+      },
+      {
+        path: "pg-soft",
+        element: <PGSoft />,
+      },
+      {
+        path: "play-and-go",
+        element: <PlayAndGo />,
+      },
+      {
+        path: "play-tech",
+        element: <PlayTech />,
+      },
+      {
+        path: "no-limit-city",
+        element: <NoLimitCity />,
+      },
+      {
+        path: "hack-saw",
+        element: <HackSaw />,
+      },
+      {
+        path: "bet-list-live",
+        element: <BetListLive />,
+      },
+      {
+        path: "banking",
+        element: <Banking />,
+      },
+      {
+        path: "message",
+        element: <Message />,
+      },
+      {
+        path: "risk-management",
+        element: <RiskManagement />,
+      },
+      {
+        path: "modify-profile/:id",
+        element: <ModifyProfile></ModifyProfile>,
+      },
+      {
+        path: "check-users-payment",
+        element: <CheckUserPayment></CheckUserPayment>
+      },{
+        path: "deposit-history",
+        element: <DepositHistory></DepositHistory>
+      }
     ],
   },
   {
@@ -432,4 +1158,5 @@ export const router = createBrowserRouter([
     path: "deposit/:id",
     element: <DepositPage />,
   },
+ 
 ]);

@@ -317,7 +317,7 @@ const DepositFormSettings = () => {
               placeholder="Add currency (e.g., BDT)"
               className="flex-1 p-2 rounded bg-gray-700"
               value={newCurrency}
-              onChange={(e) => setNewCurrency2(e.target.value)}
+              onChange={(e) => setNewCurrency(e.target.value)}
             />
             <button
               onClick={handleAddCurrency}

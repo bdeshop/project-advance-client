@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { useParams, useLocation } from "react-router";
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useLocation, useNavigate } from "react-router";
 import { FaCopy } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { AuthContext } from "../../../../../context/AuthContext";
 
 const DepositPage = () => {
-  const { id } = useParams(); // Get payment method ID (bkash, nagad, rocket)
-  const { state } = useLocation(); // Get amount and other data from DepositForm
+  const { id } = useParams(); // payment method ID
+  const { state } = useLocation(); // data from DepositForm
   const [transactionId, setTransactionId] = useState("");
   const [number, setNumber] = useState("");
   const [paymentSettings, setPaymentSettings] = useState(null);
+  const { loginUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  // Fetch payment method settings from backend
   useEffect(() => {
     const fetchPaymentSettings = async () => {
       try {
@@ -30,24 +32,60 @@ const DepositPage = () => {
   if (!paymentSettings)
     return <div className="text-center mt-10 text-white">লোড হচ্ছে...</div>;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    axios
-      .post(`${import.meta.env.VITE_API_URL}/api/deposit/submit`, {
+    const userId = loginUser?._id;
+    if (!userId) {
+      toast.error("ইউজার লগইন করুন!");
+      return;
+    }
+
+    // Safely parse amount to avoid NaN
+    const amount = parseFloat(state.amount) || 0;
+    if (isNaN(amount) || amount < 0) {
+      toast.error("অবৈধ অ্যামাউন্ট। দয়া করে সঠিক মান দিন।");
+      return;
+    }
+
+    // Calculate bonus and total (using state data if available)
+    const bonus = state.promotion ? (amount * state.promotion.bonusPercent) / 100 : 0;
+    const total = amount + bonus;
+
+    // Use state values for pbuAmount, bonusPBU, totalPBU if provided
+    const pbuAmount = parseFloat(state.pbuAmount) || (amount / 100); // 1 PBU = 100 BDT
+    const bonusPBU = parseFloat(state.bonusPBU) || bonus / 100; // Convert bonus BDT to PBU
+    const totalPBU = parseFloat(state.totalPBU) || (pbuAmount + bonusPBU);
+
+    // Validate calculations
+    if (isNaN(pbuAmount) || isNaN(bonusPBU) || isNaN(totalPBU)) {
+      toast.error("ক্যালকুলেশন ত্রুটি। দয়া করে পুনরায় চেষ্টা করুন।");
+      return;
+    }
+
+    console.log("Submitting:", { userId, transactionId, number, paymentMethod: id, paymentType: state.paymentType, amount, currency: state.currency, promotion: state.promotion, pbuAmount, bonusPBU, totalPBU }); // Debug log
+
+    try {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/deposit/submit`, {
+        userId,
         transactionId,
         number,
         paymentMethod: id,
-        amount: state?.amount,
-      })
-      .then(() => {
-        toast.success("লেনদেন সফলভাবে জমা দেওয়া হয়েছে!");
-        setTransactionId("");
-        setNumber("");
-      })
-      .catch((err) => {
-        console.error("Error submitting transaction:", err);
-        toast.error("লেনদেন জমা দিতে ব্যর্থ!");
+        paymentType: state.paymentType,
+        amount, // BDT
+        currency: state.currency || "BDT", // Ensure BDT
+        promotion: state.promotion,
+        pbuAmount, // PBU converted amount
+        bonusPBU, // PBU bonus
+        totalPBU, // Total PBU
       });
+      toast.success("লেনদেন সফলভাবে জমা দেওয়া হয়েছে!");
+      setTransactionId("");
+      setNumber("");
+      navigate('/profile/transaction-records');
+    } catch (err) {
+      console.error("Error submitting transaction:", err.response?.data || err.message);
+      toast.error(`লেনদেন জমা দিতে ব্যর্থ! ${err.response?.data?.error || "অজানা ত্রুটি।"}`);
+    }
   };
 
   const copyToClipboard = () => {

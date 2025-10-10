@@ -5,14 +5,13 @@ import { toast } from "react-toastify";
 
 const DepositForm = () => {
   const [settings, setSettings] = useState(null);
-  const [selectedPromo, setSelectedPromo] = useState(null);
+  const [selectedPromoId, setSelectedPromoId] = useState(null);
   const [selectedMethod, setSelectedMethod] = useState("");
   const [paymentType, setPaymentType] = useState("");
   const [amount, setAmount] = useState("");
   const [selectedCurrency, setSelectedCurrency] = useState("");
   const navigate = useNavigate();
 
-  // Fetch settings from backend API
   useEffect(() => {
     const fetchSettings = async () => {
       try {
@@ -23,62 +22,88 @@ const DepositForm = () => {
         }
       } catch (err) {
         console.error("Error fetching deposit settings:", err);
-        toast.error("সেটিংস লোড করতে ব্যর্থ!");
+        toast.error("Settings failed to load!");
       }
     };
     fetchSettings();
   }, []);
 
-  if (!settings) return <div className="text-center mt-10 text-white">লোড হচ্ছে...</div>;
+  if (!settings) return <div className="text-center mt-10 text-white">Loading...</div>;
 
   const paymentOptions = settings.payment_methods || [];
-  const promo = settings.promotions?.[0] || null;
+  const promotions = settings.promotions || []; // Array for multiple promos
   const paymentTypes = settings.payment_types || [];
-  const currencies = settings.currencies || [];
-  const currencyRate = settings.pbu_rate || 1;
+  const currencies = settings.currencies || []; // ["PBU"]
+  const currencies2 = settings.currencies2 || []; // ["BDT"]
+  const rate = settings.pbu_rate || 1; // 1
+  const rate2 = settings.pbu_rate2 || 100; // 100
 
-  // Total with bonus calculation
-  const totalWithBonus =
-    selectedPromo && amount && promo
-      ? (
-          parseFloat(amount) +
-          (parseFloat(amount) * promo.bonusPercent) / 100
-        ).toFixed(2)
-      : amount;
+  // Safely parse amount to number
+  const parsedAmount = parseFloat(amount) || 0;
+
+  // Calculate PBU from BDT amount (prevent NaN)
+  const pbuAmount = !isNaN(parsedAmount) ? (parsedAmount / rate2) * rate : 0;
+
+  // Find selected promo
+  const selectedPromo = promotions.find(p => p.id === selectedPromoId) || null;
+
+  // Bonus in PBU (prevent NaN)
+  const bonusPBU = selectedPromo && !isNaN(pbuAmount) ? (pbuAmount * selectedPromo.bonusPercent) / 100 : 0;
+  const totalPBU = pbuAmount + bonusPBU;
 
   const handleAmountChange = (value) => {
-    if (value >= 0) setAmount(value);
+    // Only allow valid numbers
+    if (/^\d*\.?\d*$/.test(value)) {
+      setAmount(value);
+    }
   };
 
   const handleQuickAdd = (value) => {
-    setAmount((prev) => (Number(prev) || 0) + value);
+    setAmount((prev) => {
+      const prevNum = parseFloat(prev) || 0;
+      return (prevNum + value).toString();
+    });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!selectedMethod) {
-      toast.error("অনুগ্রহ করে একটি পেমেন্ট মেথড নির্বাচন করুন।");
+      toast.error("Please select a payment method.");
       return;
     }
 
     if (!paymentType) {
-      toast.error("অনুগ্রহ করে পেমেন্ট টাইপ নির্বাচন করুন।");
+      toast.error("Please select a payment type.");
       return;
     }
 
     if (!selectedCurrency) {
-      toast.error("অনুগ্রহ করে মুদ্রা নির্বাচন করুন।");
+      toast.error("Please select a currency.");
       return;
     }
 
-    if (!amount || amount < settings.min_amount) {
-      toast.error(`অনুগ্রহ করে একটি বৈধ পরিমাণ লিখুন (ন্যূনতম ${settings.min_amount})।`);
+    if (isNaN(parsedAmount) || parsedAmount < settings.min_amount) {
+      toast.error(`Please enter a valid amount (minimum ${settings.min_amount}).`);
+      return;
+    }
+
+    // Check for NaN in calculations
+    if (isNaN(pbuAmount) || isNaN(bonusPBU) || isNaN(totalPBU)) {
+      toast.error("Calculation error. Please check amount and try again.");
       return;
     }
 
     navigate(`/deposit/${selectedMethod}`, {
-      state: { paymentType, amount, currency: selectedCurrency, promotion: selectedPromo ? promo : null },
+      state: { 
+        paymentType, 
+        amount: parsedAmount, // Ensure number
+        currency: currencies2[0], // BDT for payment
+        promotion: selectedPromo, 
+        pbuAmount, 
+        bonusPBU, 
+        totalPBU 
+      },
     });
   };
 
@@ -86,34 +111,37 @@ const DepositForm = () => {
     <div className="max-w-3xl mx-auto bg-gray-800 shadow-md rounded-md mt-8 p-5 border border-gray-700">
       {/* Top Banner */}
       <div className="bg-yellow-500 text-center text-white font-bold py-2 rounded">
-        {currencyRate} {currencies[0]} = {settings.pbu_rate2} {currencies[0]}
+        {currencies[0]} {rate} = {rate2} {currencies2[0]}
       </div>
 
-      {/* Promotion Section */}
-      {promo && (
+      {/* Promotion Section - Multiple */}
+      {promotions.length > 0 && (
         <div className="mt-4">
-          <h2 className="font-semibold mb-2 text-white">প্রোমোশন নির্বাচন করুন</h2>
-          <div
-            onClick={() => setSelectedPromo(selectedPromo ? null : promo.id)}
-            className={`border rounded-md cursor-pointer p-4 flex justify-between items-center ${
-              selectedPromo ? "border-orange-500 bg-black text-white" : "border-gray-300"
-            }`}
-          >
-            <div>
-              <div className="font-bold">{promo.title}</div>
-              <div className="text-sm">{promo.type}</div>
-              <div className="text-xs text-white">
-                {promo.start} ~ {promo.end}
+          <h2 className="font-semibold mb-2 text-white">Select a Promotion</h2>
+          {promotions.map((promo) => (
+            <div
+              key={promo.id}
+              onClick={() => setSelectedPromoId(selectedPromoId === promo.id ? null : promo.id)}
+              className={`border rounded-md cursor-pointer p-4 flex justify-between items-center mb-2 ${
+                selectedPromoId === promo.id ? "border-orange-500 bg-black text-white" : "border-gray-300"
+              }`}
+            >
+              <div>
+                <div className="font-bold">{promo.title}</div>
+                <div className="text-sm">{promo.type}</div>
+                <div className="text-xs text-white">
+                  {promo.start} ~ {promo.end}
+                </div>
               </div>
+              <input
+                type="radio"
+                checked={selectedPromoId === promo.id}
+                onChange={() => setSelectedPromoId(promo.id)}
+              />
             </div>
-            <input
-              type="radio"
-              checked={selectedPromo === promo.id}
-              onChange={() => setSelectedPromo(promo.id)}
-            />
-          </div>
-          {!selectedPromo && (
-            <p className="text-red-500 text-sm mt-1">প্রোমোশন নির্বাচন করা হয়নি</p>
+          ))}
+          {!selectedPromoId && (
+            <p className="text-red-500 text-sm mt-1">No promotion selected</p>
           )}
         </div>
       )}
@@ -121,7 +149,7 @@ const DepositForm = () => {
       {/* Payment Method */}
       <div className="mt-6">
         <h2 className="font-semibold mb-2 text-white">
-          পেমেন্ট মেথড নির্বাচন করুন <span className="text-red-500">*</span>
+          Select Payment Method <span className="text-red-500">*</span>
         </h2>
         <div className="flex flex-wrap gap-4">
           {paymentOptions.map((method) => (
@@ -149,14 +177,14 @@ const DepositForm = () => {
       {selectedMethod && paymentTypes.length > 0 && (
         <div className="mt-5">
           <h2 className="font-semibold mb-2 text-white">
-            পেমেন্ট টাইপ নির্বাচন করুন <span className="text-red-500">*</span>
+            Select Payment Type <span className="text-red-500">*</span>
           </h2>
           <select
             className="border rounded-md w-full p-2 bg-gray-700 text-white"
             value={paymentType}
             onChange={(e) => setPaymentType(e.target.value)}
           >
-            <option value="">-- টাইপ নির্বাচন করুন --</option>
+            <option value="">-- Select Type --</option>
             {paymentTypes.map((type) => (
               <option key={type} value={type}>
                 {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -169,7 +197,7 @@ const DepositForm = () => {
       {/* Amount Section */}
       <div className="mt-5">
         <div className="flex flex-wrap gap-2">
-          {[10000, 5000, 1000, 500, 100].map((v) => (
+          {[25000, 20000, 15000, 10000, 5000, 1000, 500, 100].map((v) => (
             <button
               key={v}
               type="button"
@@ -182,24 +210,31 @@ const DepositForm = () => {
         </div>
 
         <div className="mt-3 flex items-center">
-          <span className="font-semibold mr-2 text-white">{currencies[0]}</span>
+          <span className="font-semibold mr-2 text-white">{currencies2[0]}</span> {/* BDT */}
           <input
             type="number"
-            placeholder="পরিমাণ লিখুন"
+            placeholder="Enter Amount"
             value={amount}
             onChange={(e) => handleAmountChange(e.target.value)}
             className="flex-1 border rounded-md p-2 bg-gray-700 text-white"
           />
         </div>
         <div className="text-right text-sm text-white mt-1">
-          {currencies[0]} {settings.min_amount} - {settings.max_amount}
+          {currencies2[0]} {settings.min_amount} - {settings.max_amount}
         </div>
+
+        {/* PBU Conversion Display */}
+        {amount && (
+          <div className="mt-2 text-blue-400 font-medium">
+            You will get {pbuAmount.toFixed(1)} {currencies[0]} for {amount} {currencies2[0]}
+          </div>
+        )}
       </div>
 
       {/* Bonus Info */}
-      {selectedPromo && amount && promo && (
+      {selectedPromo && amount && (
         <div className="mt-3 text-green-400 font-medium">
-          🎁 {promo.bonusPercent}% বোনাস প্রয়োগ করা হয়েছে! মোট: {totalWithBonus} {selectedCurrency}
+          🎁 With {selectedPromo.bonusPercent}% bonus applied! Total: {totalPBU.toFixed(1)} {currencies[0]}
         </div>
       )}
 
@@ -208,7 +243,7 @@ const DepositForm = () => {
         onClick={handleSubmit}
         className="mt-6 w-full bg-yellow-400 text-black font-semibold py-2 rounded hover:bg-yellow-500 transition"
       >
-        জমা দিন
+        Deposit
       </button>
     </div>
   );

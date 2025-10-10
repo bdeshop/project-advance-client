@@ -23,6 +23,10 @@ const AdNavbar = () => {
     setActiveDropdown(activeDropdown === menu ? null : menu);
   };
 
+  const handleLogout = () => {
+    logout();
+  }
+
   const navItems = [
     { name: "Dashboard", path: "/admin-dashboard" },
     {
@@ -53,6 +57,7 @@ const AdNavbar = () => {
     { name: "Banking", dropdown: [
         { name: "Money Transfer", path: "/admin-dashboard/banking" },
         { name: "Check Users Payment", path: "/admin-dashboard/check-users-payment" },
+        { name: "Deposit History", path: "/admin-dashboard/deposit-history" },
     ]},
     {
       name: "Casino",
@@ -116,7 +121,7 @@ const AdNavbar = () => {
               <FaRedo className="text-white" />
             </button>
             <button className="p-2 hover:bg-gray-700 rounded-full hover:cursor-pointer">
-              <FaSignOutAlt onClick={logout} className="text-white" />
+              <FaSignOutAlt onClick={handleLogout} className="text-white" />
             </button>
           </div>
 
