@@ -13,7 +13,7 @@ import { AuthContext } from "../../../context/AuthContext";
 const AdNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  const { user ,logout,logo, balance} = useContext(AuthContext);
+  const { user ,logout,logo, balance,currency} = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -113,7 +113,7 @@ const AdNavbar = () => {
               <span className="text-gray-400 text-sm">({user.role})</span>
             </span>
             <span className="text-yellow-500 font-semibold text-xl">
-              - Main Balance: <span className="text-white">{balance} USD</span>
+              - Main Balance: <span className="text-white">{balance} {currency}</span>
             </span>
 
             {/* Icons */}

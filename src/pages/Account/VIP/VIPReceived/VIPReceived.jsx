@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink } from "react-router";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { AuthContext } from "../../../../context/AuthContext";
 
 
 const VIPReceived = () => {
+  const {userBalance,currency} = useContext(AuthContext)
   return (
     <>
       {/* Header */}
@@ -11,7 +13,7 @@ const VIPReceived = () => {
         <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
           <div className="w-1/2">
             <p className="text-white">Main Wallet</p>
-            <p className="text-green-400 text-xl font-bold">৳ 0</p>
+            <p className="text-green-400 text-xl font-bold">{currency} {userBalance}</p>
           </div>
           <div className="w-1/2">
             <p className="text-white">Security Level</p>

@@ -1,8 +1,11 @@
 
 import { NavLink } from "react-router";
 import DepositForm from "../../../../../components/DepositForm/DepositForm";
+import { useContext } from "react";
+import { AuthContext } from "../../../../../context/AuthContext";
 
 const DesktopDeposit = () => {
+  const { userBalance,currency } = useContext(AuthContext);
  
 
   return (
@@ -12,7 +15,7 @@ const DesktopDeposit = () => {
         <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
           <div className="w-1/2">
             <p className="text-white">Main Wallet</p>
-            <p className="text-green-400 text-xl font-bold">৳ 0</p>
+            <p className="text-green-400 text-xl font-bold">{currency} {userBalance}</p>
           </div>
           <div className="w-1/2">
             <p className="text-white">Security Level</p>

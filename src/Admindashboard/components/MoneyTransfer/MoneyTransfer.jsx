@@ -81,12 +81,12 @@ const MoneyTransfer = () => {
         <tbody>
           {users.map((u) => (
             <tr key={u._id}>
-              <td className="border p-2">{u.fullname}</td>
-              <td className="border p-2">{u.username}</td>
-              <td className="border p-2">{u.email}</td>
-              <td className="border p-2">{u.role}</td>
-              <td className="border p-2">{u.balance}</td>
-              <td className="border p-2 space-x-2">
+              <td className="border p-2 text-center">{u.fullname}</td>
+              <td className="border p-2 text-center">{u.username}</td>
+              <td className="border p-2 text-center">{u.email}</td>
+              <td className="border p-2 text-center">{u.role}</td>
+              <td className="border p-2 text-center">{u.balance}</td>
+              <td className="border p-2 text-center space-x-2">
                 <button
                   onClick={() => {
                     setSelectedUser(u);

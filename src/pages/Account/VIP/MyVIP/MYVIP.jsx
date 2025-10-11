@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { NavLink } from "react-router";
 import { FaCrown, FaRupeeSign } from "react-icons/fa";
+import { AuthContext } from "../../../../context/AuthContext";
 
 const MYVIP = () => {
   const [vp, setVp] = useState("");
   const conversionRatio = 100;
   const realMoney = vp ? (vp / conversionRatio).toFixed(2) : 0;
+  const {userBalance,currency} = useContext(AuthContext)
 
   return (
     <>
@@ -14,7 +16,7 @@ const MYVIP = () => {
         <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
           <div className="w-1/2">
             <p className="text-white">Main Wallet</p>
-            <p className="text-green-400 text-xl font-bold">৳ 0</p>
+            <p className="text-green-400 text-xl font-bold">{currency} {userBalance}</p>
           </div>
           <div className="w-1/2">
             <p className="text-white">Security Level</p>

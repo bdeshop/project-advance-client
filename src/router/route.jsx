@@ -88,6 +88,10 @@ import SubAdminLogin from "../pages/SubAdminLogin/SubAdminLogin";
 import MasterLogin from "../pages/MasterLogin/MasterLogin";
 import AgentLogin from "../pages/AgentLogin/AgentLogin";
 import SubAgentLogin from "../pages/SubAgentLogin/SubAgentLogin";
+import SubAdminPrivateRoute from "../routes/SubAdminPrivateRoute";
+import MasterPrivateRoute from "../routes/MasterPrivateRoute";
+import AgentPrivateRoute from "../routes/AgentPrivateRoute";
+import SubAgentPrivateRoute from "../routes/SubAgentPrivateRoute";
 
 export const router = createBrowserRouter([
   {
@@ -458,9 +462,9 @@ export const router = createBrowserRouter([
   {
     path: "sub-admin-dashboard",
     element: (
-      <PrivateRoute>
+      <SubAdminPrivateRoute>
         <AdminLayout />
-      </PrivateRoute>
+      </SubAdminPrivateRoute>
     ),
     children: [
       { index: true, element: <AdHome /> },
@@ -632,9 +636,9 @@ export const router = createBrowserRouter([
   {
     path: "master-dashboard",
     element: (
-      <PrivateRoute>
+      <MasterPrivateRoute>
         <AdminLayout />
-      </PrivateRoute>
+      </MasterPrivateRoute>
     ),
     children: [
       { index: true, element: <AdHome /> },
@@ -806,9 +810,9 @@ export const router = createBrowserRouter([
   {
     path: "agent-dashboard",
     element: (
-      <PrivateRoute>
+      <AgentPrivateRoute>
         <AdminLayout />
-      </PrivateRoute>
+      </AgentPrivateRoute>
     ),
     children: [
       { index: true, element: <AdHome /> },
@@ -980,9 +984,9 @@ export const router = createBrowserRouter([
   {
     path: "sub-agent-dashboard",
     element: (
-      <PrivateRoute>
+      <SubAgentPrivateRoute>
         <AdminLayout />
-      </PrivateRoute>
+      </SubAgentPrivateRoute>
     ),
     children: [
       { index: true, element: <AdHome /> },
@@ -1158,5 +1162,4 @@ export const router = createBrowserRouter([
     path: "deposit/:id",
     element: <DepositPage />,
   },
- 
 ]);

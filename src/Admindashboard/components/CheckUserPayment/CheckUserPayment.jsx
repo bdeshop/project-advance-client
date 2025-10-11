@@ -8,7 +8,9 @@ const CheckUserPayment = () => {
   useEffect(() => {
     const fetchPending = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit/pending`);
+        const res = await axios.get(
+          `${import.meta.env.VITE_API_URL}/api/deposit/pending`
+        );
         setPendingTransactions(res.data);
       } catch (err) {
         console.error("Error fetching pending transactions:", err);
@@ -20,7 +22,9 @@ const CheckUserPayment = () => {
 
   const handleConfirm = async (txId) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/deposit/confirm/${txId}`);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/deposit/confirm/${txId}`
+      );
       toast.success("Transaction confirmed successfully!");
       setPendingTransactions((prev) => prev.filter((tx) => tx._id !== txId));
     } catch (err) {
@@ -30,7 +34,9 @@ const CheckUserPayment = () => {
 
   const handleCancel = async (txId) => {
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/deposit/cancel/${txId}`);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/deposit/cancel/${txId}`
+      );
       toast.success("Transaction canceled successfully!");
       setPendingTransactions((prev) => prev.filter((tx) => tx._id !== txId));
     } catch (err) {
@@ -45,7 +51,9 @@ const CheckUserPayment = () => {
       </h2>
 
       {pendingTransactions.length === 0 ? (
-        <p className="text-center text-gray-400 py-10">No pending transactions found.</p>
+        <p className="text-center text-gray-400 py-10">
+          No pending transactions found.
+        </p>
       ) : (
         <div className="overflow-x-auto border border-yellow-400 rounded-lg ">
           <table className="w-full text-sm text-left border-collapse">
@@ -53,12 +61,15 @@ const CheckUserPayment = () => {
               <tr className="bg-yellow-500 text-black uppercase text-xs">
                 <th className="p-3 border border-yellow-600">Username</th>
                 <th className="p-3 border border-yellow-600">Payment Method</th>
-                <th className="p-3 border border-yellow-600">Amount</th>
+                <th className="p-3 border border-yellow-600">BDT Amount</th>
+                <th className="p-3 border border-yellow-600">PBU Amount</th>
                 <th className="p-3 border border-yellow-600">Bonus</th>
                 <th className="p-3 border border-yellow-600">Total</th>
                 <th className="p-3 border border-yellow-600">Transaction ID</th>
                 <th className="p-3 border border-yellow-600">Number</th>
-                <th className="p-3 border border-yellow-600 text-center">Actions</th>
+                <th className="p-3 border border-yellow-600 text-center">
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -69,12 +80,19 @@ const CheckUserPayment = () => {
                     index % 2 === 0 ? " " : ""
                   } hover:bg-gray-200 transition`}
                 >
-                  <td className="p-3 border border-gray-700">{tx.user.username}</td>
-                  <td className="p-3 border border-gray-700">{tx.paymentMethod}</td>
+                  <td className="p-3 border border-gray-700">
+                    {tx.user.username}
+                  </td>
+                  <td className="p-3 border border-gray-700">
+                    {tx.paymentMethod}
+                  </td>
                   <td className="p-3 border border-gray-700">{tx.amount}</td>
-                  <td className="p-3 border border-gray-700">{tx.bonus}</td>
-                  <td className="p-3 border border-gray-700">{tx.total}</td>
-                  <td className="p-3 border border-gray-700">{tx.transactionId}</td>
+                  <td className="p-3 border border-gray-700">{tx.pbuAmount}</td>
+                  <td className="p-3 border border-gray-700">{tx.bonusPBU}</td>
+                  <td className="p-3 border border-gray-700">{tx.totalPBU}</td>
+                  <td className="p-3 border border-gray-700">
+                    {tx.transactionId}
+                  </td>
                   <td className="p-3 border border-gray-700">{tx.number}</td>
                   <td className="p-3 border border-gray-700 text-center">
                     <button

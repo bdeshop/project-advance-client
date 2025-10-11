@@ -6,7 +6,7 @@ import { AuthContext } from "../../../../context/AuthContext";
 
 const DesktopTransaction = () => {
   const [transactions, setTransactions] = useState([]);
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser,userBalance } = useContext(AuthContext);
 
   const [selectedPlatform, setSelectedPlatform] = useState("All");
   const [selectedStatus, setSelectedStatus] = useState("All");
@@ -69,7 +69,7 @@ const DesktopTransaction = () => {
       <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
         <div className="w-1/2">
           <p className="text-white">Main Wallet</p>
-          <p className="text-green-400 text-xl font-bold">৳ {loginUser?.balance || 0}</p>
+          <p className="text-green-400 text-xl font-bold">৳ {userBalance || 0}</p>
         </div>
         <div className="w-1/2">
           <p className="text-white">Security Level</p>
@@ -89,7 +89,7 @@ const DesktopTransaction = () => {
           {/* Platform Filter */}
           <div className="mb-6">
             <p className="text-sm mb-2">Payment Type</p>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-8 gap-2">
               {platforms.map((p) =>
                 renderButton(p, selectedPlatform, setSelectedPlatform)
               )}
@@ -99,7 +99,7 @@ const DesktopTransaction = () => {
           {/* Status Filter */}
           <div className="mb-6">
             <p className="text-sm mb-2">Status</p>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-8 gap-2">
               {statuses.map((s) =>
                 renderButton(s, selectedStatus, setSelectedStatus)
               )}
@@ -109,7 +109,7 @@ const DesktopTransaction = () => {
           {/* Date Filter */}
           <div className="mb-6">
             <p className="text-sm mb-2">Date</p>
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-8 gap-2">
               {dates.map((d) => renderButton(d, selectedDate, setSelectedDate))}
             </div>
           </div>
@@ -121,14 +121,15 @@ const DesktopTransaction = () => {
         <div className="hidden md:block bg-gray-700 text-white p-5 rounded-md shadow-lg mt-4">
           <div className="border border-blue-600 rounded">
             {/* Table Header */}
-            <div className="grid grid-cols-7 bg-blue-600 text-white text-sm font-semibold">
-              <div className="p-2 border-r border-blue-400">#</div>
-              <div className="p-2 border-r border-blue-400">Payment Method</div>
-              <div className="p-2 border-r border-blue-400">Amount</div>
-              <div className="p-2 border-r border-blue-400">Bonus</div>
-              <div className="p-2 border-r border-blue-400">Total</div>
-              <div className="p-2 border-r border-blue-400">Status</div>
-              <div className="p-2">Date</div>
+            <div className="grid grid-cols-8 bg-blue-600 text-white text-sm font-semibold">
+              <div className="p-2 border-r border-blue-400 text-center">#</div>
+              <div className="p-2 border-r border-blue-400 text-center">Payment Method</div>
+              <div className="p-2 border-r border-blue-400 text-center">Total BDT Amount</div>
+              <div className="p-2 border-r border-blue-400 text-center">PBU Amount</div>
+              <div className="p-2 border-r border-blue-400 text-center">PBU Bonus</div>
+              <div className="p-2 border-r border-blue-400 text-center">PBU Total</div>
+              <div className="p-2 border-r border-blue-400 text-center">Status</div>
+              <div className="p-2 text-center">Date</div>
             </div>
 
             {/* Table Body */}
@@ -141,15 +142,16 @@ const DesktopTransaction = () => {
               filteredTransactions.map((tx, index) => (
                 <div
                   key={tx._id}
-                  className="grid grid-cols-7 text-center text-sm border-t border-blue-600 hover:bg-gray-600 transition"
+                  className="grid grid-cols-8 text-center text-sm border-t border-blue-600 hover:bg-gray-600 transition"
                 >
                   <div className="p-2 border-r border-blue-400">{index + 1}</div>
                   <div className="p-2 border-r border-blue-400">
                     {tx.paymentMethod}
                   </div>
                   <div className="p-2 border-r border-blue-400">{tx.amount}</div>
-                  <div className="p-2 border-r border-blue-400">{tx.bonus}</div>
-                  <div className="p-2 border-r border-blue-400">{tx.total}</div>
+                  <div className="p-2 border-r border-blue-400">{tx.pbuAmount}</div>
+                  <div className="p-2 border-r border-blue-400">{tx.bonusPBU}</div>
+                  <div className="p-2 border-r border-blue-400">{tx.totalPBU}</div>
                   <div
                     className={`p-2 border-r border-blue-400 ${
                       tx.status === "Approved"

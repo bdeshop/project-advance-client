@@ -27,7 +27,7 @@ import axios from "axios";
 const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [accountOpen, setAccountOpen] = useState(false);
-  const [balance, setBalance] = useState(0);
+  
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ username: "", password: "" });
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const Navbar = () => {
     loginUser,
     logoutUserData,
     loginUserData,
+    currency, userBalance
   } = useContext(AuthContext);
 
   const { bgColor, textColor, fontSize, bgButtonColor, signUpButtonBgColor } =
@@ -94,29 +95,7 @@ const Navbar = () => {
     }
   };
 
-  const fetchBalance = async () => {
-    if (!loginUser) return;
 
-    try {
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/admin/balance`,
-        {
-          params: { role: loginUser.role, id: loginUser._id }, // id পাঠানো হচ্ছে
-        }
-      );
-
-      if (res.data?.balance !== undefined) {
-        setBalance(res.data.balance);
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to fetch balance");
-    }
-  };
-
-    useEffect(() => {
-      fetchBalance();
-    }, [loginUser]);
 
   // gradient direction map
   const directionMap = {
@@ -253,10 +232,10 @@ const Navbar = () => {
               {/* Balance Section */}
               <div className="flex items-center border border-white rounded px-1 py-1  text-sm">
                 <span className="flex text-[8px] md:text-[16px] text-white font-bold">
-                  Main BDT{" "}
+                  Main {currency}{" "}
                 </span>
                 <span className="font-bold ml-1 text-white">
-                  {balance}
+                  {userBalance}
                 </span>
                 <span className="ml-1 text-white">Exposure</span>
                 <span className=" text-red-600 px-1 rounded text-xs">0</span>
@@ -490,7 +469,7 @@ const Navbar = () => {
               </div>
             ) : (
               <p className="mt-2">
-                Balance: BDT {loginUser?.balance || 0} | Exposure: 0
+                Balance: {currency} {userBalance} | Exposure: 0
               </p>
             )}
           </div>

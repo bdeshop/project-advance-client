@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link, NavLink, Outlet } from "react-router";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaCoins } from "react-icons/fa6";
+import { AuthContext } from "../context/AuthContext";
 
 const RealWalletLayout = () => {
+  const {userBalance,currency} = useContext(AuthContext)
   return (
     <div className="relative min-h-screen overflow-hidden">
       {/* Top Navbar */}
@@ -18,7 +20,7 @@ const RealWalletLayout = () => {
             {/* Balance */}
             <div className="flex items-center gap-1 text-green-600 font-bold">
               <FaCoins />
-              <span>0.00</span>
+              <span>{currency} {userBalance}</span>
             </div>
             {/* Exp */}
             <div className="bg-red-600 text-white px-2 py-0.5 rounded text-sm">

@@ -1,5 +1,5 @@
 import { Link } from "lucide-react";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CiLogin } from "react-icons/ci";
 import {
   FaWallet,
@@ -21,16 +21,17 @@ import {
 } from "react-icons/md";
 import { RxCross2 } from "react-icons/rx";
 import { NavLink } from "react-router";
+import { AuthContext } from "../../../context/AuthContext";
 
 const MobileAccount = () => {
   const [showAmount, setShowAmount] = useState(false);
-  const [amount, setAmount] = useState(0.0);
+  const [amount, setAmount] = useState(0);
+  const {userBalance,currency} = useContext(AuthContext)
 
   // রিফ্রেশ বাটনে ক্লিক করলে নতুন ভ্যালু সেট করার ডেমো ফাংশন
   const handleReload = () => {
-    // ডেমোর জন্য র‌্যান্ডম ভ্যালু
-    const newAmount = (Math.random() * 1000).toFixed(2);
-    setAmount(newAmount);
+    
+    setAmount(userBalance);
   };
   return (
     <>
@@ -69,7 +70,7 @@ const MobileAccount = () => {
           {/* Right side */}
           <div className="flex items-center gap-2">
             <p className="text-yellow-400 font-semibold">
-              {showAmount ? `৳ ${amount}` : "****"}
+             {currency} {showAmount ? `৳ ${userBalance}` : "****"}
             </p>
             <button onClick={() => setShowAmount(!showAmount)}>
               {showAmount ? (

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { FaUser, FaPhoneAlt, FaEnvelope, FaBirthdayCake } from "react-icons/fa";
 import MobileProfile from "./MobileProfile";
+import { AuthContext } from "../../../context/AuthContext";
 
 const DekstopMyProfile = () => {
+  const {userBalance,currency} = useContext(AuthContext);
   return (
     <>
       {/* Mobile View */}
@@ -49,7 +51,7 @@ const DekstopMyProfile = () => {
             <div className="bg-gray-800 p-4  items-center w-1/2">
               <span>Main Wallet</span>
               <br />
-              <span className="text-green-400 font-bold text-2xl">৳ 0</span>
+              <span className="text-green-400 font-bold text-2xl">{currency} {userBalance}</span>
             </div>
             <div className="bg-gray-800 p-4 items-center w-1/2">
               <span>Security Level</span>

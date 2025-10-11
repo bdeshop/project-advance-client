@@ -1,4 +1,3 @@
-// Banking.jsx
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -8,12 +7,13 @@ import MoneyTransfer from "../../components/MoneyTransfer/MoneyTransfer";
 const Banking = () => {
   const [amount, setAmount] = useState("");
   const [balance, setBalance] = useState(0);
-  const { user } = useContext(AuthContext);
+  const { user,currency } = useContext(AuthContext);
   const [totalBalance, setTotalBalance] = useState(0);
   const [SubAgentTotalBalance, setSubAgentTotalBalance] = useState(0);
   const [agentTotalBalance, setAgentTotalBalance] = useState(0);
   const [masterTotalBalance, setMasterTotalBalance] = useState(0);
   const [subAdminTotalBalance, setSubAdminTotalBalance] = useState(0);
+
 
   // API থেকে মোট balance আনা
   const fetchTotalBalance = async () => {
@@ -21,9 +21,11 @@ const Banking = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/users/total-balance`
       );
-      setTotalBalance(res.data.totalBalance);
+      // ডিফল্ট 0 যদি totalBalance না থাকে
+      setTotalBalance(res.data.totalBalance ?? 0);
     } catch (error) {
       console.error("Error fetching total balance:", error);
+      setTotalBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
@@ -38,9 +40,11 @@ const Banking = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/subagents/total-balance`
       );
-      setSubAgentTotalBalance(res.data.totalBalance);
+      // ডিফল্ট 0 যদি totalBalance না থাকে
+      setSubAgentTotalBalance(res.data.totalBalance ?? 0);
     } catch (error) {
       console.error("Error fetching total Sub Agent balance:", error);
+      setSubAgentTotalBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
@@ -54,9 +58,11 @@ const Banking = () => {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/agents/total-balance`
       );
-      setAgentTotalBalance(res.data.totalBalance);
+      // ডিফল্ট 0 যদি totalBalance না থাকে
+      setAgentTotalBalance(res.data.totalBalance ?? 0);
     } catch (error) {
       console.error("Error fetching total Agent balance:", error);
+      setAgentTotalBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
@@ -64,39 +70,41 @@ const Banking = () => {
     fetchAgentTotalBalance();
   }, []);
 
-
-// Backend থেকে Master এর মোট balance আনা
+  // Backend থেকে Master এর মোট balance আনা
   const fetchMasterTotalBalance = async () => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/masters/total-balance`
       );
-      setMasterTotalBalance(res.data.totalBalance);
+      // ডিফল্ট 0 যদি totalBalance না থাকে
+      setMasterTotalBalance(res.data.totalBalance ?? 0);
     } catch (error) {
       console.error("Error fetching total Master balance:", error);
+      setMasterTotalBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
   useEffect(() => {
     fetchMasterTotalBalance();
-  }, []); 
+  }, []);
 
-   // Backend থেকে Sub Admin এর মোট balance আনা
+  // Backend থেকে Sub Admin এর মোট balance আনা
   const fetchSubAdminTotalBalance = async () => {
     try {
       const res = await axios.get(
         `${import.meta.env.VITE_API_URL}/api/subadmins/total-balance`
       );
-      setSubAdminTotalBalance(res.data.totalBalance);
+      // ডিফল্ট 0 যদি totalBalance না থাকে
+      setSubAdminTotalBalance(res.data.totalBalance ?? 0);
     } catch (error) {
       console.error("Error fetching total Sub Admin balance:", error);
+      setSubAdminTotalBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
   useEffect(() => {
     fetchSubAdminTotalBalance();
   }, []);
-
 
   const fetchBalance = async () => {
     if (!user) return;
@@ -109,12 +117,12 @@ const Banking = () => {
         }
       );
 
-      if (res.data?.balance !== undefined) {
-        setBalance(res.data.balance);
-      }
+      // ডিফল্ট 0 যদি balance না থাকে
+      setBalance(res.data.balance ?? 0);
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Failed to fetch balance");
+      setBalance(0); // এরর হলে ডিফল্ট 0
     }
   };
 
@@ -134,6 +142,7 @@ const Banking = () => {
       if (res.data?.admin) {
         toast.success(res.data.message || "Balance added successfully!");
         setAmount("");
+        fetchBalance(); // ব্যালেন্স আপডেট করতে
       }
     } catch (error) {
       console.error(error);
@@ -157,7 +166,7 @@ const Banking = () => {
           <div className="bg-black text-white rounded-lg p-4 shadow-md">
             <h2 className="text-center font-semibold">Total User Balance</h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-              USD ({totalBalance.toFixed(2)})
+              {currency} ({(totalBalance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Total Sub Agent Balance */}
@@ -166,21 +175,21 @@ const Banking = () => {
               Total Sub Agent Balance
             </h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-              USD ({SubAgentTotalBalance.toFixed(2)})
+              {currency} ({(SubAgentTotalBalance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Total Agent Balance */}
           <div className="bg-black text-white rounded-lg p-4 shadow-md">
             <h2 className="text-center font-semibold">Total Agent Balance</h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-              USD ({agentTotalBalance.toFixed(2)})
+              {currency} ({(agentTotalBalance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Total Master Balance */}
           <div className="bg-black text-white rounded-lg p-4 shadow-md">
             <h2 className="text-center font-semibold">Total Master Balance</h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-              USD ({masterTotalBalance.toFixed(2)})
+              {currency} ({(masterTotalBalance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Total Sub Admin Balance */}
@@ -189,14 +198,14 @@ const Banking = () => {
               Total Sub Admin Balance
             </h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-             USD ({subAdminTotalBalance.toFixed(2)})
+              {currency} ({(subAdminTotalBalance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Mother Admin Balance */}
           <div className="bg-black text-white rounded-lg p-4 shadow-md">
             <h2 className="text-center font-semibold">Mother Admin Balance</h2>
             <div className="bg-yellow-600 text-center text-black font-bold mt-3 py-2 rounded-lg">
-              USD ({balance.toFixed(2)})
+              {currency} ({(balance ?? 0).toFixed(2)})
             </div>
           </div>
           {/* Add Balance */}
@@ -221,7 +230,7 @@ const Banking = () => {
           </div>
         </div>
       </div>
-      <MoneyTransfer></MoneyTransfer>
+      <MoneyTransfer />
     </>
   );
 };

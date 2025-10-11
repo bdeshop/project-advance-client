@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   FaWallet,
   FaHistory,
@@ -19,13 +19,20 @@ import {
 } from "react-icons/fa";
 import { PiHandDepositBold, PiHandWithdrawFill } from "react-icons/pi";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../../context/AuthContext";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const {
+      loginUser,
+      userBalance,
+      currency
+    } = useContext(AuthContext);
 
   const toggleSidebar = () => {
     setIsOpen((prev) => !prev);
   };
+  
 
   return (
     <>
@@ -48,8 +55,8 @@ const Sidebar = () => {
           <div>
             <div className="flex flex-col items-center text-center">
               <div className="w-16 h-16 bg-gray-700 rounded-full mb-2"></div>
-              <h2 className="text-lg font-semibold">Ria21</h2>
-              <p className="text-yellow-400 text-sm">৳ 0.00</p>
+              <h2 className="text-lg font-semibold">{loginUser.fullname}</h2>
+              <p className="text-yellow-400 text-sm">{currency} {userBalance}</p>
 
               <div className="flex items-center justify-between w-full mt-3 text-xs ">
                 <span>Silver</span>

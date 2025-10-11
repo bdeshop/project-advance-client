@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router";
 import { FaWhatsapp, FaExclamationTriangle } from "react-icons/fa";
+import { AuthContext } from "../../../context/AuthContext";
 
 const MobileProfile = () => {
+  const {userBalance,currency,login} = useContext(AuthContext);
   return (
     <>
       <div className="md:hidden  bg-gray-900 text-white flex flex-col mt-12">

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { FaExclamationCircle, FaWallet } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../../../../context/AuthContext";
 const paymentOptions = [
   {
     id: 1,
@@ -20,6 +21,7 @@ const paymentOptions = [
 const DesktopWithdraw = () => {
   // const [showPromotions, setShowPromotions] = useState(false);
   const [amount, setAmount] = useState(0);
+  const { userBalance,currency,loginUserData } = useContext(AuthContext);
 
   const amountOptions = [100, 500, 1000, 2000, 5000, 10000, 20000, 25000];
   return (
@@ -29,7 +31,7 @@ const DesktopWithdraw = () => {
         <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
           <div className="w-1/2">
             <p className="text-white">Main Wallet</p>
-            <p className="text-green-400 text-xl font-bold">৳ 0</p>
+            <p className="text-green-400 text-xl font-bold">{currency} {userBalance}</p>
           </div>
           <div className="w-1/2">
             <p className="text-white">Security Level</p>

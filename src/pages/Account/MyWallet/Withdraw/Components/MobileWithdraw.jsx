@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
 import {
@@ -7,11 +7,13 @@ import {
   FaEnvelope,
   FaWhatsapp,
 } from "react-icons/fa";
+import { AuthContext } from "../../../../../context/AuthContext";
 
 const MobileWithdraw = () => {
   const [promotion, setPromotion] = useState("Normal");
   //   const [paymentMethod, setPaymentMethod] = useState("Nagad");
   const [amount, setAmount] = useState(0);
+  const {userBalance,currency} = useContext(AuthContext)
 
   const amountOptions = [100, 500, 1000, 2000, 5000, 10000, 20000, 25000];
   const paymentOptions = [
@@ -78,7 +80,7 @@ const MobileWithdraw = () => {
           </div>
 
           {/* Balance */}
-          <p className="text-3xl font-bold mt-2">0.00</p>
+          <p className="text-3xl font-bold mt-2">{currency} {userBalance}</p>
 
           {/* Sub Info */}
           <div className="mt-2 text-sm space-y-1">

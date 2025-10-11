@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { FaCheck } from "react-icons/fa";
 import {
   FaWallet,
@@ -7,6 +7,7 @@ import {
   FaInfoCircle,
 } from "react-icons/fa";
 import { Link, NavLink } from "react-router";
+import { AuthContext } from "../../../../../context/AuthContext";
 
 const DesktopBilling = () => {
   //   const platforms = [
@@ -68,6 +69,7 @@ const DesktopBilling = () => {
   //   const [selectedPlatform, setSelectedPlatform] = useState("All");
   //   const [selectedGameType, setSelectedGameType] = useState("All");
   const [selectedDate, setSelectedDate] = useState("Today");
+  const {userBalance,currency} = useContext(AuthContext);
 
   const renderButton = (label, selected, onClick) => (
     <button
@@ -90,7 +92,7 @@ const DesktopBilling = () => {
         <div className="flex items-center m-6 bg-gray-700 p-4 rounded-lg">
           <div className="w-1/2">
             <p className="text-white">Main Wallet</p>
-            <p className="text-green-400 text-xl font-bold">৳ 0</p>
+            <p className="text-green-400 text-xl font-bold">{currency} {userBalance}</p>
           </div>
           <div className="w-1/2">
             <p className="text-white">Security Level</p>

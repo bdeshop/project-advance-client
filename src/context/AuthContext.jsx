@@ -1,6 +1,8 @@
 import axios from "axios";
+import { Currency, User } from "lucide-react";
 import { createContext, useState, useEffect } from "react";
 import { Navigate } from "react-router";
+
 
 
 export const AuthContext = createContext();
@@ -25,6 +27,8 @@ export const AuthProvider = ({ children }) => {
   const [sidebarData, setSidebarData] = useState(null);
   const [balance,setBalance] = useState('');
   const [loginUser, setLoginUser] = useState(null);
+  const [currency, setCurrency] = useState(null);
+  const [userBalance, setUserBalance] = useState(0);
 
 
  useEffect(() => {
@@ -308,7 +312,44 @@ const logout = () => {
     <Navigate to={'/'}></Navigate>
     localStorage.removeItem("user");
   };
-  
+
+// ================ Deposit Settings Fetch =================
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/deposit-payment/settings`);
+        setCurrency(res.data.currencies[0] || "PBU");
+      } catch (err) {
+        console.error("Error fetching deposit settings:", err);
+      }
+    };
+    fetchSettings();
+  }, []);
+
+  // ---------------- Get Mother Admin Balance ----------------
+    const fetchUserBalance = async () => {
+    if (!loginUser) return;
+
+    try {
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/admin/balance`,
+        {
+          params: { role: loginUser.role, id: loginUser._id }, // id পাঠানো হচ্ছে
+        }
+      );
+
+      if (res.data?.balance !== undefined) {
+        setUserBalance(res.data.balance);
+      }
+    } catch (error) {
+      console.error(error);
+
+    }
+  };
+
+    useEffect(() => {
+      fetchUserBalance();
+    }, [loginUser]);
 
   // While loading, don’t render children to prevent flicker
   if (loading) return null;
@@ -345,7 +386,10 @@ const logout = () => {
         balance,
         loginUser,
         logoutUserData,
-        loginUserData
+        loginUserData,
+        userBalance,
+        currency
+      
       }}
     >
       {children}
